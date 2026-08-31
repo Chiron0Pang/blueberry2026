@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>農場工作人員須知與地址導航</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --accent-color: #e74c3c;
+            --warning-color: #f39c12;
+            --purple-color: #9b59b6;
+            --info-color: #17a2b8;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); line-height: 1.7; }
+        header { background: linear-gradient(135deg, var(--primary-color), #34495e); color: #fff; padding: 40px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 24px; letter-spacing: 1px; }
+        header p { margin: 10px 0 0; opacity: 0.8; font-size: 15px; }
+        .container { max-width: 700px; margin: 20px auto; padding: 15px; }
+        .card { background: #fff; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-left: 5px solid var(--secondary-color); }
+        .card.alert { border-left-color: var(--accent-color); }
+        .card.warning { border-left-color: var(--warning-color); }
+        .card.pack { border-left-color: var(--purple-color); }
+        .card.other-info { border-left-color: var(--info-color); }
+        .announcement-banner { background-color: #fdf2f2; border: 2px dashed var(--accent-color); border-radius: 8px; padding: 15px; margin-bottom: 20px; color: var(--accent-color); font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+        h2 { margin-top: 0; font-size: 18px; color: var(--primary-color); display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #eee; padding-bottom: 8px; }
+        ul, ol { padding-left: 20px; margin: 0; }
+        li { margin-bottom: 12px; }
+        .farm-item { background: #fdfdfd; border: 1px solid #f1f2f6; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.01); }
+        .farm-name { font-weight: bold; font-size: 16px; color: #2c3e50; margin-bottom: 5px; }
+        .farm-address { font-size: 14px; color: #666; margin-bottom: 15px; }
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+        .btn-group:last-child { margin-bottom: 0; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 10px; font-size: 14px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background 0.2s, transform 0.1s; flex: 1; min-width: 130px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+        .btn:active { transform: scale(0.98); }
+        .btn-map { background-color: #34a853; color: white; }
+        .btn-map:hover { background-color: #2d8e47; }
+        .btn-waze { background-color: #33ccff; color: #222; }
+        .btn-waze:hover { background-color: #29b6f6; }
+        .btn-video { background-color: #ff0000; color: white; }
+        .btn-video:hover { background-color: #cc0000; }
+        .highlight { color: var(--accent-color); font-weight: bold; }
+        
+        /* 針對指定文字特別放大的樣式 */
+        .time-focus { color: var(--accent-color); font-weight: 900; font-size: 22px; padding: 0 2px; }
+        
+        /* 圖片容器樣式 */
+        .image-container { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px; justify-content: center; }
+        .image-box { flex: 1; min-width: 260px; max-width: 100%; background: #f1f2f6; padding: 8px; border-radius: 8px; border: 1px solid #ddd; text-align: center; }
+        .image-box img { width: 100%; height: auto; border-radius: 6px; display: block; object-fit: cover; }
+        .image-caption { font-size: 13px; color: #666; margin-top: 5px; font-weight: bold; }
+        
+        footer { text-align: center; padding: 30px 20px; color: #999; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>農場員工重要資訊公告</h1>
+        <p>請全體工作人員務必仔細閱讀並遵守以下規範</p>
+    </header>
+
+    <div class="container">
+
+        <!-- 頂部即時公告 -->
+        <div class="announcement-banner">
+            <span>⚠️ 📢 <strong>@All 各位請注意：</strong>請嚴格遵守農場守則，一旦被發現違規，可能會請你即時離场！</span>
+        </div>
+
+        <!-- 工資與 Payslip -->
+        <div class="card alert">
+            <h2>💰 工資和 Payslip 注意事項</h2>
+            <ul>
+                <li><strong>工資結算週期：</strong>星期四 至 下星期三 為一週。</li>
+                <li><strong>發放時間：</strong>將於（結算週）的<span class="highlight">下週一 下午 17:00 前</span>發放完畢。</li>
+                <li><strong>未收到回報：</strong>如未收到工資和 payslip，請務必於<span class="highlight">週一晚上 19:00 分前</span>主動告知管理層。</li>
+            </ul>
+        </div>
+
+        <!-- 嚴格禁止與違規即時離場守則 -->
+        <div class="card alert">
+            <h2>🚫 違規即時離場守則（請嚴格遵守）</h2>
+            <ol>
+                <li><strong>禁止坐桶：</strong>大家不要坐桶子（即使是自己帶的最好都不要）。</li>
+                <li><strong>吸煙限制：</strong>嚴禁在場內吸煙（包括<span class="highlight">電子煙</span>）。如需吸煙，請務必移步至場外指定區域。</li>
+                <li><strong>交果洗手：</strong>每次交果完畢後，請務必清洗雙手。</li>
+                <li><strong>場內禁食：</strong>場內禁止進食，且<span class="highlight">只允許飲用純水</span>（禁止含糖飲料）。</li>
+                <li><strong>休息進食規範：</strong>大家在休息時間如需進食，請至場外用餐。重新開始採果前，請務必洗手。</li>
+                <li><strong>嚴禁隨地小便：</strong>請絕對不要在場內的草地上隨地小便。</li>
+                <li><strong>耳機配戴限制：</strong>如需配戴耳機，<span class="highlight">請只戴一邊</span>，以確保能聽到現場廣播或其他聲音（例如：叫大家交桶子）。</li>
+                <li><strong>手套規格：</strong>嚴禁配戴不符合農場規格的手套（例如：不能使用完全覆蓋手指的手套，<span class="highlight">必須完全露出所有手指</span>）。</li>
+                <li><strong>禁止戴太陽眼鏡：</strong>工作期間不能戴太陽眼鏡，以確保採收品質與辨色。</li>
+                <li><strong>嚴禁損害農場利益：</strong>嚴禁做出任何對農場造成風險損失的事情。例如：<span class="highlight">偷竊</span>（包括藍莓及其他不屬於你的私人財產）、私自關掉農場水系統、破壞農場設備等。</li>
+            </ol>
+        </div>
+
+        <!-- ⚠️ 包裝注意事項 -->
+        <div class="card pack">
+            <h2>⚠️ 包裝注意事項</h2>
+            <ol>
+                <li>在開工前（<span class="time-focus">5分鐘</span>）開始做準備工作。</li>
+                <li>包裝前，請記得必須要用酒精搓手液。</li>
+                <li>要戴包裝帽子（包好所有露出的頭髮）。</li>
+                <li>長頭髮的，必須綁起來。</li>
+                <li>手上（不能）戴任何飾物，包括手錶。</li>
+                <li>水瓶要放在休息室。</li>
+                <li>請專心工作，不要聊天，<span class="highlight">不能戴耳機及不要用手機‼️</span></li>
+                <li>如藍莓掉在地上，請馬上撿起來掉在垃圾桶。</li>
+                <li>做完包裝，需立即做清潔（包括清洗機器及掃地）。</li>
+            </ol>
+        </div>
+
+        <!-- 📋 其他注意事項（洗手間與停車規範） -->
+        <div class="card other-info">
+            <h2>📋 其他注意事項</h2>
+            <ul>
+                <li><strong>洗手間衛生問題：</strong>如果女生們需要更換生理用品，請用洗手間裡面的紙袋把用過的生理用品裝好，再掉進垃圾桶。</li>
+                <li><strong>節能與整潔：</strong>請各位保持洗手間清潔，和用完洗手間<span class="highlight">必須關燈</span>。</li>
+                <li><strong>早上停車規範：</strong>請大家早上<span class="highlight">不要把車停在洗手方這邊</span>，因為開車門的聲音，會打擾到附近鄰居。</li>
+            </ul>
+            
+            <!-- 兩張實景相片預留位置 -->
+            <div class="image-container">
+                <div class="image-box">
+                    <img src="toilet.jpeg" alt="洗手間生理用品用紙袋裝好及關燈提示" loading="lazy">
+                    <div class="image-caption">📸 洗手間告示（紙袋與關燈提示）</div>
+                </div>
+                <div class="image-box">
+                    <img src="parking.jpeg" alt="洗手間旁請勿停車提示" loading="lazy">
+                    <div class="image-caption">📸 外部告示（早上切勿在此停車）</div>
+                </div>
+            </div>
+        </div>
+
+
+ <!-- 🍇 採果技巧與好壞果圖鑑 -->
+        <div class="card gallery-card">
+            <h2>🍇 採果技巧與好壞果圖鑑</h2>
+            
+            <!-- 1. 腰帶使用 -->
+            <div class="gallery-section">
+                <div class="gallery-title">💡 腰帶使用規範</div>
+                <div class="gallery-desc">把藍莓桶連結腰帶上，盡量把它們拉緊，可以令腰部受力轉移到腳部。</div>
+                <div class="image-container">
+                    <div class="image-box"><img src="BELT1.jpeg" loading="lazy"><div class="image-caption">📸 腰帶綁法示範一</div></div>
+                    <div class="image-box"><img src="BELT.jpeg" loading="lazy"><div class="image-caption">📸 腰帶拉緊示範二</div></div>
+                </div>
+            </div>
+
+            <!-- 2. 交滿桶藍莓地方 -->
+            <div class="gallery-section">
+                <div class="gallery-title">🚛 交滿桶藍莓地方</div>
+                <div class="gallery-desc">把自己滿藍莓的桶交到車上。</div>
+                <div class="image-container">
+                    <div class="image-box"><img src="B CAR.jpg" loading="lazy"><div class="image-caption">📸 交桶上車位置</div></div>
+                </div>
+            </div>
+
+            <!-- 3. 好果 -->
+            <div class="gallery-section">
+                <div class="gallery-title">✅ 好果標準</div>
+                <div class="gallery-desc">是全藍、沒有花、沒有樹枝、和沒有破皮膚的才是好果。</div>
+                <div class="image-container">
+                    <div class="image-box"><img src="SO GOOD.PNG" loading="lazy"><div class="image-caption">📸 標準好果示範一</div></div>
+                    <div class="image-box"><img src="GOOD AND BAD.jpeg" loading="lazy"><div class="image-caption">📸 標準好果示範二</div></div>
+                </div>
+            </div>
+
+            <!-- 4. 紅/綠果 -->
+            <div class="gallery-section">
+                <div class="gallery-title">❌ 紅/綠果（嚴禁採摘）</div>
+                <div class="gallery-desc"><span class="highlight">是不能採的，採摘會被警告！！！</span></div>
+                <div class="image-container">
+                    <div class="image-box"><img src="ONO.heic" loading="lazy"><div class="image-caption">📸 不合格紅綠果一</div></div>
+                    <div class="image-box"><img src="SO BAD.jpeg" loading="lazy"><div class="image-caption">📸 不合格紅綠果二</div></div>
+                </div>
+            </div>
+
+            <!-- 5. 破皮 -->
+            <div class="gallery-section">
+                <div class="gallery-title">⚠️ 破皮果實處理</div>
+                <div class="gallery-desc">在採摘時如果有發現，請自行食了它解決。如果在桶內過多是會被警告！！在採摘時遇到容易破皮的，請用360度轉動方式採摘。</div>
+                <div class="image-container">
+                    <div class="image-box"><img src="SKIN.jpeg" loading="lazy"><div class="image-caption">📸 破皮果實與採摘手法</div></div>
+                </div>
+            </div>
+
+            <!-- 6. 鼻屎果(小果) -->
+            <div class="gallery-section">
+                <div class="gallery-title">🚯 鼻屎果（小果）不摘</div>
+                <div class="gallery-desc">就是小到有如鼻屎的，自己都不會食的就不要摘了，可以直接跳過。</div>
+                <div class="image-container">
+                    <div class="image-box"><img src="SM.jpeg" loading="lazy"><div class="image-caption">📸 鼻屎果大小對比</div></div>
+                </div>
+            </div>
+
+            <!-- 7. 請大家做個好採手 -->
+            <div class="gallery-section" style="border-top: 2px dashed var(--secondary-color); margin-top: 20px; padding-top: 15px;">
+                <div class="gallery-title" style="color: var(--secondary-color); text-align: center; font-size: 16px;">🌟 請大家做個好採手 🌟</div>
+                <div class="image-container">
+                    <div class="image-box"><img src="SS.jpeg" loading="lazy"><div class="image-caption">👍 優秀採手榮譽榜/示範</div></div>
+                </div>
+            </div>
+
+
+
+
+
+        <!-- 常規農場事項 -->
+        <div class="card warning">
+            <h2>🚜 常規農場工作守則</h2>
+            <ul>
+                <li>請絕對聽從管理人員的合理指示。</li>
+                <li>工作時間內需保持積極、認編的工作態度。</li>
+                <li>請準時到達規定的農場（採果區域）集合，切勿遲到。</li>
+                <li><strong>成績與品質要求：</strong>所有人的採收成績與品質均需盡量做到最好。成績欠佳或工作態度欠佳者，將面臨被停工及請離開的風險。</li>
+            </ul>
+        </div>
+
+        <!-- 農場地址 Farm Address -->
+        <div class="card">
+            <h2>📍 農場導航與介紹影片 (Farm Directory)</h2>
+            
+            <!-- 農場 1 -->
+            <div class="farm-item">
+                <div class="farm-name">1. Crows Nest Farm 🐦‍⬛</div>
+                <div class="farm-address">205 Orchard Rd, Crows Nest QLD 4355 澳洲</div>
+                <div class="btn-group">
+                    <a href="https://maps.app.goo.gl/wFzBzrBGhQgLPQYr6?g_st=ic" target="_blank" class="btn btn-map">🗺️ Google 地圖</a>
+                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.2760889%2C152.076504" target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
+                    <a href="https://youtu.be/wXjUQaSAsj4" target="_blank" class="btn btn-video">▶️ 介紹影片</a>
+                </div>
+            </div>
+
+            <!-- 農場 2 -->
+            <div class="farm-item">
+                <div class="farm-name">2. Geham Farm 🐽</div>
+                <div class="farm-address">9203 New England Hwy, Geham QLD 4352 澳洲</div>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/place/9203+New+England+Hwy,+Geham+QLD+4352/@-27.3827839,152.0158043,17z/data=!3m1!4b1!4m6!3m5!1s0x6b9663a8f1f23e9f:0xebd757e96a19404e!8m2!3d-27.3827887!4d152.0183792!16s%2Fg%2F11g0h043b8?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn btn-map">🗺️ Google 地圖</a>
+                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.3794666%2C152.016723." target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
+                    <a href="https://youtu.be/T6QrD8eTg8Q" target="_blank" class="btn btn-video">▶️ 介紹影片</a>
+                </div>
+            </div>
+
+            <!-- 農場 3 -->
+            <div class="farm-item">
+                <div class="farm-name">3. Ravensbourne Farm (經理場)</div>
+                <div class="farm-address">24 Schwager Road, Ravensbourne QLD 澳洲</div>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/place/24+Schwager+Rd,+Ravensbourne+QLD+4352/@-27.3814261,152.1400225,17z/data=!3m1!4b1!4m6!3m5!1s0x6b968895ad7727dd:0xa4b51d9c72f0ed1b!8m2!3d-27.3814309!4d152.1425974!16s%2Fg%2F11ghp0qwfp?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn btn-map">🗺️ Google 地圖</a>
+                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.381556%2C152.142341" target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
+                    <a href="https://youtu.be/u57BkPag0Vc" target="_blank" class="btn btn-video">▶️ 介紹影片</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <p>請嚴格遵守農場守則 • 違規者將面臨即時離場處分</p>
+    </footer>
+
+</body>
+</html>
+
