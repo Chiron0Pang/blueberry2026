@@ -312,6 +312,7 @@
         <p>請嚴格遵守農場守則 • 違規者將面臨即時離場處分</p>
     </footer>
 
+    <script src="translations.js"></script>
     <script>
         function toggleLanguageMenu(event) {
             event.stopPropagation();
@@ -322,31 +323,18 @@
         }
 
         function translatePage(language) {
-            const labels = {
-                'zh-TW': { button: '🌐 翻譯', title: '農場員工重要資訊公告', subtitle: '請全體工作人員務必仔細閱讀並遵守以下規範' },
-                'zh-CN': { button: '🌐 翻译', title: '农场员工重要信息公告', subtitle: '请所有工作人员务必仔细阅读并遵守以下规定' },
-                'en': { button: '🌐 Translate', title: 'Important Information for Farm Workers', subtitle: 'All workers must read and follow the rules below carefully.' },
-                'ja': { button: '🌐 翻訳', title: '農場スタッフへの重要なお知らせ', subtitle: 'スタッフの皆さんは、以下のルールをよく読み、必ず守ってください。' },
-                'ko': { button: '🌐 번역', title: '농장 근로자 중요 안내', subtitle: '모든 근로자는 아래 규정을 주의 깊게 읽고 반드시 준수해 주세요.' }
-            };
-            const selected = labels[language] || labels['zh-TW'];
-            document.documentElement.lang = language;
-            document.getElementById('translateButton').textContent = selected.button;
-            document.querySelector('header h1').textContent = selected.title;
-            document.querySelector('header > p').textContent = selected.subtitle;
-
-            // Full, professionally reviewed translations are loaded from local language files.
-            // Traditional Chinese remains the original source text.
-            if (language === 'zh-TW') {
-                window.location.href = window.location.pathname;
-                return;
-            }
-            window.location.href = 'index-' + language + '.html';
+            applyFarmLanguage(language);
+            document.getElementById('languageMenu').classList.remove('show');
+            document.getElementById('translateButton').setAttribute('aria-expanded', 'false');
         }
 
         document.addEventListener('click', function () {
             const menu = document.getElementById('languageMenu');
             if (menu) menu.classList.remove('show');
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const saved = localStorage.getItem('farmLanguage');
+            if (saved && ['en','zh-TW','zh-CN','ja','ko'].includes(saved)) applyFarmLanguage(saved);
         });
     </script>
 
