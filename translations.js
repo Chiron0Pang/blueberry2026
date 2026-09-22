@@ -283,44 +283,25 @@ const FARM_TRANSLATIONS = {
 
 const FARM_ORIGINAL_HTML = new WeakMap();
 
-function translateElementText(el, map, language) {
-  if (!FARM_ORIGINAL_HTML.has(el)) FARM_ORIGINAL_HTML.set(el, el.innerHTML);
-  const original = FARM_ORIGINAL_HTML.get(el);
-  if (language === 'zh-TW') { el.innerHTML = original; return; }
-
-  // Translate the original HTML string directly. This preserves strong/span
-  // formatting while allowing phrases that are split across styled elements
-  // to be translated reliably.
-  let html = original;
-  const entries = Object.entries(map).sort((a,b) => b[0].length - a[0].length);
-  for (const [from,to] of entries) {
-    if (from.length >= 2 && html.includes(from)) html = html.split(from).join(to);
-  }
-
-  // Then translate any remaining individual text nodes exactly.
-  const box = document.createElement('div');
-  box.innerHTML = html;
-  const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
-  const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+function translateTextNodes(root, map) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes=[]; while (walker.nextNode()) nodes.push(walker.currentNode);
+  const entries=Object.entries(map).sort((a,b)=>b[0].length-a[0].length);
   for (const node of nodes) {
-    const raw=node.nodeValue, trimmed=raw.trim();
-    if (!trimmed) continue;
-    if (map[trimmed] !== undefined) {
-      const lead=(raw.match(/^\\s*/)||[''])[0];
-      const tail=(raw.match(/\\s*$/)||[''])[0];
-      node.nodeValue=lead+map[trimmed]+tail;
+    if (node.parentElement && ['SCRIPT','STYLE'].includes(node.parentElement.tagName)) continue;
+    let value=node.nodeValue;
+    for (const [from,to] of entries) {
+      if (from.length>=2 && value.includes(from)) value=value.split(from).join(to);
     }
+    node.nodeValue=value;
   }
-  el.innerHTML=box.innerHTML;
 }
 
 function applyFarmLanguage(language) {
   const map=FARM_TRANSLATIONS[language] || {};
   document.documentElement.lang=language==='zh-TW'?'zh-HK':language;
-  const selectors=['header h1','header p','.announcement-banner','h2','.card li','.card p','.gallery-title','.gallery-desc','.image-caption','.farm-address','.farm-name','.btn','footer p','#translateButton'];
-  document.querySelectorAll(selectors.join(',')).forEach(el=>{
-    if (el.closest('.language-menu')) return;
-    translateElementText(el,map,language);
-  });
+  if (!FARM_ORIGINAL_HTML.has(document.body)) FARM_ORIGINAL_HTML.set(document.body, document.body.innerHTML);
+  document.body.innerHTML=FARM_ORIGINAL_HTML.get(document.body);
+  if (language!=='zh-TW') translateTextNodes(document.body,map);
   localStorage.setItem('farmLanguage',language);
 }
