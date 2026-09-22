@@ -21,8 +21,15 @@
         header p { margin: 10px 0 0; opacity: 0.8; font-size: 15px; }
         .translate-btn { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.95); color: var(--primary-color); border: none; border-radius: 999px; padding: 9px 13px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); z-index: 10; }
         .translate-btn:active { transform: scale(0.98); }
+        .translate-wrap { position: absolute; top: 14px; right: 14px; z-index: 10; }
+        .translate-wrap .translate-btn { position: static; }
+        .language-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; min-width: 170px; background: #fff; border-radius: 12px; padding: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.22); text-align: left; }
+        .language-menu.show { display: block; }
+        .language-menu button { width: 100%; border: 0; background: transparent; color: #222; padding: 10px 12px; border-radius: 8px; text-align: left; font-size: 14px; cursor: pointer; }
+        .language-menu button:hover { background: #f1f3f5; }
         @media (max-width: 480px) {
-            .translate-btn { top: 10px; right: 10px; padding: 8px 10px; font-size: 13px; }
+            .translate-wrap { top: 10px; right: 10px; }
+            .translate-btn { padding: 8px 10px; font-size: 13px; }
             header { padding-top: 54px; }
         }
         .container { max-width: 700px; margin: 20px auto; padding: 15px; }
@@ -65,7 +72,16 @@
 <body>
 
     <header>
-        <button class="translate-btn" type="button" onclick="translatePage()">🌐 翻譯</button>
+        <div class="translate-wrap">
+            <button class="translate-btn" type="button" onclick="toggleLanguageMenu(event)" aria-haspopup="true" aria-expanded="false">🌐 翻譯</button>
+            <div class="language-menu" id="languageMenu">
+                <button type="button" onclick="translatePage('en')">English</button>
+                <button type="button" onclick="translatePage('zh-TW')">繁體中文</button>
+                <button type="button" onclick="translatePage('zh-CN')">简体中文</button>
+                <button type="button" onclick="translatePage('ja')">日本語</button>
+                <button type="button" onclick="translatePage('ko')">한국어</button>
+            </div>
+        </div>
         <h1>農場員工重要資訊公告</h1>
         <p>請全體工作人員務必仔細閱讀並遵守以下規範</p>
     </header>
@@ -297,11 +313,25 @@
     </footer>
 
     <script>
-        function translatePage() {
-            const currentUrl = window.location.href;
-            const translateUrl = 'https://translate.google.com/translate?sl=auto&tl=en&u=' + encodeURIComponent(currentUrl);
-            window.open(translateUrl, '_blank', 'noopener');
+        function toggleLanguageMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('languageMenu');
+            const button = event.currentTarget;
+            const isOpen = menu.classList.toggle('show');
+            button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         }
+
+        function translatePage(language) {
+            const currentUrl = window.location.href;
+            const translateUrl = 'https://translate.google.com/translate?sl=zh-TW&tl=' + encodeURIComponent(language) + '&u=' + encodeURIComponent(currentUrl);
+            window.open(translateUrl, '_blank', 'noopener');
+            document.getElementById('languageMenu').classList.remove('show');
+        }
+
+        document.addEventListener('click', function () {
+            const menu = document.getElementById('languageMenu');
+            if (menu) menu.classList.remove('show');
+        });
     </script>
 
 </body>
