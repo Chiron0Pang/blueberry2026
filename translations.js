@@ -287,22 +287,29 @@ function translateElementText(el, map, language) {
   if (!FARM_ORIGINAL_HTML.has(el)) FARM_ORIGINAL_HTML.set(el, el.innerHTML);
   const original = FARM_ORIGINAL_HTML.get(el);
   if (language === 'zh-TW') { el.innerHTML = original; return; }
+
+  // Translate the original HTML string directly. This preserves strong/span
+  // formatting while allowing phrases that are split across styled elements
+  // to be translated reliably.
+  let html = original;
+  const entries = Object.entries(map).sort((a,b) => b[0].length - a[0].length);
+  for (const [from,to] of entries) {
+    if (from.length >= 2 && html.includes(from)) html = html.split(from).join(to);
+  }
+
+  // Then translate any remaining individual text nodes exactly.
   const box = document.createElement('div');
-  box.innerHTML = original;
+  box.innerHTML = html;
   const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
   const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
   for (const node of nodes) {
     const raw=node.nodeValue, trimmed=raw.trim();
     if (!trimmed) continue;
-    let value=raw;
     if (map[trimmed] !== undefined) {
-      value=raw.match(/^\\s*/)[0]+map[trimmed]+raw.match(/\\s*$/)[0];
-    } else {
-      for (const [from,to] of Object.entries(map)) {
-        if (from.length>=2 && value.includes(from)) value=value.split(from).join(to);
-      }
+      const lead=(raw.match(/^\\s*/)||[''])[0];
+      const tail=(raw.match(/\\s*$/)||[''])[0];
+      node.nodeValue=lead+map[trimmed]+tail;
     }
-    node.nodeValue=value;
   }
   el.innerHTML=box.innerHTML;
 }
