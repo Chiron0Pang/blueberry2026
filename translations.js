@@ -360,8 +360,15 @@ function applyFarmLanguage(language) {
         }
       } else translateTextNodes(el,map);
     });
-    // Catch any remaining standalone text.
+    // Catch remaining text, including Chinese split by nested formatting.
     translateTextNodes(document.body,map);
+    // Final fallback: replace any remaining source phrases in the rendered HTML.
+    // This makes all dictionary entries apply even when styling split the source sentence.
+    let rendered=document.body.innerHTML;
+    for(const [from,to] of entries){
+      if(from.length>=2 && rendered.includes(from)) rendered=rendered.split(from).join(to);
+    }
+    document.body.innerHTML=rendered;
   }
   localStorage.setItem('farmLanguage',language);
 }
