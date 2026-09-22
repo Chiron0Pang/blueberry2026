@@ -284,14 +284,14 @@ const FARM_TRANSLATIONS = {
 const FARM_ORIGINAL_HTML = new WeakMap();
 
 function translateTextNodes(root, map) {
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodes=[]; while (walker.nextNode()) nodes.push(walker.currentNode);
   const entries=Object.entries(map).sort((a,b)=>b[0].length-a[0].length);
-  for (const node of nodes) {
-    if (node.parentElement && ['SCRIPT','STYLE'].includes(node.parentElement.tagName)) continue;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+  for(const node of nodes){
+    if(node.parentElement && ['SCRIPT','STYLE'].includes(node.parentElement.tagName)) continue;
     let value=node.nodeValue;
-    for (const [from,to] of entries) {
-      if (from.length>=2 && value.includes(from)) value=value.split(from).join(to);
+    for(const [from,to] of entries){
+      if(from.length>=2 && value.includes(from)) value=value.split(from).join(to);
     }
     node.nodeValue=value;
   }
@@ -300,8 +300,32 @@ function translateTextNodes(root, map) {
 function applyFarmLanguage(language) {
   const map=FARM_TRANSLATIONS[language] || {};
   document.documentElement.lang=language==='zh-TW'?'zh-HK':language;
-  if (!FARM_ORIGINAL_HTML.has(document.body)) FARM_ORIGINAL_HTML.set(document.body, document.body.innerHTML);
-  document.body.innerHTML=FARM_ORIGINAL_HTML.get(document.body);
-  if (language!=='zh-TW') translateTextNodes(document.body,map);
+
+  // Save pristine page once. Restore it before every language change.
+  if(!window.__farmOriginalBody) window.__farmOriginalBody=document.body.innerHTML;
+  document.body.innerHTML=window.__farmOriginalBody;
+
+  if(language!=='zh-TW'){
+    // First translate complete visible blocks. textContent joins text split by
+    // strong/span styling, so the full-sentence dictionary can match.
+    const blocks=document.querySelectorAll('.announcement-banner,h1,header p,h2,.card li,.card p,.gallery-title,.gallery-desc,.image-caption,.farm-address,.farm-name,.btn,footer p,#translateButton');
+    const entries=Object.entries(map).sort((a,b)=>b[0].length-a[0].length);
+    blocks.forEach(el=>{
+      const plain=el.textContent.trim();
+      if(map[plain]!==undefined){
+        // Preserve formatting only when the source is not split across child tags.
+        if(el.children.length===0) el.textContent=map[plain];
+        else {
+          let matched=false;
+          for(const [from,to] of entries){
+            if(from===plain){ el.textContent=to; matched=true; break; }
+          }
+          if(!matched) translateTextNodes(el,map);
+        }
+      } else translateTextNodes(el,map);
+    });
+    // Catch any remaining standalone text.
+    translateTextNodes(document.body,map);
+  }
   localStorage.setItem('farmLanguage',language);
 }
