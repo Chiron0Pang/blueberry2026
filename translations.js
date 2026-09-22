@@ -281,32 +281,39 @@ const FARM_TRANSLATIONS = {
   }
 };
 
-const FARM_ORIGINAL_TEXT = new WeakMap();
+const FARM_ORIGINAL_HTML = new WeakMap();
 
-function applyFarmLanguage(language) {
-  const map = FARM_TRANSLATIONS[language];
-  document.documentElement.lang = language === 'zh-TW' ? 'zh-HK' : language;
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode);
+function translateElementText(el, map, language) {
+  if (!FARM_ORIGINAL_HTML.has(el)) FARM_ORIGINAL_HTML.set(el, el.innerHTML);
+  const original = FARM_ORIGINAL_HTML.get(el);
+  if (language === 'zh-TW') { el.innerHTML = original; return; }
+  const box = document.createElement('div');
+  box.innerHTML = original;
+  const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+  const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
   for (const node of nodes) {
-    if (node.parentElement && ['SCRIPT','STYLE'].includes(node.parentElement.tagName)) continue;
-    if (!FARM_ORIGINAL_TEXT.has(node)) FARM_ORIGINAL_TEXT.set(node, node.nodeValue);
-    const original = FARM_ORIGINAL_TEXT.get(node);
-    if (language === 'zh-TW') { node.nodeValue = original; continue; }
-    let value = original;
-    const exact = map && map[value.trim()];
-    if (exact !== undefined) {
-      const lead = value.match(/^\s*/)[0], tail = value.match(/\s*$/)[0];
-      node.nodeValue = lead + exact + tail;
-      continue;
-    }
-    if (map) {
+    const raw=node.nodeValue, trimmed=raw.trim();
+    if (!trimmed) continue;
+    let value=raw;
+    if (map[trimmed] !== undefined) {
+      value=raw.match(/^\\s*/)[0]+map[trimmed]+raw.match(/\\s*$/)[0];
+    } else {
       for (const [from,to] of Object.entries(map)) {
-        if (from.length >= 2 && value.includes(from)) value = value.split(from).join(to);
+        if (from.length>=2 && value.includes(from)) value=value.split(from).join(to);
       }
     }
-    node.nodeValue = value;
+    node.nodeValue=value;
   }
-  localStorage.setItem('farmLanguage', language);
+  el.innerHTML=box.innerHTML;
+}
+
+function applyFarmLanguage(language) {
+  const map=FARM_TRANSLATIONS[language] || {};
+  document.documentElement.lang=language==='zh-TW'?'zh-HK':language;
+  const selectors=['header h1','header p','.announcement-banner','h2','.card li','.card p','.gallery-title','.gallery-desc','.image-caption','.farm-address','.farm-name','.btn','footer p','#translateButton'];
+  document.querySelectorAll(selectors.join(',')).forEach(el=>{
+    if (el.closest('.language-menu')) return;
+    translateElementText(el,map,language);
+  });
+  localStorage.setItem('farmLanguage',language);
 }
