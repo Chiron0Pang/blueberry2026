@@ -281,6 +281,40 @@ const FARM_TRANSLATIONS = {
   }
 };
 
+
+const FARM_BLOCK_TRANSLATIONS = {
+  ja: {
+    "pay-cycle":"<strong>給与計算期間：</strong>木曜日から翌週水曜日までを1週間として計算します。",
+    "pay-time":"<strong>給与および給与明細の支給時期：</strong>対象週の<span class=\"highlight\">翌週月曜日 午後5:00まで</span>に支給・送付します。",
+    "pay-missing":"<strong>給与または給与明細が届いていない場合<span style=\"color:red;font-size:1.2em;font-weight:bold;\">（月曜日 午後5:00以降）</span>：</strong>給与または給与明細が届いていない場合は、<span style=\"color:#8B008B;font-weight:900;\">まず迷惑メール／ジャンクメールフォルダを必ず確認してください</span>。確認後も届いていない場合は、<span class=\"highlight\">月曜日 午後7:00まで</span>に管理者へ連絡してください。",
+    "rule-1":"<strong>バケツに座らない：</strong>農場のバケツは収穫用です。椅子代わりに座らないでください。",
+    "rule-2":"<strong>喫煙制限：</strong>農場内では<span class=\"highlight\">電子タバコ</span>を含む喫煙を禁止します。喫煙する場合は、必ず農場外の指定場所へ移動してください。",
+    "rule-3":"<strong>果実提出後の手洗い：</strong>果実を提出するたびに、必ず両手を洗ってください。",
+    "rule-4":"<strong>農場内での飲食禁止：</strong>農場内への食べ物の持ち込み・飲食は禁止です。食べ物を持参した場合は入口の外に置いてください。<span class=\"highlight\">飲めるのは水のみ</span>です（糖分を含む飲料は禁止）。",
+    "rule-5":"<strong>休憩中の飲食：</strong>休憩中に食事をする場合は農場外で食べてください。収穫を再開する前に必ず手を洗ってください。",
+    "rule-6":"<strong>農場内での排泄禁止：</strong>農場内の芝生などで排尿・排便をしないでください。",
+    "rule-7":"<strong>イヤホンの使用制限：</strong>イヤホンを使用する場合は<span class=\"highlight\">片耳だけ</span>にしてください。場内放送やバケツ提出の指示などが聞こえる状態を保ってください。",
+    "rule-8":"<strong>手袋の規定：</strong>農場の基準に合わない手袋は禁止です。指全体を覆う手袋は使用できません。<span class=\"highlight\">すべての指が完全に出るもの</span>を使用してください。",
+    "rule-9":"<strong>サングラス禁止：</strong>収穫品質を保ち、果実の色を正確に確認できるよう、作業中はサングラスを着用しないでください。",
+    "rule-10":"<strong>農場に損害を与える行為の禁止：</strong>農場に損失や危険をもたらす行為は禁止です。例：<span class=\"highlight\">盗難</span>（ブルーベリーや自分の所有物ではない物を持ち去る行為を含む）、無断で給水設備を止める、農場設備を破損する等。"
+  },
+  ko: {
+    "pay-cycle":"<strong>급여 정산 기간:</strong> 목요일부터 다음 주 수요일까지를 1주로 계산합니다.",
+    "pay-time":"<strong>급여 및 급여명세서 지급 시간:</strong> 해당 정산 주의 <span class=\"highlight\">다음 주 월요일 오후 5시까지</span> 지급 및 발송됩니다.",
+    "pay-missing":"<strong>급여 또는 급여명세서를 받지 못한 경우 <span style=\"color:red;font-size:1.2em;font-weight:bold;\">(월요일 오후 5시 이후)</span>:</strong> 급여 또는 급여명세서를 받지 못했다면 <span style=\"color:#8B008B;font-weight:900;\">먼저 스팸/정크 메일함을 반드시 확인해 주세요</span>. 확인 후에도 받지 못했다면 <span class=\"highlight\">월요일 오후 7시까지</span> 관리자에게 알려 주세요.",
+    "rule-1":"<strong>버킷에 앉지 마세요:</strong> 농장의 버킷은 과일 수확용입니다. 의자처럼 앉지 마세요.",
+    "rule-2":"<strong>흡연 제한:</strong> 농장 내에서는 <span class=\"highlight\">전자담배</span>를 포함한 흡연이 금지됩니다. 흡연이 필요한 경우 반드시 농장 밖 지정 구역으로 이동해 주세요.",
+    "rule-3":"<strong>과일 제출 후 손 씻기:</strong> 과일을 제출한 뒤에는 매번 반드시 양손을 씻어 주세요.",
+    "rule-4":"<strong>작업 구역 내 음식 금지:</strong> 작업 구역 안으로 음식을 가져오거나 먹는 것은 금지됩니다. 음식을 가져왔다면 입구 밖에 두세요. <span class=\"highlight\">마실 수 있는 것은 물뿐입니다</span> (당이 든 음료는 금지).",
+    "rule-5":"<strong>휴식 시간 식사 규정:</strong> 휴식 시간에 식사할 경우 작업 구역 밖에서 드세요. 다시 수확을 시작하기 전에 반드시 손을 씻어 주세요.",
+    "rule-6":"<strong>농장 내 배변·배뇨 금지:</strong> 농장 안의 잔디나 그 밖의 장소에서 소변이나 대변을 보지 마세요.",
+    "rule-7":"<strong>이어폰 착용 제한:</strong> 이어폰을 착용할 경우 <span class=\"highlight\">한쪽만 착용해 주세요</span>. 현장 방송이나 버킷 제출 안내 등 주변의 지시를 들을 수 있어야 합니다.",
+    "rule-8":"<strong>장갑 규정:</strong> 농장 기준에 맞지 않는 장갑은 착용할 수 없습니다. 손가락 전체를 덮는 장갑은 사용할 수 없으며, <span class=\"highlight\">모든 손가락이 완전히 드러나야 합니다</span>.",
+    "rule-9":"<strong>선글라스 착용 금지:</strong> 수확 품질을 유지하고 과일 색을 정확히 구분할 수 있도록 작업 중에는 선글라스를 착용하지 마세요.",
+    "rule-10":"<strong>농장에 손해를 끼치는 행위 금지:</strong> 농장에 손실이나 피해를 줄 수 있는 행동은 금지됩니다. 예: <span class=\"highlight\">절도</span> (블루베리 또는 본인 소유가 아닌 물건을 가져가는 행위 포함), 허가 없이 농장 급수 시스템을 끄는 행위, 농장 장비를 훼손하는 행위 등."
+  }
+};
+
 const FARM_ORIGINAL_HTML = new WeakMap();
 
 function translateTextNodes(root, map) {
@@ -306,6 +340,8 @@ function applyFarmLanguage(language) {
   document.body.innerHTML=window.__farmOriginalBody;
 
   if(language!=='zh-TW'){
+    const blockMap=FARM_BLOCK_TRANSLATIONS[language] || {};
+    document.querySelectorAll('[data-i18n]').forEach(el=>{ const v=blockMap[el.dataset.i18n]; if(v!==undefined) el.innerHTML=v; });
     // First translate complete visible blocks. textContent joins text split by
     // strong/span styling, so the full-sentence dictionary can match.
     const blocks=document.querySelectorAll('.announcement-banner,h1,header p,h2,.card li,.card p,.gallery-title,.gallery-desc,.image-caption,.farm-address,.farm-name,.btn,footer p,#translateButton');
