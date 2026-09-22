@@ -73,7 +73,7 @@
 
     <header>
         <div class="translate-wrap">
-            <button class="translate-btn" type="button" onclick="toggleLanguageMenu(event)" aria-haspopup="true" aria-expanded="false">🌐 翻譯</button>
+            <button class="translate-btn" id="translateButton" type="button" onclick="toggleLanguageMenu(event)" aria-haspopup="true" aria-expanded="false">🌐 翻譯</button>
             <div class="language-menu" id="languageMenu">
                 <button type="button" onclick="translatePage('en')">English</button>
                 <button type="button" onclick="translatePage('zh-TW')">繁體中文</button>
@@ -322,10 +322,26 @@
         }
 
         function translatePage(language) {
-            const currentUrl = window.location.href;
-            const translateUrl = 'https://translate.google.com/translate?sl=zh-TW&tl=' + encodeURIComponent(language) + '&u=' + encodeURIComponent(currentUrl);
-            window.open(translateUrl, '_blank', 'noopener');
-            document.getElementById('languageMenu').classList.remove('show');
+            const labels = {
+                'zh-TW': { button: '🌐 翻譯', title: '農場員工重要資訊公告', subtitle: '請全體工作人員務必仔細閱讀並遵守以下規範' },
+                'zh-CN': { button: '🌐 翻译', title: '农场员工重要信息公告', subtitle: '请所有工作人员务必仔细阅读并遵守以下规定' },
+                'en': { button: '🌐 Translate', title: 'Important Information for Farm Workers', subtitle: 'All workers must read and follow the rules below carefully.' },
+                'ja': { button: '🌐 翻訳', title: '農場スタッフへの重要なお知らせ', subtitle: 'スタッフの皆さんは、以下のルールをよく読み、必ず守ってください。' },
+                'ko': { button: '🌐 번역', title: '농장 근로자 중요 안내', subtitle: '모든 근로자는 아래 규정을 주의 깊게 읽고 반드시 준수해 주세요.' }
+            };
+            const selected = labels[language] || labels['zh-TW'];
+            document.documentElement.lang = language;
+            document.getElementById('translateButton').textContent = selected.button;
+            document.querySelector('header h1').textContent = selected.title;
+            document.querySelector('header > p').textContent = selected.subtitle;
+
+            // Full, professionally reviewed translations are loaded from local language files.
+            // Traditional Chinese remains the original source text.
+            if (language === 'zh-TW') {
+                window.location.href = window.location.pathname;
+                return;
+            }
+            window.location.href = 'index-' + language + '.html';
         }
 
         document.addEventListener('click', function () {
