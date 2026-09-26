@@ -335,7 +335,7 @@
         <p>請嚴格遵守農場守則 • 違規者將面臨即時離場處分</p>
     </footer>
 
-    <script src="translations.js"></script>
+    <script src="translations.js?v=20260927-2"></script>
     <script>
         function toggleLanguageMenu(event) {
             event.stopPropagation();
@@ -347,8 +347,10 @@
 
         function translatePage(language) {
             applyFarmLanguage(language);
-            document.getElementById('languageMenu').classList.remove('show');
-            document.getElementById('translateButton').setAttribute('aria-expanded', 'false');
+            const menu = document.getElementById('languageMenu');
+            const button = document.getElementById('translateButton');
+            if (menu) menu.classList.remove('show');
+            if (button) button.setAttribute('aria-expanded', 'false');
         }
 
         document.addEventListener('click', function () {
