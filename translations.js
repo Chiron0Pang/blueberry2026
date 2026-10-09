@@ -361,6 +361,15 @@ function applyFarmLanguage(language) {
     if(signal && SIGNAL_SECTION_TRANSLATIONS[language]){
       const media=signal.querySelector('.image-container');
       signal.innerHTML=SIGNAL_SECTION_TRANSLATIONS[language];
+      const invite=document.createElement('p');
+      const link=document.createElement('a');
+      link.className='btn btn-map';
+      link.href='https://signal.group/#CjQKIP9RNYn0IWx6Dp1_2v13DXwy92_3Bvl-sTS1JoYd720sEhCJNN4MI-Txhv-zQR92Xx7B';
+      link.target='_blank';
+      link.rel='noopener noreferrer';
+      link.textContent=({'en':'💬 Join the Signal Group','zh-CN':'💬 点击加入 Signal 活动群','ja':'💬 Signal グループに参加','ko':'💬 Signal 그룹 참여'})[language];
+      invite.appendChild(link);
+      signal.appendChild(invite);
       if(media) signal.appendChild(media);
       const caption=signal.querySelector('.image-caption');
       if(caption) caption.textContent=({'en':'📸 Signal group QR code','zh-CN':'📸 Signal 活动群二维码','ja':'📸 Signal グループのQRコード','ko':'📸 Signal 그룹 QR 코드'})[language];
