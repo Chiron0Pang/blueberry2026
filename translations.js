@@ -286,6 +286,12 @@ const FARM_TRANSLATIONS = {
 };
 
 
+const SIGNAL_SECTION_TRANSLATIONS = {
+  en: `<h2>💬 Signal Social Group</h2><p>Everyone is welcome to join voluntarily! Find friends to hang out with, organise activities, share stories and useful information, chat and get to know one another.</p><p>This is an informal social group, not an official channel for farm work announcements. Please be friendly and respectful.</p><p><strong>📱 Scan the QR code below with Signal to join.</strong></p>`,
+  "zh-CN": `<h2>💬 Signal 活动交流群</h2><p>欢迎大家自愿加入！可以在群组内寻找队友一起出去玩、交流生活趣事、分享信息、聊聊天，认识新朋友。</p><p>此群组属于自由交流性质，并非农场官方工作通知群组。请互相尊重，友善交流。</p><p><strong>📱 使用 Signal 扫描下方二维码即可加入。</strong></p>`,
+  ja: `<h2>💬 Signal 交流グループ</h2><p>どなたでも自由に参加できます！一緒に遊びに行く仲間を探したり、日常の出来事や役立つ情報を共有したり、気軽におしゃべりして交流しましょう。</p><p>このグループは自由参加の交流用であり、農場の公式業務連絡グループではありません。お互いを尊重し、友好的に交流してください。</p><p><strong>📱 Signalで下のQRコードを読み取って参加してください。</strong></p>`,
+  ko: `<h2>💬 Signal 친목 모임</h2><p>누구나 자유롭게 참여할 수 있습니다! 함께 놀러 갈 친구를 찾고, 일상 이야기와 유용한 정보를 나누고, 편하게 대화하며 친해져 보세요.</p><p>이 그룹은 자율적으로 참여하는 친목 모임이며 농장의 공식 업무 공지 채널이 아닙니다. 서로 존중하며 친절하게 소통해 주세요.</p><p><strong>📱 Signal에서 아래 QR 코드를 스캔해 참여하세요.</strong></p>`
+};
 const LEAVE_SECTION_TRANSLATIONS = {
   en: `<h2>📝 Leave Requests and Application Format</h2><p>To help with daily work and staffing arrangements, please notify the supervisor as early as possible if you need leave and provide all required information.</p><h3>📋 Please use the following format</h3><p><strong>📅 Leave date(s):</strong><br>Example: 28/09/2026 – 30/09/2026</p><p><strong>👤 Name:</strong><br>＿＿＿＿＿＿＿＿</p><p><strong>🏷️ Type of leave:</strong><br>Personal leave / Sick leave / Other</p><p><strong>📝 Reason:</strong><br>＿＿＿＿＿＿＿＿</p><p><strong>🔙 Expected return-to-work date:</strong><br>＿＿＿＿＿＿＿＿</p><p><strong>Once completed, please send the above information to the supervisor for processing.</strong></p><h3>⚠️ Leave Request Guidelines</h3><ol><li><strong>⏰ Please give at least 24 hours' notice for planned personal leave:</strong> For longer leave that can be planned in advance, please give more notice so work and staffing can be arranged.</li><li><strong>🤒 Sick leave / unexpected situations — notify us as soon as possible:</strong> If illness or an unexpected situation means you cannot work, notify the supervisor as soon as you know. Do not wait until after your shift has started.</li><li><strong>📅 Clearly state your leave dates:</strong> For leave covering several days, clearly state the start date, end date and expected return-to-work date.</li><li><strong>❌ Do not simply message “I’m not coming in today”:</strong> Please provide your name, date(s), type of leave and reason using the format above so the supervisor can record the absence and arrange staffing.</li><li><strong>🔄 If you need to extend your leave, notify us again:</strong> If you cannot return on the original date, notify the supervisor as soon as possible with your new expected return date.</li><li><strong>⚠️ Absence without notice:</strong> If you do not attend work and have not notified us according to this procedure, it will be recorded as <strong>“absence without notice”</strong>, and management will follow up.</li><li><strong>📩 Check for a reply after submitting your request:</strong> If the supervisor needs to confirm dates or other information, please reply promptly so the record and staffing arrangements can be completed.</li></ol>`,
   "zh-CN": `<h2>📝 请假事宜及申请格式</h2><p>为方便安排每日工作及人手，如需请假，请尽早通知工头，并提供完整资料。</p><h3>📋 请按照以下格式发送</h3><p><strong>📅 请假日期：</strong><br>例如：28/09/2026 ～ 30/09/2026</p><p><strong>👤 姓名：</strong><br>＿＿＿＿＿＿＿＿</p><p><strong>🏷️ 请假类型：</strong><br>事假／病假／其他</p><p><strong>📝 原因：</strong><br>＿＿＿＿＿＿＿＿</p><p><strong>🔙 预计返工日期：</strong><br>＿＿＿＿＿＿＿＿</p><p><strong>完成后，请将以上资料发给工头处理。</strong></p><h3>⚠️ 请假注意事项</h3><ol><li><strong>⏰ 事假请最少提前 24 小时通知：</strong>如属可预先安排的长假，应更早提出，以便安排工作及人手。</li><li><strong>🤒 病假／突发情况请尽快通知：</strong>如因生病或突发情况无法上班，请在知道自己无法上班后尽快通知工头，不要等到上班时间过后才通知。</li><li><strong>📅 请清楚提供请假日期：</strong>如连续请假多日，请写清楚开始日期、结束日期及预计返工日期。</li><li><strong>❌ 请不要只发“今天不上班”：</strong>请按照以上格式提供姓名、日期、请假类型及原因，方便工头记录及安排人手。</li><li><strong>🔄 如需延长请假，请再次通知：</strong>如未能按照原定日期返工，请尽快通知工头新的预计返工日期。</li><li><strong>⚠️ 未通知而缺勤：</strong>如没有按照程序通知而没有上班，将记录为<strong>“未通知缺勤”</strong>，并由管理人员跟进。</li><li><strong>📩 提交资料后请留意回复：</strong>如工头需要确认日期或其他资料，请配合回复，以便完成记录及安排。</li></ol>`,
@@ -351,6 +357,14 @@ function applyFarmLanguage(language) {
   document.body.innerHTML=window.__farmOriginalBody;
 
   if(language!=='zh-TW'){
+    const signal=document.querySelector('[data-i18n="signal-community"]');
+    if(signal && SIGNAL_SECTION_TRANSLATIONS[language]){
+      const media=signal.querySelector('.image-container');
+      signal.innerHTML=SIGNAL_SECTION_TRANSLATIONS[language];
+      if(media) signal.appendChild(media);
+      const caption=signal.querySelector('.image-caption');
+      if(caption) caption.textContent=({'en':'📸 Signal group QR code','zh-CN':'📸 Signal 活动群二维码','ja':'📸 Signal グループのQRコード','ko':'📸 Signal 그룹 QR 코드'})[language];
+    }
     const leaveSection=document.querySelector('[data-i18n="leave-section"]');
     if(leaveSection && LEAVE_SECTION_TRANSLATIONS[language]) leaveSection.innerHTML=LEAVE_SECTION_TRANSLATIONS[language];
     const blockMap=FARM_BLOCK_TRANSLATIONS[language] || {};
