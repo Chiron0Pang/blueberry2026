@@ -406,5 +406,13 @@ function applyFarmLanguage(language) {
     }
     document.body.innerHTML=rendered;
   }
+  // Switch the embedded payroll infographic independently of text translations.
+  const payrollExample=document.querySelector('[data-payroll-example]');
+  if(payrollExample){
+    const supported=['en','zh-CN','ja','ko'];
+    payrollExample.src=supported.includes(language)
+      ? 'payroll-week-example-'+language+'.svg'
+      : 'payroll-week-example.svg';
+  }
   localStorage.setItem('farmLanguage',language);
 }
