@@ -1,3 +1,32 @@
+
+const PAYROLL_CALCULATOR_I18N={
+'zh-TW':{title:'📅 工資日期計算機',intro:'選擇其中一日返工日期，計算所屬結算週及發薪日期。',label:'選擇返工日期',periodLabel:'工資結算週期（星期四至星期三）',payLabel:'💰 工資及 Payslip 發放',payTime:'星期一下午 17:00 前',missingLabel:'⚠️ 未收到工資或 Payslip',spam:'❗先檢查垃圾郵件！',notify:'星期一晚上 19:00 前通知管理層',explain:'計算方式：由所選日期回推至星期四，結算至下一個星期三，並於結算週後的星期一發薪。'},
+'zh-CN':{title:'📅 工资日期计算器',intro:'选择其中一天的上班日期，计算所属结算周及发薪日期。',label:'选择上班日期',periodLabel:'工资结算周期（周四至周三）',payLabel:'💰 工资及 Payslip 发放',payTime:'周一下午 17:00 前',missingLabel:'⚠️ 未收到工资或 Payslip',spam:'❗请先检查垃圾邮件！',notify:'周一晚上 19:00 前通知管理层',explain:'计算方式：从所选日期回推至周四，结算至下一个周三，并于结算周结束后的周一发薪。'},
+'en':{title:'📅 Payroll Date Calculator',intro:'Choose a work date to see its payroll week and payment date.',label:'Select work date',periodLabel:'Pay period (Thursday–Wednesday)',payLabel:'💰 Pay and Payslip issued',payTime:'By Monday 5:00 PM',missingLabel:'⚠️ Missing pay or payslip',spam:'❗Check your spam folder first!',notify:'Notify management by Monday 7:00 PM',explain:'Calculation: the pay period runs Thursday to Wednesday, and payment is due the following Monday.'},
+'ja':{title:'📅 給与日計算ツール',intro:'勤務日を選択すると、給与締め期間と支給日を確認できます。',label:'勤務日を選択',periodLabel:'給与締め期間（木曜～水曜）',payLabel:'💰 給与・給与明細の支給',payTime:'月曜日 17:00 まで',missingLabel:'⚠️ 給与または明細が届かない場合',spam:'❗まず迷惑メールを確認！',notify:'月曜日 19:00 までに管理者へ連絡',explain:'計算方法：選択した日を含む木曜から翌水曜までを締め期間とし、その翌月曜日に支給します。'},
+'ko':{title:'📅 급여 날짜 계산기',intro:'근무 날짜를 선택하면 정산 기간과 급여 지급일을 확인할 수 있습니다.',label:'근무 날짜 선택',periodLabel:'급여 정산 기간 (목요일~수요일)',payLabel:'💰 급여 및 명세서 지급',payTime:'월요일 오후 5시까지',missingLabel:'⚠️ 급여 또는 명세서를 받지 못한 경우',spam:'❗먼저 스팸 메일을 확인하세요!',notify:'월요일 오후 7시까지 관리자에게 알리세요',explain:'계산 방법: 선택한 날짜가 포함된 목요일부터 다음 수요일까지 정산하고, 그다음 월요일에 지급합니다.'}
+};
+function updatePayrollCalculator(language){
+ const root=document.querySelector('[data-payroll-calculator]');if(!root)return;
+ const dict=PAYROLL_CALCULATOR_I18N[language]||PAYROLL_CALCULATOR_I18N['zh-TW'];
+ root.querySelectorAll('[data-pc]').forEach(el=>{const key=el.getAttribute('data-pc');if(dict[key])el.textContent=dict[key];});
+ const input=root.querySelector('#payroll-work-date');
+ function render(){
+   if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(input.value))return;
+   const [year,month,day]=input.value.split('-').map(Number);
+   const date=new Date(Date.UTC(year,month-1,day));
+   if(date.getUTCFullYear()!==year||date.getUTCMonth()!==month-1||date.getUTCDate()!==day)return;
+   const thursday=new Date(date.getTime()-((date.getUTCDay()+3)%7)*86400000);
+   const wednesday=new Date(thursday.getTime()+6*86400000);
+   const monday=new Date(thursday.getTime()+11*86400000);
+   const fmt=d=>String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear();
+   root.querySelector('#pc-period').textContent=fmt(thursday)+' – '+fmt(wednesday);
+   root.querySelector('#pc-paydate').textContent=fmt(monday);
+   root.querySelector('#pc-alertdate').textContent=fmt(monday);
+ }
+ input.addEventListener('input',render);render();
+}
+
 const FARM_TRANSLATIONS = {
   en: {
     "📝 請假事宜及申請格式":"📝 Leave Requests and Application Format","為方便安排每日工作及人手，如需請假，請盡早通知工頭，並提供完整資料。":"To help with daily work and staffing arrangements, please notify the supervisor as early as possible if you need leave and provide all required information.","📋 請按照以下格式發送":"📋 Please use the following format","📅 請假日期：":"📅 Leave date(s):","例如：28/09/2026 ～ 30/09/2026":"Example: 28/09/2026 – 30/09/2026","👤 姓名：":"👤 Name:","🏷️ 請假類型：":"🏷️ Type of leave:","事假／病假／其他":"Personal leave / Sick leave / Other","📝 原因：":"📝 Reason:","🔙 預計返工日期：":"🔙 Expected return-to-work date:","完成後，請將以上資料發給工頭處理。":"Once completed, please send the above information to the supervisor for processing.","⚠️ 請假注意事項":"⚠️ Leave Request Guidelines","⏰ 事假請最少提前 24 小時通知：":"⏰ Please give at least 24 hours' notice for planned personal leave:","如屬可預先安排的長假，應更早提出，以便安排工作及人手。":"For longer leave that can be planned in advance, please give more notice so work and staffing can be arranged.","🤒 病假／突發情況請盡快通知：":"🤒 Sick leave / unexpected situations — notify us as soon as possible:","如因生病或突發情況無法上班，請在知道自己無法上班後盡快通知工頭，不要等到上班時間過後才通知。":"If illness or an unexpected situation means you cannot work, notify the supervisor as soon as you know. Do not wait until after your shift has started.","📅 請清楚提供請假日期：":"📅 Clearly state your leave dates:","如連續請假多日，請寫清楚開始日期、結束日期及預計返工日期。":"For leave covering several days, clearly state the start date, end date and expected return-to-work date.","❌ 請不要只發「今日唔返」：":"❌ Do not simply message “I’m not coming in today”:","請按照以上格式提供姓名、日期、請假類型及原因，方便工頭記錄及安排人手。":"Please provide your name, date(s), type of leave and reason using the format above so the supervisor can record the absence and arrange staffing.","🔄 如需延長請假，請再次通知：":"🔄 If you need to extend your leave, notify us again:","如未能按照原定日期返工，請盡快通知工頭新的預計返工日期。":"If you cannot return on the original date, notify the supervisor as soon as possible with your new expected return date.","⚠️ 未通知而缺勤：":"⚠️ Absence without notice:","如沒有按照程序通知而沒有上班，將記錄為":"If you do not attend work and have not notified us according to this procedure, it will be recorded as ","「未通知缺勤」":"“absence without notice”","，並由管理人員跟進。":", and management will follow up.","📩 提交資料後請留意回覆：":"📩 Check for a reply after submitting your request:","如工頭需要確認日期或其他資料，請配合回覆，以便完成記錄及安排。":"If the supervisor needs to confirm dates or other information, please reply promptly so the record and staffing arrangements can be completed.",
@@ -414,5 +443,6 @@ function applyFarmLanguage(language) {
       ? 'payroll-week-example-'+language+'.svg'
       : 'payroll-week-example.svg';
   }
+  updatePayrollCalculator(language);
   localStorage.setItem('farmLanguage',language);
 }
