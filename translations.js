@@ -332,7 +332,7 @@ const FARM_BLOCK_TRANSLATIONS = {
   ja: {
     "pay-cycle":"<strong>給与計算期間：</strong>木曜日から翌週水曜日までを1週間として計算します。",
     "pay-time":"<strong>給与および給与明細の支給時期：</strong>対象週の<span class=\"highlight\">翌週月曜日 午後5:00まで</span>に支給・送付します。",
-    "pay-missing":"<strong>給与または給与明細が届いていない場合<span style=\"color:red;font-size:1.2em;font-weight:bold;\">（月曜日 午後5:00以降）</span>：</strong>給与または給与明細が届いていない場合は、<span style=\"color:#8B008B;font-weight:900;\">まず迷惑メール／ジャンクメールフォルダを必ず確認してください</span>。確認後も届いていない場合は、<span class=\"highlight\">月曜日 午後7:00まで</span>に管理者へ連絡してください。",
+    "pay-missing":"<strong>給与または給与明細が届いていない場合<span style=\"color:red;font-size:1.2em;font-weight:bold;\">（月曜日 午後5:00以降）</span>：</strong>給与または給与明細が届いていない場合は、<span style=\"color:#8B008B;font-weight:900;\">まず迷惑メール／ジャンクメールフォルダを必ず確認してください</span>。確認後も届いていない場合は、<span style=\"color:#c51626;font-size:1.45em;font-weight:900;\">（当日）</span><span class=\"highlight\">月曜日 午後7:00まで</span>に管理者へ連絡してください。",
     "rule-1":"<strong>バケツに座らない：</strong>農場のバケツは収穫用です。椅子代わりに座らないでください。",
     "rule-2":"<strong>喫煙制限：</strong>農場内では<span class=\"highlight\">電子タバコ</span>を含む喫煙を禁止します。喫煙する場合は、必ず農場外の指定場所へ移動してください。",
     "rule-3":"<strong>果実提出後の手洗い：</strong>果実を提出するたびに、必ず両手を洗ってください。",
@@ -347,7 +347,7 @@ const FARM_BLOCK_TRANSLATIONS = {
   ko: {
     "pay-cycle":"<strong>급여 정산 기간:</strong> 목요일부터 다음 주 수요일까지를 1주로 계산합니다.",
     "pay-time":"<strong>급여 및 급여명세서 지급 시간:</strong> 해당 정산 주의 <span class=\"highlight\">다음 주 월요일 오후 5시까지</span> 지급 및 발송됩니다.",
-    "pay-missing":"<strong>급여 또는 급여명세서를 받지 못한 경우 <span style=\"color:red;font-size:1.2em;font-weight:bold;\">(월요일 오후 5시 이후)</span>:</strong> 급여 또는 급여명세서를 받지 못했다면 <span style=\"color:#8B008B;font-weight:900;\">먼저 스팸/정크 메일함을 반드시 확인해 주세요</span>. 확인 후에도 받지 못했다면 <span class=\"highlight\">월요일 오후 7시까지</span> 관리자에게 알려 주세요.",
+    "pay-missing":"<strong>급여 또는 급여명세서를 받지 못한 경우 <span style=\"color:red;font-size:1.2em;font-weight:bold;\">(월요일 오후 5시 이후)</span>:</strong> 급여 또는 급여명세서를 받지 못했다면 <span style=\"color:#8B008B;font-weight:900;\">먼저 스팸/정크 메일함을 반드시 확인해 주세요</span>. 확인 후에도 받지 못했다면 <span style=\"color:#c51626;font-size:1.45em;font-weight:900;\">(당일)</span><span class=\"highlight\">월요일 오후 7시까지</span> 관리자에게 알려 주세요.",
     "rule-1":"<strong>버킷에 앉지 마세요:</strong> 농장의 버킷은 과일 수확용입니다. 의자처럼 앉지 마세요.",
     "rule-2":"<strong>흡연 제한:</strong> 농장 내에서는 <span class=\"highlight\">전자담배</span>를 포함한 흡연이 금지됩니다. 흡연이 필요한 경우 반드시 농장 밖 지정 구역으로 이동해 주세요.",
     "rule-3":"<strong>과일 제출 후 손 씻기:</strong> 과일을 제출한 뒤에는 매번 반드시 양손을 씻어 주세요.",
