@@ -370,7 +370,7 @@
         <p>請嚴格遵守農場守則 • 違規者將面臨即時離場處分</p>
     </footer>
 
-    <script src="translations.js?v=20261011-paycalc"></script>
+    <script src="translations.js?v=20261011-paycalc-fix2"></script>
     <script>
         function toggleLanguageMenu(event) {
             event.stopPropagation();
@@ -394,7 +394,7 @@
         });
         document.addEventListener('DOMContentLoaded', function () {
             const saved = localStorage.getItem('farmLanguage');
-            if (saved && ['en','zh-TW','zh-CN','ja','ko'].includes(saved)) applyFarmLanguage(saved);
+            applyFarmLanguage(saved && ['en','zh-TW','zh-CN','ja','ko'].includes(saved) ? saved : 'zh-TW');
         });
     </script>
 
