@@ -12,7 +12,7 @@ function updatePayrollCalculator(language){
  root.querySelectorAll('[data-pc]').forEach(el=>{const key=el.getAttribute('data-pc');if(dict[key])el.textContent=dict[key];});
  const input=root.querySelector('#payroll-work-date');
  function render(){
-   if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(input.value))return;
+   if(!/^\d{4}-\d{2}-\d{2}$/.test(input.value))return;
    const [year,month,day]=input.value.split('-').map(Number);
    const date=new Date(Date.UTC(year,month-1,day));
    if(date.getUTCFullYear()!==year||date.getUTCMonth()!==month-1||date.getUTCDate()!==day)return;
@@ -24,7 +24,7 @@ function updatePayrollCalculator(language){
    root.querySelector('#pc-paydate').textContent=fmt(monday);
    root.querySelector('#pc-alertdate').textContent=fmt(monday);
  }
- input.addEventListener('input',render);render();
+ input.oninput=render;render();
 }
 
 const FARM_TRANSLATIONS = {
@@ -383,7 +383,9 @@ function applyFarmLanguage(language) {
 
   // Save pristine page once. Restore it before every language change.
   if(!window.__farmOriginalBody) window.__farmOriginalBody=document.body.innerHTML;
+  const previousWorkDate=document.querySelector('#payroll-work-date')?.value;
   document.body.innerHTML=window.__farmOriginalBody;
+  if(previousWorkDate){const dateInput=document.querySelector('#payroll-work-date');if(dateInput)dateInput.value=previousWorkDate;}
 
   if(language!=='zh-TW'){
     const signal=document.querySelector('[data-i18n="signal-community"]');
