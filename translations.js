@@ -446,5 +446,6 @@ function applyFarmLanguage(language) {
       : 'payroll-week-example.svg';
   }
   updatePayrollCalculator(language);
+  if(typeof initMissingPayReport==="function") initMissingPayReport(language);
   localStorage.setItem('farmLanguage',language);
 }
