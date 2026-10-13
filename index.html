@@ -126,7 +126,24 @@
               </div>
               <p data-pc="explain" style="font-size:14px;margin:13px 0 0">計算方式：由所選日期回推至星期四，結算至下一個星期三，並於結算週後的星期一發薪。</p>
             </section>
-
+<section id="missing-pay-report" style="margin-top:22px;padding:20px;border:2px solid #d4c7ed;border-radius:16px;background:#fcfaff;color:#24304a">
+<h3 id="mpr-title">📝 工資／Payslip 未收到申報表</h3><p id="mpr-intro">星期一 17:00 後仍未收到？請先檢查垃圾郵件，並於當天 19:00 前通知管理層。</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+<label><span id="mpr-name-label">英文姓名 *</span><input id="mpr-name" autocomplete="name" style="display:block;width:100%;padding:10px;box-sizing:border-box"></label>
+<label><span id="mpr-alias-label">別名（選填）</span><input id="mpr-alias" style="display:block;width:100%;padding:10px;box-sizing:border-box"></label></div>
+<fieldset style="margin:15px 0"><legend id="mpr-missing-label">未收到甚麼？ *</legend>
+<label style="display:block"><input type="radio" name="mpr-missing" value="salary"><span id="mpr-salary">只欠工資</span></label>
+<label style="display:block"><input type="radio" name="mpr-missing" value="payslip"><span id="mpr-payslip">只欠 Payslip</span></label>
+<label style="display:block"><input type="radio" name="mpr-missing" value="both" checked><span id="mpr-both">工資及 Payslip 都未收到</span></label></fieldset>
+<label for="mpr-date" id="mpr-date-label" style="display:block;font-weight:700">選擇該週其中一日返工日期 *</label>
+<input id="mpr-date" type="date" style="width:100%;max-width:320px;padding:10px;box-sizing:border-box">
+<div id="mpr-period" aria-live="polite" style="margin:12px 0;padding:12px;background:#edf3ff;border-radius:9px;font-weight:700"></div>
+<label style="display:block;margin:12px 0"><input id="mpr-spam" type="checkbox"><span id="mpr-spam-label">我已檢查收件箱及垃圾郵件（Spam / Junk）</span></label>
+<label style="display:block;margin:12px 0"><input id="mpr-bank" type="checkbox"><span id="mpr-bank-label">我已檢查銀行戶口是否收到工資</span></label>
+<label for="mpr-notes" id="mpr-notes-label" style="display:block;font-weight:700">補充資料（選填）</label>
+<textarea id="mpr-notes" rows="3" style="width:100%;box-sizing:border-box;padding:10px"></textarea>
+<button id="mpr-copy" type="button" style="display:block;width:100%;margin-top:15px;padding:14px;border:0;border-radius:10px;background:#245ac4;color:white;font-weight:800;font-size:17px;cursor:pointer">📋 複製申報內容</button>
+<p id="mpr-feedback" role="status" aria-live="polite"></p><p id="mpr-privacy" style="font-size:13px">只會複製內容，請自行發訊息予管理層；此表格不會上傳或儲存個人資料。毋須提供 TFN 或銀行帳號。</p></section>
         </div>
 
         <!-- 嚴格禁止與違規即時離場守則 -->
@@ -370,7 +387,8 @@
         <p>請嚴格遵守農場守則 • 違規者將面臨即時離場處分</p>
     </footer>
 
-    <script src="translations.js?v=20261011-payday-today"></script>
+    <script src="missing-pay-report.js?v=20261013-1"></script>
+    <script src="translations.js?v=20261013-missing-pay-form"></script>
     <script>
         function toggleLanguageMenu(event) {
             event.stopPropagation();
