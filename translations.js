@@ -447,5 +447,6 @@ function applyFarmLanguage(language) {
   }
   updatePayrollCalculator(language);
   if(typeof initMissingPayReport==="function") initMissingPayReport(language);
+  if(typeof initEmployeeNoticeForms==="function") initEmployeeNoticeForms(language);
   localStorage.setItem('farmLanguage',language);
 }
