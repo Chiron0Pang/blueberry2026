@@ -147,6 +147,38 @@
 <p id="mpr-feedback" role="status" aria-live="polite"></p><p id="mpr-privacy" style="font-size:13px">只會複製內容，請自行發訊息予管理層；此表格不會上傳或儲存個人資料。毋須提供 TFN 或銀行帳號。</p></section>
         </div>
 
+        <!-- 📝 請假及離職表格 -->
+<div class="card" id="employee-notice-forms" style="border:2px solid #c9d9eb">
+<h2 id="nf-heading">📝 請假及離職通知表格</h2><p id="nf-intro">填寫後複製內容，自行發送給管理層。</p>
+<section id="nf-leave" style="padding:20px;background:#edf7ff;border:2px solid #8bc5ed;border-left:7px solid #267cb7;border-radius:16px;margin:20px 0 28px">
+<div aria-hidden="true" style="font-size:30px">🗓️</div><h3 id="nf-leave-title" style="color:#155f94">📝 員工請假申請表</h3>
+<label><span id="nf-leave-name-label">英文姓名 *</span><input id="nf-leave-name" type="text"></label>
+<label><span id="nf-leave-alias-label">別名（選填）</span><input id="nf-leave-alias" type="text"></label>
+<fieldset><legend id="nf-leave-type-label">請假類型 *</legend><label><input type="radio" name="nf-leave-type" value="personal" checked><span id="nf-leave-personal">事假</span></label><label><input type="radio" name="nf-leave-type" value="sick"><span id="nf-leave-sick">病假</span></label><label><input type="radio" name="nf-leave-type" value="other"><span id="nf-leave-other">其他</span></label></fieldset>
+<label><span id="nf-leave-start-label">開始日期 *</span><input id="nf-leave-start" type="date"></label>
+<label><span id="nf-leave-end-label">結束日期 *</span><input id="nf-leave-end" type="date"></label>
+<p id="nf-leave-days" aria-live="polite"></p>
+<label><span id="nf-leave-return-label">預計返工日期 *</span><input id="nf-leave-return" type="date"></label>
+<label><span id="nf-leave-reason-label">請假原因 *</span><textarea id="nf-leave-reason" rows="3"></textarea></label>
+<p id="nf-leave-reminder">請盡早通知管理層；病假或突發情況請盡快通知。通知不代表已獲批准。</p>
+<label><input id="nf-leave-confirm" type="checkbox"><span id="nf-leave-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
+<button type="button" id="nf-leave-copy">📋 複製請假申請</button><p id="nf-leave-status" role="status"></p>
+</section>
+<section id="nf-resign" style="padding:20px;background:#fff5e9;border:2px solid #e9b57e;border-left:7px solid #c4772b;border-radius:16px;margin:28px 0 20px">
+<div aria-hidden="true" style="font-size:30px">🚪</div><h3 id="nf-resign-title" style="color:#985114">📋 員工離職通知表</h3>
+<label><span id="nf-resign-name-label">英文姓名 *</span><input id="nf-resign-name" type="text"></label>
+<label><span id="nf-resign-alias-label">別名（選填）</span><input id="nf-resign-alias" type="text"></label>
+<label><span id="nf-resign-notice-label">提出通知日期 *</span><input id="nf-resign-notice" type="date"></label>
+<label><span id="nf-resign-days-label">提前通知日數 *</span><select id="nf-resign-days"><option value="7">7</option><option value="14" selected>14</option><option value="21">21</option><option value="28">28</option><option value="custom" id="nf-custom-label">自訂日數</option></select></label>
+<label id="nf-resign-custom-wrap" hidden><span id="nf-resign-custom-label">輸入日數（0–365）</span><input id="nf-resign-custom" type="number" min="0" max="365" value="14"></label>
+<p id="nf-resign-last" aria-live="polite"></p>
+<label><span id="nf-resign-reason-label">離職原因 *</span><textarea id="nf-resign-reason" rows="3"></textarea></label>
+<p id="nf-resign-reminder">為方便安排人手，請盡量提前兩星期（14日）通知管理層。實際通知要求以適用合約及法律為準。</p>
+<label><input id="nf-resign-confirm" type="checkbox"><span id="nf-resign-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
+<button type="button" id="nf-resign-copy">📋 複製離職通知</button><p id="nf-resign-status" role="status"></p>
+</section><p id="nf-privacy">表格只會複製文字，不會上傳或儲存資料。</p>
+</div>
+
         <!-- 嚴格禁止與違規即時離場守則 -->
         <div class="card alert">
             <h2>🚫 違規即時離場守則（請嚴格遵守）</h2>
@@ -163,38 +195,6 @@
                 <li data-i18n="rule-10"><strong>嚴禁損害農場利益：</strong>嚴禁做出任何對農場造成風險損失的事情。例如：<span class="highlight">偷竊</span>（包括藍莓及其他不屬於你的私人財產）、私自關掉農場水系統、破壞農場設備等。</li>
             </ol>
         </div>
-        <!-- 📝 請假及離職表格 -->
-<div class="card" id="employee-notice-forms" style="border:2px solid #c9d9eb">
-<h2 id="nf-heading">📝 請假及離職通知表格</h2><p id="nf-intro">填寫後複製內容，自行發送給管理層。</p>
-<section id="nf-leave" style="padding:15px;background:#f7fbff;border-radius:12px;margin:16px 0">
-<h3 id="nf-leave-title">📝 員工請假申請表</h3>
-<label><span id="nf-leave-name-label">英文姓名 *</span><input id="nf-leave-name" type="text"></label>
-<label><span id="nf-leave-alias-label">別名（選填）</span><input id="nf-leave-alias" type="text"></label>
-<fieldset><legend id="nf-leave-type-label">請假類型 *</legend><label><input type="radio" name="nf-leave-type" value="personal" checked><span id="nf-leave-personal">事假</span></label><label><input type="radio" name="nf-leave-type" value="sick"><span id="nf-leave-sick">病假</span></label><label><input type="radio" name="nf-leave-type" value="other"><span id="nf-leave-other">其他</span></label></fieldset>
-<label><span id="nf-leave-start-label">開始日期 *</span><input id="nf-leave-start" type="date"></label>
-<label><span id="nf-leave-end-label">結束日期 *</span><input id="nf-leave-end" type="date"></label>
-<p id="nf-leave-days" aria-live="polite"></p>
-<label><span id="nf-leave-return-label">預計返工日期 *</span><input id="nf-leave-return" type="date"></label>
-<label><span id="nf-leave-reason-label">請假原因 *</span><textarea id="nf-leave-reason" rows="3"></textarea></label>
-<p id="nf-leave-reminder">請盡早通知管理層；病假或突發情況請盡快通知。通知不代表已獲批准。</p>
-<label><input id="nf-leave-confirm" type="checkbox"><span id="nf-leave-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
-<button type="button" id="nf-leave-copy">📋 複製請假申請</button><p id="nf-leave-status" role="status"></p>
-</section>
-<section id="nf-resign" style="padding:15px;background:#f7fbff;border-radius:12px;margin:16px 0">
-<h3 id="nf-resign-title">📋 員工離職通知表</h3>
-<label><span id="nf-resign-name-label">英文姓名 *</span><input id="nf-resign-name" type="text"></label>
-<label><span id="nf-resign-alias-label">別名（選填）</span><input id="nf-resign-alias" type="text"></label>
-<label><span id="nf-resign-notice-label">提出通知日期 *</span><input id="nf-resign-notice" type="date"></label>
-<label><span id="nf-resign-days-label">提前通知日數 *</span><select id="nf-resign-days"><option value="7">7</option><option value="14" selected>14</option><option value="21">21</option><option value="28">28</option><option value="custom" id="nf-custom-label">自訂日數</option></select></label>
-<label id="nf-resign-custom-wrap" hidden><span id="nf-resign-custom-label">輸入日數（0–365）</span><input id="nf-resign-custom" type="number" min="0" max="365" value="14"></label>
-<p id="nf-resign-last" aria-live="polite"></p>
-<label><span id="nf-resign-reason-label">離職原因 *</span><textarea id="nf-resign-reason" rows="3"></textarea></label>
-<p id="nf-resign-reminder">為方便安排人手，請盡量提前兩星期（14日）通知管理層。實際通知要求以適用合約及法律為準。</p>
-<label><input id="nf-resign-confirm" type="checkbox"><span id="nf-resign-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
-<button type="button" id="nf-resign-copy">📋 複製離職通知</button><p id="nf-resign-status" role="status"></p>
-</section><p id="nf-privacy">表格只會複製文字，不會上傳或儲存資料。</p>
-</div>
-
 <div class="card warning leave-card" id="leave-notes"><h2>⚠️ 請假注意事項</h2>
             <ol>
                 <li><strong>⏰ 事假請最少提前 24 小時通知：</strong>如屬可預先安排的長假，應更早提出，以便安排工作及人手。</li>
