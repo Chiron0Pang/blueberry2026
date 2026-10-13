@@ -135,9 +135,10 @@
 <label style="display:block"><input type="radio" name="mpr-missing" value="salary"><span id="mpr-salary">只欠工資</span></label>
 <label style="display:block"><input type="radio" name="mpr-missing" value="payslip"><span id="mpr-payslip">只欠 Payslip</span></label>
 <label style="display:block"><input type="radio" name="mpr-missing" value="both" checked><span id="mpr-both">工資及 Payslip 都未收到</span></label></fieldset>
-<label for="mpr-date" id="mpr-date-label" style="display:block;font-weight:700">選擇該週其中一日返工日期 *</label>
-<input id="mpr-date" type="date" style="width:100%;max-width:320px;padding:10px;box-sizing:border-box">
+<label for="mpr-date" id="mpr-date-label" style="display:block;font-weight:700">選擇工資週期（星期四至下星期三） *</label>
+<select id="mpr-date" style="width:100%;max-width:380px;padding:10px;box-sizing:border-box"></select>
 <div id="mpr-period" aria-live="polite" style="margin:12px 0;padding:12px;background:#edf3ff;border-radius:9px;font-weight:700"></div>
+<p id="mpr-check-hint" style="font-weight:700">以下兩項可二選一，亦可全選 *</p>
 <label style="display:block;margin:12px 0"><input id="mpr-spam" type="checkbox"><span id="mpr-spam-label">我已檢查收件箱及垃圾郵件（Spam / Junk）</span></label>
 <label style="display:block;margin:12px 0"><input id="mpr-bank" type="checkbox"><span id="mpr-bank-label">我已檢查銀行戶口是否收到工資</span></label>
 <label for="mpr-notes" id="mpr-notes-label" style="display:block;font-weight:700">補充資料（選填）</label>
@@ -408,7 +409,7 @@
         <p>請嚴格遵守農場守則 • 違規者將面臨即時離場處分</p>
     </footer>
 
-    <script src="missing-pay-report.js?v=20261013-1"></script>
+    <script src="missing-pay-report.js?v=20261013-2"></script>
     <script src="employee-notice-forms.js?v=20261013-1"></script>
     <script src="translations.js?v=20261013-notice-forms"></script>
     <script>
