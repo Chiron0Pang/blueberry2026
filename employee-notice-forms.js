@@ -51,7 +51,7 @@ el('leave-copy').onclick=async()=>{
  const resp=await fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,alias,type,start:el('leave-start').value,end:el('leave-end').value,returnDate:el('leave-return').value,reason})});
  const result=await resp.json();
  if(!resp.ok||!result.ok){status('leave',result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:m.offline);return}
- const message=[w[2],w[3]+': '+name,w[4]+': '+alias,w[5]+': '+typeText,w[34]+': '+fmt(a)+' – '+fmt(b),w[25].replace('{n}',dateDiff(a,b)+1),w[11]+': '+fmt(back),w[35]+': '+reason].join('\\n');
+ const message=[w[2],w[3]+': '+name,w[4]+': '+alias,w[5]+': '+typeText,w[34]+': '+fmt(a)+' – '+fmt(b),w[25].replace('{n}',dateDiff(a,b)+1),w[11]+': '+fmt(back),w[35]+': '+reason].join('\n');
  try{await navigator.clipboard.writeText(message);status('leave',m.done)}catch(e){status('leave',m.copied);let area=el('leave-manual');if(!area){area=document.createElement('textarea');area.id='nf-leave-manual';area.rows=9;el('leave-status').after(area)}area.value=message;area.style.width='100%';area.focus();area.select()}
  }catch(e){status('leave',m.offline)}finally{button.disabled=false}
 };
