@@ -161,7 +161,7 @@
 <label><span id="nf-leave-end-label">結束日期 *</span><input id="nf-leave-end" type="date"></label>
 <p id="nf-leave-days" aria-live="polite"></p>
 <label><span id="nf-leave-return-label">預計返工日期 *</span><input id="nf-leave-return" type="date"></label>
-<label><span id="nf-leave-reason-label">請假原因 *</span><textarea id="nf-leave-reason" rows="3"></textarea></label>
+<label><span id="nf-leave-reason-label">請假原因 *</span><textarea id="nf-leave-reason" rows="3" required maxlength="1000" placeholder="例如：頭痛、生理期、身體不適等"></textarea></label>
 <p id="nf-leave-reminder">請盡早通知管理層；病假或突發情況請盡快通知。通知不代表已獲批准。</p>
 <label><input id="nf-leave-confirm" type="checkbox"><span id="nf-leave-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
 <button type="button" id="nf-leave-copy" style="display:block;width:100%;max-width:520px;min-height:64px;padding:17px 22px;font-size:clamp(17px,4.4vw,21px);font-weight:800;border-radius:14px;line-height:1.4;margin:16px auto">📋 複製請假申請</button><p id="nf-leave-status" role="status"></p>
@@ -413,7 +413,7 @@
     </footer>
 
     <script src="missing-pay-report.js?v=20261013-2"></script>
-    <script src="employee-notice-forms.js?v=20261015-3"></script>
+    <script src="employee-notice-forms.js?v=20261015-5"></script>
     <script src="translations.js?v=20261013-notice-forms"></script>
     <script>
         function toggleLanguageMenu(event) {
