@@ -45,6 +45,7 @@ const fields={
 }[lang]||['中文姓名（選填）','英文姓名（選填）','中文或英文姓名填其中一項即可；別名必填。'];
 el('leave-name-label').textContent=fields[0];el('leave-english-label').textContent=fields[1];el('leave-name-help').textContent=fields[2];
 el('leave-alias-label').textContent=w[4].replace(/（選填）|（选填）| \\(optional\\)|（任意）|\\(선택\\)/g,'')+' *';
+el('leave-reason').placeholder=({'zh-TW':'例如：頭痛、生理期、身體不適等','zh-CN':'例如：头痛、生理期、身体不适等','en':'e.g. headache, menstrual discomfort, feeling unwell','ja':'例：頭痛、生理痛、体調不良など','ko':'예: 두통, 생리통, 몸이 아픈 경우 등'}[lang]||'例如：頭痛、生理期、身體不適等');
 el('leave-name').placeholder='例如：陳大文';el('leave-english').placeholder='e.g. Lam XXX Iris';el('leave-alias').placeholder='例如：YY';
 el('leave-copy').textContent=m.button;
 el('leave-reminder').textContent=m.hint;
