@@ -152,7 +152,9 @@
 <h2 id="nf-heading">📝 請假及離職通知表格</h2><p id="nf-intro">填寫後複製內容，自行發送給管理層。</p>
 <section id="nf-leave" style="padding:20px;background:#edf7ff;border:2px solid #8bc5ed;border-left:7px solid #267cb7;border-radius:16px;margin:20px 0 28px">
 <div aria-hidden="true" style="font-size:30px">🗓️</div><h3 id="nf-leave-title" style="color:#155f94">📝 員工請假申請表</h3>
-<label><span id="nf-leave-name-label">英文姓名 *</span><input id="nf-leave-name" type="text"></label>
+<p id="nf-leave-name-help" style="margin:10px 0 6px;font-size:14px;color:#34536c">中文或英文姓名填其中一項即可，別名必填。</p>
+<label><span id="nf-leave-name-label">中文姓名（選填）</span><input id="nf-leave-name" type="text" autocomplete="name"></label>
+<label><span id="nf-leave-english-label">英文姓名（選填）</span><input id="nf-leave-english" type="text" autocomplete="off"></label>
 <label><span id="nf-leave-alias-label">別名（選填）</span><input id="nf-leave-alias" type="text"></label>
 <fieldset><legend id="nf-leave-type-label">請假類型 *</legend><label><input type="radio" name="nf-leave-type" value="personal" checked><span id="nf-leave-personal">事假</span></label><label><input type="radio" name="nf-leave-type" value="sick"><span id="nf-leave-sick">病假</span></label><label><input type="radio" name="nf-leave-type" value="other"><span id="nf-leave-other">其他</span></label></fieldset>
 <label><span id="nf-leave-start-label">開始日期 *</span><input id="nf-leave-start" type="date"></label>
@@ -162,7 +164,7 @@
 <label><span id="nf-leave-reason-label">請假原因 *</span><textarea id="nf-leave-reason" rows="3"></textarea></label>
 <p id="nf-leave-reminder">請盡早通知管理層；病假或突發情況請盡快通知。通知不代表已獲批准。</p>
 <label><input id="nf-leave-confirm" type="checkbox"><span id="nf-leave-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
-<button type="button" id="nf-leave-copy">📋 複製請假申請</button><p id="nf-leave-status" role="status"></p>
+<button type="button" id="nf-leave-copy" style="display:block;width:100%;max-width:520px;min-height:64px;padding:17px 22px;font-size:clamp(17px,4.4vw,21px);font-weight:800;border-radius:14px;line-height:1.4;margin:16px auto">📋 複製請假申請</button><p id="nf-leave-status" role="status"></p>
 </section>
 <section id="nf-resign" style="padding:20px;background:#fff5e9;border:2px solid #e9b57e;border-left:7px solid #c4772b;border-radius:16px;margin:28px 0 20px">
 <div aria-hidden="true" style="font-size:30px">🚪</div><h3 id="nf-resign-title" style="color:#985114">📋 員工離職通知表</h3>
@@ -411,7 +413,7 @@
     </footer>
 
     <script src="missing-pay-report.js?v=20261013-2"></script>
-    <script src="employee-notice-forms.js?v=20261015-2"></script>
+    <script src="employee-notice-forms.js?v=20261015-3"></script>
     <script src="translations.js?v=20261013-notice-forms"></script>
     <script>
         function toggleLanguageMenu(event) {
