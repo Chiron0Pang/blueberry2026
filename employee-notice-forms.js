@@ -36,15 +36,22 @@ const messages={
 'ko':{hint:'중국어 또는 영어 이름 중 하나와 별명이 직원 시스템과 일치해야 합니다. 성과 이름 순서를 바꿀 수 있습니다. 등록은 관리자 승인을 의미하지 않습니다.',button:'📤 휴가 등록 및 복사',working:'확인 및 등록 중…',done:'✅ 휴가 등록 및 복사 완료.',copied:'✅ 등록 완료. 직접 복사해 주세요.',fail:'❌ 이름/별명이 일치하지 않아 등록되지 않았습니다.',duplicate:'⚠️ 해당 날짜에 기존 휴가 기록이 있습니다.',rate:'⚠️ 요청이 너무 많습니다.',offline:'⚠️ 연결 실패. 등록되지 않았습니다.'}
 };
 const m=messages[lang]||messages['zh-TW'];
-el('leave-name-label').textContent=({'zh-TW':'中文或英文姓名 *','zh-CN':'中文或英文姓名 *','en':'Chinese or English full name *','ja':'中国語または英語の氏名 *','ko':'중국어 또는 영어 이름 *'}[lang]||'中文或英文姓名 *');
-el('leave-alias-label').textContent=w[4].replace(/（選填）|（选填）| \(optional\)|（任意）|\(선택\)/g,'')+' *';
-el('leave-name').placeholder=({'zh-TW':'例如：陳大文 / Lam XXX Iris','zh-CN':'例如：陈大文 / Lam XXX Iris','en':'e.g. 陳大文 / Lam XXX Iris','ja':'例：陳大文 / Lam XXX Iris','ko':'예: 陳大文 / Lam XXX Iris'}[lang]||'陳大文 / Lam XXX Iris');el('leave-alias').placeholder='YY';
+const fields={
+'zh-TW':['中文姓名（選填）','英文姓名（選填）','中文或英文姓名填其中一項即可；別名必填。'],
+'zh-CN':['中文姓名（选填）','英文姓名（选填）','中文或英文姓名填写其中一项即可；别名必填。'],
+'en':['Chinese name (optional)','English name (optional)','Enter either a Chinese or English name. Nickname is required.'],
+'ja':['中国語の氏名（任意）','英語の氏名（任意）','中国語または英語の氏名を入力してください。ニックネームは必須です。'],
+'ko':['중국어 이름 (선택)','영어 이름 (선택)','중국어 또는 영어 이름을 입력하세요. 별명은 필수입니다.']
+}[lang]||['中文姓名（選填）','英文姓名（選填）','中文或英文姓名填其中一項即可；別名必填。'];
+el('leave-name-label').textContent=fields[0];el('leave-english-label').textContent=fields[1];el('leave-name-help').textContent=fields[2];
+el('leave-alias-label').textContent=w[4].replace(/（選填）|（选填）| \\(optional\\)|（任意）|\\(선택\\)/g,'')+' *';
+el('leave-name').placeholder='例如：陳大文';el('leave-english').placeholder='e.g. Lam XXX Iris';el('leave-alias').placeholder='例如：YY';
 el('leave-copy').textContent=m.button;
 el('leave-reminder').textContent=m.hint;
 el('leave-confirm-label').textContent=m.hint;
 el('privacy').textContent=m.hint;
 el('leave-copy').onclick=async()=>{
- const a=parse(el('leave-start').value),b=parse(el('leave-end').value),back=parse(el('leave-return').value),name=el('leave-name').value.trim(),alias=el('leave-alias').value.trim(),reason=el('leave-reason').value.trim();
+ const a=parse(el('leave-start').value),b=parse(el('leave-end').value),back=parse(el('leave-return').value),chineseName=el('leave-name').value.trim(),englishName=el('leave-english').value.trim(),name=chineseName||englishName,alias=el('leave-alias').value.trim(),reason=el('leave-reason').value.trim();
  if(!name||!alias||!a||!b||b<a||!back||back<=b||!reason||!el('leave-confirm').checked){status('leave',w[27]);return}
  const type=document.querySelector('input[name="nf-leave-type"]:checked')?.value||'personal',typeText=w[type==='personal'?6:type==='sick'?7:8];
  const button=el('leave-copy');button.disabled=true;status('leave',m.working);
@@ -52,7 +59,7 @@ el('leave-copy').onclick=async()=>{
  const resp=await fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,alias,type,start:el('leave-start').value,end:el('leave-end').value,returnDate:el('leave-return').value,reason})});
  const result=await resp.json();
  if(!resp.ok||!result.ok){status('leave',result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:m.offline);return}
- const message=[w[2],w[3]+': '+name,w[4]+': '+alias,w[5]+': '+typeText,w[34]+': '+fmt(a)+' – '+fmt(b),w[25].replace('{n}',dateDiff(a,b)+1),w[11]+': '+fmt(back),w[35]+': '+reason].join('\n');
+ const message=[w[2],fields[0]+': '+(chineseName||'-'),fields[1]+': '+(englishName||'-'),w[4]+': '+alias,w[5]+': '+typeText,w[34]+': '+fmt(a)+' – '+fmt(b),w[25].replace('{n}',dateDiff(a,b)+1),w[11]+': '+fmt(back),w[35]+': '+reason].join('\n');
  try{await navigator.clipboard.writeText(message);status('leave',m.done)}catch(e){status('leave',m.copied);let area=el('leave-manual');if(!area){area=document.createElement('textarea');area.id='nf-leave-manual';area.rows=9;el('leave-status').after(area)}area.value=message;area.style.width='100%';area.focus();area.select()}
  }catch(e){status('leave',m.offline)}finally{button.disabled=false}
 };
