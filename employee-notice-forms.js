@@ -28,6 +28,33 @@ if(!name||!a||!b||b<a||!back||back<=b||!reason||!el('leave-confirm').checked){st
 const type=document.querySelector('input[name="nf-leave-type"]:checked')?.value||'personal',typeText=w[type==='personal'?6:type==='sick'?7:8];
 copy('leave',[w[2],w[3]+': '+name,w[4]+': '+(el('leave-alias').value.trim()||w[30]),w[5]+': '+typeText,w[34]+': '+fmt(a)+' – '+fmt(b),w[25].replace('{n}',dateDiff(a,b)+1),w[11]+': '+fmt(back),w[35]+': '+reason].join('\n'));
 };
+const messages={
+'zh-TW':{hint:'英文姓名及別名必須與員工系統吻合。按下按鈕會直接登記請假，並複製申請內容；登記不代表管理員已批准。',button:'📤 登記並複製請假申請',working:'正在核對及登記…',done:'✅ 已登記到員工系統，並已複製申請內容。',copied:'✅ 已登記到員工系統；請手動複製內容。',fail:'❌ 姓名或別名未能唯一配對，未有登記。請核對後聯絡管理員。',duplicate:'⚠️ 日期已有請假紀錄，未重複登記。',rate:'⚠️ 提交過於頻繁，請稍後再試。',offline:'⚠️ 無法連接員工系統，未有登記或複製。'},
+'zh-CN':{hint:'英文姓名及别名必须与员工系统一致。点击后会直接登记请假并复制内容；登记不代表已获批准。',button:'📤 登记并复制请假申请',working:'正在核对及登记…',done:'✅ 已登记到员工系统，并已复制申请。',copied:'✅ 已登记；请手动复制内容。',fail:'❌ 姓名或别名未能唯一匹配，未登记。',duplicate:'⚠️ 日期已有请假记录。',rate:'⚠️ 提交过于频繁，请稍后再试。',offline:'⚠️ 无法连接员工系统，未登记或复制。'},
+'en':{hint:'Your full name and nickname must match the employee system. This button records leave immediately and copies the request; recording does not mean management approval.',button:'📤 Record & copy leave request',working:'Checking and recording…',done:'✅ Leave recorded and request copied.',copied:'✅ Leave recorded; please copy the text manually.',fail:'❌ Name/nickname not uniquely matched. Nothing recorded.',duplicate:'⚠️ Existing leave record for these dates.',rate:'⚠️ Too many attempts. Try later.',offline:'⚠️ Could not connect. Nothing recorded or copied.'},
+'ja':{hint:'氏名とニックネームが従業員システムと一致する必要があります。登録は承認を意味しません。',button:'📤 休暇を登録してコピー',working:'照合・登録中…',done:'✅ 登録とコピーが完了しました。',copied:'✅ 登録済みです。手動でコピーしてください。',fail:'❌ 氏名とニックネームが一致しません。未登録です。',duplicate:'⚠️ 既存の休暇記録があります。',rate:'⚠️ 試行回数が多すぎます。',offline:'⚠️ 接続できず、登録されませんでした。'},
+'ko':{hint:'이름과 별명이 직원 시스템과 일치해야 합니다. 등록은 관리자 승인을 의미하지 않습니다.',button:'📤 휴가 등록 및 복사',working:'확인 및 등록 중…',done:'✅ 휴가 등록 및 복사 완료.',copied:'✅ 등록 완료. 직접 복사해 주세요.',fail:'❌ 이름/별명이 일치하지 않아 등록되지 않았습니다.',duplicate:'⚠️ 해당 날짜에 기존 휴가 기록이 있습니다.',rate:'⚠️ 요청이 너무 많습니다.',offline:'⚠️ 연결 실패. 등록되지 않았습니다.'}
+};
+const m=messages[lang]||messages['zh-TW'];
+el('leave-alias-label').textContent=w[4].replace(/（選填）|（选填）| \(optional\)|（任意）|\(선택\)/g,'')+' *';
+el('leave-name').placeholder='Lam XXX Iris';el('leave-alias').placeholder='YY';
+el('leave-copy').textContent=m.button;
+el('leave-reminder').textContent=m.hint;
+el('leave-confirm-label').textContent=m.hint;
+el('privacy').textContent=m.hint;
+el('leave-copy').onclick=async()=>{
+ const a=parse(el('leave-start').value),b=parse(el('leave-end').value),back=parse(el('leave-return').value),name=el('leave-name').value.trim(),alias=el('leave-alias').value.trim(),reason=el('leave-reason').value.trim();
+ if(!name||!alias||!a||!b||b<a||!back||back<=b||!reason||!el('leave-confirm').checked){status('leave',w[27]);return}
+ const type=document.querySelector('input[name="nf-leave-type"]:checked')?.value||'personal',typeText=w[type==='personal'?6:type==='sick'?7:8];
+ const button=el('leave-copy');button.disabled=true;status('leave',m.working);
+ try{
+ const resp=await fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,alias,type,start:el('leave-start').value,end:el('leave-end').value,returnDate:el('leave-return').value,reason})});
+ const result=await resp.json();
+ if(!resp.ok||!result.ok){status('leave',result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:m.offline);return}
+ const message=[w[2],w[3]+': '+name,w[4]+': '+alias,w[5]+': '+typeText,w[34]+': '+fmt(a)+' – '+fmt(b),w[25].replace('{n}',dateDiff(a,b)+1),w[11]+': '+fmt(back),w[35]+': '+reason].join('\\n');
+ try{await navigator.clipboard.writeText(message);status('leave',m.done)}catch(e){status('leave',m.copied);let area=el('leave-manual');if(!area){area=document.createElement('textarea');area.id='nf-leave-manual';area.rows=9;el('leave-status').after(area)}area.value=message;area.style.width='100%';area.focus();area.select()}
+ }catch(e){status('leave',m.offline)}finally{button.disabled=false}
+};
 el('resign-copy').onclick=()=>{
 const calc=refreshResign(),name=el('resign-name').value.trim(),reason=el('resign-reason').value.trim();
 if(!name||!calc||!reason||!el('resign-confirm').checked){status('resign',w[27]);return}
