@@ -12,9 +12,11 @@ function week(value){if(!/^\d{4}-\d{2}-\d{2}$/.test(value))return null;const [y,
 window.initMissingPayReport=function(lang){
  const root=document.getElementById('missing-pay-report');if(!root)return;const words=dict[lang]||dict['zh-TW'];
  ids.forEach((id,i)=>{if(get(id))get(id).textContent=words[i]});
+ const extra={"zh-TW":["工資有收到，但有欠缺（需提供該週 Payslip 作證明）","我已收到工資，但我（肯定）欠缺了那週時數／金額","以下三項可選一，亦可全選 *"],"zh-CN":["工资已收到，但有欠缺（需提供该周 Payslip 作为证明）","我已收到工资，但我确定该周工时／金额有欠缺","以下三项可选一，也可全选 *"],"en":["Pay received but short (provide that week’s payslip as evidence)","I received pay but am certain that hours / amount are missing for that week","Select one or more of the three checks *"],"ja":["給与は受領しましたが不足があります（該当週の給与明細を証拠として提出してください）","給与は受領しましたが、その週の労働時間／金額が不足していることを確認しました","以下の3項目から1つ以上選択 *"],"ko":["급여를 받았지만 부족분이 있습니다 (해당 주 급여명세서를 증빙으로 제출하세요)","급여를 받았지만 해당 주의 근무시간／금액이 부족한 것이 확실합니다","아래 세 항목 중 하나 이상 선택 *"]};
+ const additional=extra[lang]||extra['zh-TW'];get('shortfall').textContent=additional[0];get('shortfall-check-label').textContent=additional[1];
  const date=get('date'),period=get('period'),feedback=get('feedback');
  const hint={'zh-TW':'以下兩項可二選一，亦可全選 *','zh-CN':'以下两项可二选一，也可全选 *','en':'Select either or both checks *','ja':'以下のいずれか、または両方を選択 *','ko':'아래 항목 중 하나 또는 둘 다 선택 *'};
- get('check-hint').textContent=hint[lang]||hint['zh-TW'];
+ get('check-hint').textContent=additional[2];
  const saved=date.value;date.innerHTML='';
  const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent={'zh-TW':'請選擇工資週期','zh-CN':'请选择工资周期','en':'Select a pay period','ja':'給与期間を選択','ko':'급여 기간 선택'}[lang]||'請選擇工資週期';date.append(placeholder);
  const now=new Date(),utc=new Date(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()));
@@ -26,10 +28,10 @@ window.initMissingPayReport=function(lang){
  date.oninput=refresh;refresh();
  get('copy').onclick=async function(){
   const name=get('name').value.trim(),dateValue=date.value,range=week(dateValue);
-  if(!name||!range||(!get('spam').checked&&!get('bank').checked)){feedback.textContent=words[15];return}
+  if(!name||!range||(!get('spam').checked&&!get('bank').checked&&!get('shortfall-check').checked)){feedback.textContent=words[15];return}
   const selected=root.querySelector('input[name="mpr-missing"]:checked')?.value||'both';
-  const missing=words[selected==='salary'?5:selected==='payslip'?6:7];
-  const report=[words[0],words[2].replace(' *','')+': '+name,words[3]+': '+(get('alias').value.trim()||words[18]),words[4].replace(' *','')+': '+missing,words[14]+': '+range,words[9]+': '+(get('spam').checked?words[19]:'—'),words[10]+': '+(get('bank').checked?words[19]:'—'),words[11]+': '+(get('notes').value.trim()||words[18])].join('\n');
+  const missing=selected==='shortfall'?additional[0]:words[selected==='salary'?5:selected==='payslip'?6:7];
+  const report=[words[0],words[2].replace(' *','')+': '+name,words[3]+': '+(get('alias').value.trim()||words[18]),words[4].replace(' *','')+': '+missing,words[14]+': '+range,words[9]+': '+(get('spam').checked?words[19]:'—'),words[10]+': '+(get('bank').checked?words[19]:'—'),additional[1]+': '+(get('shortfall-check').checked?words[19]:'—'),words[11]+': '+(get('notes').value.trim()||words[18])].join('\n');
   try{if(!navigator.clipboard||!navigator.clipboard.writeText)throw Error('clipboard unavailable');await navigator.clipboard.writeText(report);feedback.textContent=words[16];}
   catch(e){feedback.textContent=words[17];const ta=document.createElement('textarea');ta.value=report;ta.readOnly=true;ta.style.width='100%';ta.rows=9;const old=get('manual-copy');if(old)old.remove();ta.id='mpr-manual-copy';feedback.after(ta);ta.focus();ta.select();}
  };
