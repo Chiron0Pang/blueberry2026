@@ -137,13 +137,15 @@
 <fieldset style="margin:15px 0"><legend id="mpr-missing-label">未收到甚麼？ *</legend>
 <label style="display:block"><input type="radio" name="mpr-missing" value="salary"><span id="mpr-salary">只欠工資</span></label>
 <label style="display:block"><input type="radio" name="mpr-missing" value="payslip"><span id="mpr-payslip">只欠 Payslip</span></label>
-<label style="display:block"><input type="radio" name="mpr-missing" value="both" checked><span id="mpr-both">工資及 Payslip 都未收到</span></label></fieldset>
+<label style="display:block"><input type="radio" name="mpr-missing" value="both" checked><span id="mpr-both">工資及 Payslip 都未收到</span></label>
+<label style="display:block"><input type="radio" name="mpr-missing" value="shortfall"><span id="mpr-shortfall">工資有收到，但有欠缺（需提供該週 Payslip 作證明）</span></label></fieldset>
 <label for="mpr-date" id="mpr-date-label" style="display:block;font-weight:700">選擇工資週期（星期四至下星期三） *</label>
 <select id="mpr-date" style="width:100%;max-width:380px;padding:10px;box-sizing:border-box"></select>
 <div id="mpr-period" aria-live="polite" style="margin:12px 0;padding:12px;background:#edf3ff;border-radius:9px;font-weight:700"></div>
-<p id="mpr-check-hint" style="font-weight:700">以下兩項可二選一，亦可全選 *</p>
+<p id="mpr-check-hint" style="font-weight:700">以下三項可選一，亦可全選 *</p>
 <label style="display:block;margin:12px 0"><input id="mpr-spam" type="checkbox"><span id="mpr-spam-label">我已檢查收件箱及垃圾郵件（Spam / Junk）</span></label>
 <label style="display:block;margin:12px 0"><input id="mpr-bank" type="checkbox"><span id="mpr-bank-label">我已檢查銀行戶口是否收到工資</span></label>
+<label style="display:block;margin:12px 0"><input id="mpr-shortfall-check" type="checkbox"><span id="mpr-shortfall-check-label">我已收到工資，但我（肯定）欠缺了那週時數／金額</span></label>
 <label for="mpr-notes" id="mpr-notes-label" style="display:block;font-weight:700">補充資料（選填）</label>
 <textarea id="mpr-notes" rows="3" style="width:100%;box-sizing:border-box;padding:10px"></textarea>
 <button id="mpr-copy" type="button" style="display:block;width:100%;margin-top:15px;padding:14px;border:0;border-radius:10px;background:#245ac4;color:white;font-weight:800;font-size:17px;cursor:pointer">📋 複製申報內容</button>
@@ -415,7 +417,7 @@
         <p>請嚴格遵守農場守則 • 違規者將面臨即時離場處分</p>
     </footer>
 
-    <script src="missing-pay-report.js?v=20261013-2"></script>
+    <script src="missing-pay-report.js?v=20261020-1"></script>
     <script src="employee-notice-forms.js?v=20261015-6"></script>
     <script src="translations.js?v=20261013-notice-forms"></script>
     <script>
