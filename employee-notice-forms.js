@@ -19,6 +19,13 @@ const el=id=>document.getElementById('nf-'+id);
 const parse=s=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return null;const [y,m,d]=s.split('-').map(Number),v=new Date(Date.UTC(y,m-1,d));return v.getUTCFullYear()===y&&v.getUTCMonth()===m-1&&v.getUTCDate()===d?v:null};
 const fmt=d=>String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear();
 const dateDiff=(a,b)=>Math.round((b-a)/86400000);
+const signalReminders={
+ 'zh-TW':['已複製請假申請','記得在 Signal 發給工頭，讓他知道哦～','知道了'],
+ 'zh-CN':['已复制请假申请','记得在 Signal 发给工头，让他知道哦～','知道了'],
+ 'en':['Leave request copied','Remember to send it to your supervisor on Signal.','Got it'],
+ 'ja':['休暇申請をコピーしました','Signalで現場責任者に送って、休暇申請を知らせてください。','わかりました'],
+ 'ko':['휴가 신청을 복사했습니다','Signal로 현장 책임자에게 휴가 신청을 보내 주세요.','확인']
+};
 let lastSubmittedLeave;
 window.initEmployeeNoticeForms=function(lang){
 const w=translations[lang]||translations['zh-TW'];if(!el('heading'))return;
@@ -64,6 +71,11 @@ const copyText=el('leave-copy-text');
 const copyButton=el('leave-copy-again');
 copyButton.textContent=m.retry;
 copyText.setAttribute('aria-label',m.retry);
+const signalReminder=el('leave-copy-reminder');
+const [reminderTitle,reminderText,reminderClose]=signalReminders[lang]||signalReminders['zh-TW'];
+el('leave-copy-reminder-title').textContent=reminderTitle;
+el('leave-copy-reminder-text').textContent=reminderText;
+el('leave-copy-reminder-close').textContent=reminderClose;
 copyButton.onclick=async()=>{
  try{
   if(navigator.clipboard?.writeText){
@@ -74,12 +86,18 @@ copyButton.onclick=async()=>{
    copyText.setSelectionRange(0,copyText.value.length);
    if(!document.execCommand('copy'))throw Error('Copy unavailable');
   }
-  status('leave',m.done);
  }catch{
   status('leave',m.copied);
   copyText.focus();
   copyText.select();
   copyText.setSelectionRange(0,copyText.value.length);
+  return;
+ }
+ status('leave',m.done);
+ if(typeof signalReminder.showModal==='function'){
+  if(!signalReminder.open)signalReminder.showModal();
+ }else{
+  window.alert(reminderText);
  }
 };
 el('leave-copy').onclick=async()=>{
