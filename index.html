@@ -70,6 +70,59 @@
         .image-caption { font-size: 13px; color: #666; margin-top: 5px; font-weight: bold; }
         
         footer { text-align: center; padding: 30px 20px; color: #999; font-size: 13px; }
+
+        #nf-leave-copy-reminder {
+            box-sizing: border-box;
+            width: min(380px, calc(100% - 32px));
+            max-height: calc(100% - 32px);
+            padding: 16px 20px 20px;
+            border: 0;
+            border-radius: 24px;
+            background: #fff;
+            color: #102951;
+            text-align: center;
+            box-shadow: 0 14px 48px #10295140;
+        }
+        #nf-leave-copy-reminder::backdrop { background: #19395c99; }
+        .leave-reminder-mascot {
+            display: block;
+            width: min(200px, 60%);
+            height: auto;
+            margin: 0 auto 8px;
+        }
+        #nf-leave-copy-reminder-title { margin: 0 0 16px; font-size: clamp(20px, 5.5vw, 26px); }
+        #nf-leave-copy-reminder-text {
+            position: relative;
+            margin: 0 0 14px;
+            padding: 12px 10px;
+            border-radius: 18px;
+            background: #d7e9ff;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+        #nf-leave-copy-reminder-text::before {
+            position: absolute;
+            top: -8px;
+            left: calc(50% - 8px);
+            border-right: 8px solid transparent;
+            border-bottom: 9px solid #d7e9ff;
+            border-left: 8px solid transparent;
+            content: "";
+        }
+        #nf-leave-copy-reminder-close {
+            width: 100%;
+            min-height: 46px;
+            border: 0;
+            border-radius: 14px;
+            background: #2150af;
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        #nf-leave-copy-reminder-close:focus-visible { outline: 2px solid #102951; outline-offset: 2px; }
     </style>
 </head>
 <body>
@@ -174,9 +227,11 @@
 <button type="button" id="nf-leave-copy-again">📋 複製已提交申請</button>
 <textarea id="nf-leave-copy-text" rows="9" readonly style="display:block;width:100%;margin-top:8px;font-size:16px"></textarea>
 </div>
-<dialog id="nf-leave-copy-reminder" aria-labelledby="nf-leave-copy-reminder-title" aria-describedby="nf-leave-copy-reminder-text" style="width:min(360px,85vw);box-sizing:border-box;border:0;border-radius:16px;padding:24px;color:#23364d">
-<h3 id="nf-leave-copy-reminder-title" style="margin-top:0">已複製請假申請</h3>
-<p id="nf-leave-copy-reminder-text">記得在 Signal 發給工頭，讓他知道哦～</p>
+<dialog id="nf-leave-copy-reminder" aria-labelledby="nf-leave-copy-reminder-title" aria-describedby="nf-leave-copy-reminder-text">
+<img class="leave-reminder-mascot" src="leave-groundhog.webp" width="456" height="405" alt="">
+<h3 id="nf-leave-copy-reminder-title">已複製請假申請</h3>
+<p id="nf-leave-copy-reminder-text">記得發給工頭讓他知道哦～
+在 Signal</p>
 <form method="dialog"><button type="submit" id="nf-leave-copy-reminder-close" autofocus>知道了</button></form>
 </dialog>
 </section>
@@ -427,7 +482,7 @@
     </footer>
 
     <script src="missing-pay-report.js?v=20261020-1"></script>
-    <script src="employee-notice-forms.js?v=20261110-2"></script>
+    <script src="employee-notice-forms.js?v=20261110-3"></script>
     <script src="translations.js?v=20261013-notice-forms"></script>
     <script>
         function toggleLanguageMenu(event) {
