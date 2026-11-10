@@ -19,6 +19,7 @@ const el=id=>document.getElementById('nf-'+id);
 const parse=s=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return null;const [y,m,d]=s.split('-').map(Number),v=new Date(Date.UTC(y,m-1,d));return v.getUTCFullYear()===y&&v.getUTCMonth()===m-1&&v.getUTCDate()===d?v:null};
 const fmt=d=>String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear();
 const dateDiff=(a,b)=>Math.round((b-a)/86400000);
+let lastSubmittedLeave;
 window.initEmployeeNoticeForms=function(lang){
 const w=translations[lang]||translations['zh-TW'];if(!el('heading'))return;
 ids.forEach((id,i)=>{if(el(id))el(id).textContent=w[i]});
@@ -31,11 +32,11 @@ const refreshResign=()=>{const d=parse(el('resign-notice').value),custom=el('res
 refreshLeave();refreshResign();
 async function copy(kind,message){try{await navigator.clipboard.writeText(message);status(kind,w[28]);}catch(e){status(kind,w[29]);let area=el(kind+'-manual');if(!area){area=document.createElement('textarea');area.id='nf-'+kind+'-manual';area.rows=9;el(kind+'-status').after(area)}area.value=message;area.style.width='100%';area.focus();area.select();}}
 const messages={
-'zh-TW':{hint:'中文或英文姓名（二選一）及別名必須與員工系統吻合；姓與名可以調轉。按下按鈕會提交申請並複製內容；只有管理員同意後才會正式登記請假。',button:'📤 登記並複製請假申請',working:'正在核對及登記…',done:'✅ 已提交待管理員審批，並已複製申請內容。',copied:'✅ 已提交待審批；請手動複製內容。',fail:'❌ 姓名或別名未能唯一配對，未有登記。請核對後聯絡管理員。',duplicate:'⚠️ 日期已有請假紀錄，未重複登記。',rate:'⚠️ 提交過於頻繁，請稍後再試。',offline:'⚠️ 無法連接員工系統，未有登記或複製。'},
-'zh-CN':{hint:'中文或英文姓名（二选一）及别名必须与员工系统一致；姓与名可以调换。点击后会提交申请并复制内容；只有管理员同意后才正式登记请假。',button:'📤 登记并复制请假申请',working:'正在核对及登记…',done:'✅ 已提交等待管理员审批，并已复制申请。',copied:'✅ 已提交待审批；请手动复制内容。',fail:'❌ 姓名或别名未能唯一匹配，未登记。',duplicate:'⚠️ 日期已有请假记录。',rate:'⚠️ 提交过于频繁，请稍后再试。',offline:'⚠️ 无法连接员工系统，未登记或复制。'},
-'en':{hint:'Your Chinese or English full name (either one) and nickname must match the employee system. Surname and given-name order can be swapped. This button submits a request for manager approval and copies it; leave is recorded only after approval.',button:'📤 Record & copy leave request',working:'Checking and recording…',done:'✅ Request submitted for manager approval and copied.',copied:'✅ Request submitted for approval; please copy manually.',fail:'❌ Name/nickname not uniquely matched. Nothing recorded.',duplicate:'⚠️ Existing leave record for these dates.',rate:'⚠️ Too many attempts. Try later.',offline:'⚠️ Could not connect. Nothing recorded or copied.'},
-'ja':{hint:'中国語または英語の氏名（どちらか一方）とニックネームが一致する必要があります。姓名の順序は入れ替え可能です。登録は承認を意味しません。',button:'📤 休暇を登録してコピー',working:'照合・登録中…',done:'✅ 承認待ちとして申請し、コピーしました。',copied:'✅ 承認待ちです。手動でコピーしてください。',fail:'❌ 氏名とニックネームが一致しません。未登録です。',duplicate:'⚠️ 既存の休暇記録があります。',rate:'⚠️ 試行回数が多すぎます。',offline:'⚠️ 接続できず、登録されませんでした。'},
-'ko':{hint:'중국어 또는 영어 이름 중 하나와 별명이 직원 시스템과 일치해야 합니다. 성과 이름 순서를 바꿀 수 있습니다. 등록은 관리자 승인을 의미하지 않습니다.',button:'📤 휴가 등록 및 복사',working:'확인 및 등록 중…',done:'✅ 승인 대기 신청 및 복사 완료.',copied:'✅ 승인 대기 중입니다. 직접 복사해 주세요.',fail:'❌ 이름/별명이 일치하지 않아 등록되지 않았습니다.',duplicate:'⚠️ 해당 날짜에 기존 휴가 기록이 있습니다.',rate:'⚠️ 요청이 너무 많습니다.',offline:'⚠️ 연결 실패. 등록되지 않았습니다.'}
+'zh-TW':{hint:"中文或英文姓名（二選一）及別名必須與員工系統吻合。姓與名可以調轉。提交後請按「複製已提交申請」。請假須經管理員批准。",button:"📤 提交請假申請",working:'正在核對及登記…',done:"✅ 已提交待審批，亦已複製申請內容。",copied:"已提交待審批。瀏覽器未能自動複製，請長按下方文字複製。",fail:'❌ 姓名或別名未能唯一配對，未有登記。請核對後聯絡管理員。',duplicate:'⚠️ 日期已有請假紀錄，未重複登記。',rate:'⚠️ 提交過於頻繁，請稍後再試。',offline:"⚠️ 未能確認是否提交成功，請先向管理員查詢。",submitted:"✅ 已提交待審批。請按下方按鈕複製申請。",retry:"📋 複製已提交申請",dateError:"預計返工日期必須遲過請假結束日期。"},
+'zh-CN':{hint:"中文或英文姓名（二选一）及别名必须与员工系统一致。姓与名可以调换。提交后请点击「复制已提交申请」。请假须经管理员批准。",button:"📤 提交请假申请",working:'正在核对及登记…',done:"✅ 已提交待审批，且已复制申请内容。",copied:"已提交待审批。浏览器无法自动复制，请长按下方文字复制。",fail:'❌ 姓名或别名未能唯一匹配，未登记。',duplicate:'⚠️ 日期已有请假记录。',rate:'⚠️ 提交过于频繁，请稍后再试。',offline:"⚠️ 无法确认提交是否成功，请先向管理员查询。",submitted:"✅ 已提交待审批。请点击下方按钮复制申请。",retry:"📋 复制已提交申请",dateError:"预计返工日期必须晚于请假结束日期。"},
+'en':{hint:"Enter your Chinese or English full name and the nickname in the employee system. Surname and given-name order can be swapped. After submitting, use the copy button. Leave requires manager approval.",button:"📤 Submit leave request",working:'Checking and recording…',done:"✅ Submitted for approval and copied.",copied:"Submitted for approval. Automatic copying failed. Select and copy the text below.",fail:'❌ Name/nickname not uniquely matched. Nothing recorded.',duplicate:'⚠️ Existing leave record for these dates.',rate:'⚠️ Too many attempts. Try later.',offline:"⚠️ Submission could not be confirmed. Check with management first.",submitted:"✅ Submitted for approval. Use the button below to copy the request.",retry:"📋 Copy submitted request",dateError:"The expected return date must be after the leave end date."},
+'ja':{hint:"中国語または英語の氏名と、社員システムに登録されたニックネームを入力してください。姓名の順序は入れ替え可能です。送信後にコピーできます。休暇には管理者の承認が必要です。",button:"📤 休暇申請を送信",working:'照合・登録中…',done:"✅ 承認待ちの申請をコピーしました。",copied:"申請は承認待ちです。自動コピーに失敗しました。下の文章を選択してコピーしてください。",fail:'❌ 氏名とニックネームが一致しません。未登録です。',duplicate:'⚠️ 既存の休暇記録があります。',rate:'⚠️ 試行回数が多すぎます。',offline:"⚠️ 送信結果を確認できません。まず管理者に確認してください。",submitted:"✅ 申請を送信しました。下のボタンでコピーできます。",retry:"📋 送信済み申請をコピー",dateError:"復帰予定日は休暇終了日より後にしてください。"},
+'ko':{hint:"직원 시스템에 등록된 중국어 또는 영어 이름과 별명을 입력하세요. 성과 이름 순서를 바꿀 수 있습니다. 제출 후 복사할 수 있습니다. 휴가는 관리자 승인이 필요합니다.",button:"📤 휴가 신청 제출",working:'확인 및 등록 중…',done:"✅ 승인 대기 중인 신청 내용을 복사했습니다.",copied:"승인 대기 중입니다. 자동 복사에 실패했습니다. 아래 내용을 선택해 복사하세요.",fail:'❌ 이름/별명이 일치하지 않아 등록되지 않았습니다.',duplicate:'⚠️ 해당 날짜에 기존 휴가 기록이 있습니다.',rate:'⚠️ 요청이 너무 많습니다.',offline:"⚠️ 제출 결과를 확인할 수 없습니다. 먼저 관리자에게 문의하세요.",submitted:"✅ 승인 대기 중입니다. 아래 버튼을 눌러 신청 내용을 복사하세요.",retry:"📋 제출한 신청 복사",dateError:"복귀 예정일은 휴가 종료일보다 늦어야 합니다."}
 };
 const m=messages[lang]||messages['zh-TW'];
 const fields={
@@ -58,23 +59,42 @@ el('leave-name').placeholder='例如：陳大文';el('leave-english').placeholde
 el('leave-copy').textContent=m.button;
 el('leave-reminder').textContent=m.hint;
 el('privacy').hidden=true;
+const copyPanel=el('leave-copy-panel');
+const copyText=el('leave-copy-text');
+const copyButton=el('leave-copy-again');
+copyButton.textContent=m.retry;
+copyText.setAttribute('aria-label',m.retry);
+copyButton.onclick=async()=>{
+ try{
+  if(navigator.clipboard?.writeText){
+   await navigator.clipboard.writeText(copyText.value);
+  }else{
+   copyText.focus();
+   copyText.select();
+   copyText.setSelectionRange(0,copyText.value.length);
+   if(!document.execCommand('copy'))throw Error('Copy unavailable');
+  }
+  status('leave',m.done);
+ }catch{
+  status('leave',m.copied);
+  copyText.focus();
+  copyText.select();
+  copyText.setSelectionRange(0,copyText.value.length);
+ }
+};
 el('leave-copy').onclick=async()=>{
  const a=parse(el('leave-start').value),b=parse(el('leave-end').value),back=parse(el('leave-return').value),chineseName=el('leave-name').value.trim(),englishName=el('leave-english').value.trim(),name=chineseName||englishName,alias=el('leave-alias').value.trim(),reason=reasonField.value.trim();
  const button=el('leave-copy');
  if(button.disabled)return;
- el('leave-manual')?.remove();
+ copyPanel.hidden=true;
  const type=getLeaveType();
  const reasonText=reason.replace(/[\p{P}\p{S}\p{Cf}]/gu,'').trim();
  if(type==='personal'&&(!reasonText||genericPersonalReason.test(reasonText))){
   status('leave',personalReasonError);reasonField.focus();return;
  }
- if(!name||!alias||!a||!b||b<a||!back||back<=b||!reason||!el('leave-confirm').checked){status('leave',w[27]);return}
+ if(b&&back&&back<=b){status('leave',m.dateError);el('leave-return').focus();return}
+ if(!name||!alias||!a||!b||b<a||!back||!reason||!el('leave-confirm').checked){status('leave',w[27]);return}
  const typeText=w[type==='personal'?6:type==='sick'?7:8];
- button.disabled=true;status('leave',m.working);
- try{
- const resp=await fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,alias,type,start:el('leave-start').value,end:el('leave-end').value,returnDate:el('leave-return').value,reason})});
- const result=await resp.json();
- if(!resp.ok||!result.ok){status('leave',result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:m.offline);return}
  const message=[
   w[2],
   ...(chineseName?[fields[0].replace(/（[^）]*）|\s*\([^)]*\)/g,'')+': '+chineseName]:[]),
@@ -86,24 +106,25 @@ el('leave-copy').onclick=async()=>{
   w[11].replace(/\s*\*$/,'')+': '+fmt(back),
   w[12].replace(/\s*\*$/,'')+(lang==='zh-TW'||lang==='zh-CN'?'：':': ')+reason
  ].join('\n');
- try{
-  await navigator.clipboard.writeText(message);
-  status('leave',m.done);
- }catch{
-  status('leave',m.copied);
-  const area=document.createElement('textarea');
-  area.id='nf-leave-manual';
-  area.rows=9;
-  area.readOnly=true;
-  area.setAttribute('aria-label',m.copied);
-  area.style.width='100%';
-  area.value=message;
-  el('leave-status').after(area);
-  area.focus();
-  area.select();
-  area.setSelectionRange(0,message.length);
+ const payload=JSON.stringify({name,alias,type,start:el('leave-start').value,end:el('leave-end').value,returnDate:el('leave-return').value,reason});
+ if(payload!==lastSubmittedLeave){
+  button.disabled=true;
+  status('leave',m.working);
+  try{
+   const resp=await fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:payload});
+   const result=await resp.json();
+   if(!resp.ok||!result.ok){status('leave',result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:m.offline);return}
+   lastSubmittedLeave=payload;
+  }catch{
+   status('leave',m.offline);
+   return;
+  }finally{
+   button.disabled=false;
+  }
  }
- }catch(e){status('leave',m.offline)}finally{button.disabled=false}
+ copyText.value=message;
+ copyPanel.hidden=false;
+ status('leave',m.submitted);
 };
 el('resign-copy').onclick=()=>{
 const calc=refreshResign(),name=el('resign-name').value.trim(),reason=el('resign-reason').value.trim();
