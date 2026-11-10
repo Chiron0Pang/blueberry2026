@@ -20,7 +20,7 @@ const parse=s=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return null;const [y,m,d]=
 const fmt=d=>String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear();
 const dateDiff=(a,b)=>Math.round((b-a)/86400000);
 const signalReminders={
- 'zh-TW':['已複製請假申請','記得發給工頭讓他知道哦～\n在 Signal','知道了'],
+ 'zh-TW':['已複製請假申請','記得在Signal發給工頭讓他知道你(請假)哦~','知道了'],
  'zh-CN':['已复制请假申请','记得发给工头让他知道哦～\n在 Signal','知道了'],
  'en':['Leave request copied','Remember to send it to your supervisor on Signal.','Got it'],
  'ja':['休暇申請をコピーしました','Signalで現場責任者に送って、休暇申請を知らせてください。','わかりました'],
