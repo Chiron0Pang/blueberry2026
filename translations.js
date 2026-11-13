@@ -378,6 +378,7 @@ function translateTextNodes(root, map) {
 }
 
 function applyFarmLanguage(language) {
+  if(window.__leaveSubmitting)return;
   const map=FARM_TRANSLATIONS[language] || {};
   document.documentElement.lang=language==='zh-TW'?'zh-HK':language;
 
@@ -454,5 +455,5 @@ function applyFarmLanguage(language) {
   updatePayrollCalculator(language);
   if(typeof initMissingPayReport==="function") initMissingPayReport(language);
   if(typeof initEmployeeNoticeForms==="function") initEmployeeNoticeForms(language);
-  localStorage.setItem('farmLanguage',language);
+  try{localStorage.setItem('farmLanguage',language);}catch{}
 }
