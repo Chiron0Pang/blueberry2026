@@ -46,6 +46,11 @@ const messages={
 'ko':{hint:"직원 시스템에 등록된 중국어 또는 영어 이름과 별명을 입력하세요. 성과 이름 순서를 바꿀 수 있습니다. 제출 후 신청 내용 복사를 시도합니다. 휴가는 관리자 승인이 필요합니다.",button:"📤 휴가 신청 제출 및 복사",working:'확인 및 등록 중…',done:"✅ 승인 대기 중인 신청 내용을 복사했습니다.",copied:"승인 대기 중입니다. 자동 복사에 실패했습니다. 아래 내용을 선택해 복사하세요.",fail:'❌ 이름/별명이 일치하지 않아 등록되지 않았습니다.',duplicate:'⚠️ 해당 날짜에 기존 휴가 기록이 있습니다.',rate:'⚠️ 요청이 너무 많습니다.',offline:"⚠️ 제출 결과를 확인할 수 없습니다. 먼저 관리자에게 문의하세요.",retry:"📋 제출한 신청 복사",dateError:"복귀 예정일은 휴가 종료일보다 늦어야 합니다."}
 };
 const m=messages[lang]||messages['zh-TW'];
+const familyLabels={'zh-TW':'突發家庭事故','zh-CN':'突发家庭事故',en:'Family emergency',ja:'家庭の緊急事情',ko:'가족 긴급 상황'};
+const familyText=familyLabels[lang]||familyLabels['zh-TW'];
+if(el('leave-family'))el('leave-family').textContent=familyText;
+el('leave-other').textContent=({'zh-TW':'其他（自填）','zh-CN':'其他（自填）',en:'Other (specify)',ja:'その他（記入）',ko:'기타 (직접 입력)'})[lang]||'其他（自填）';
+
 const fields={
 'zh-TW':['中文姓名（選填）','英文姓名（選填）','中文或英文姓名填其中一項即可；別名必填。'],
 'zh-CN':['中文姓名（选填）','英文姓名（选填）','中文或英文姓名填写其中一项即可；别名必填。'],
@@ -59,7 +64,10 @@ const reasonField=el('leave-reason');
 const getLeaveType=()=>document.querySelector('input[name="nf-leave-type"]:checked')?.value||'personal';
 const [personalReasonHint,personalReasonError]=personalReasonPrompts[lang]||personalReasonPrompts['zh-TW'];
 const otherReasonHint=({'zh-TW':'例如：頭痛、生理期、身體不適等','zh-CN':'例如：头痛、生理期、身体不适等','en':'e.g. headache, menstrual discomfort, feeling unwell','ja':'例：頭痛、生理痛、体調不良など','ko':'예: 두통, 생리통, 몸이 아픈 경우 등'}[lang]||'例如：頭痛、生理期、身體不適等');
-const refreshReasonHint=()=>{reasonField.placeholder=getLeaveType()==='personal'?personalReasonHint:otherReasonHint};
+const refreshReasonHint=()=>{
+ const type=getLeaveType();
+ reasonField.placeholder=type==='family'?({'zh-TW':'簡述家庭突發事情即可。','zh-CN':'简述家庭突发事情即可。',en:'A brief description is sufficient.',ja:'簡単な説明で構いません。',ko:'간단히 작성해 주세요.'}[lang]||'簡述家庭突發事情即可。'):type==='personal'?personalReasonHint:type==='other'?({'zh-TW':'請簡述實際事由，例如：辦理護照續期。','zh-CN':'请简述实际事由，例如：办理护照续期。',en:'Briefly describe the reason, e.g. passport renewal.',ja:'理由を簡単に記入してください。',ko:'실제 사유를 간단히 작성하세요.'}[lang]||personalReasonHint):otherReasonHint;
+};
 document.querySelectorAll('input[name="nf-leave-type"]').forEach(input=>{input.onchange=refreshReasonHint});
 refreshReasonHint();
 el('leave-name').placeholder='例如：陳大文';el('leave-english').placeholder='e.g. Lam XXX Iris';el('leave-alias').placeholder='例如：YY';
@@ -146,7 +154,7 @@ el('leave-copy').onclick=async()=>{
  if(dateDiff(a,b)>45){invalidField('leave-end',explain('一次申請最多46個日曆日；較長假期請聯絡管理層。','A request can cover up to 46 calendar days. Contact management for longer leave.'));return;}
  if(todayDate&&(dateDiff(todayDate,a)<-7||dateDiff(todayDate,a)>365)){invalidField('leave-start',explain('開始日期須在過去7日至未來365日內；其他日期請聯絡管理層。','Start date must be within the past 7 days or the next 365 days. Contact management for other dates.'));return;}
 
- const typeText=w[type==='personal'?6:type==='sick'?7:8];
+ const typeText=type==='family'?familyText:w[type==='personal'?6:type==='sick'?7:8];
  const message=[
   w[2],
   ...(chineseName?[fields[0].replace(/（[^）]*）|\s*\([^)]*\)/g,'')+': '+chineseName]:[]),
