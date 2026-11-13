@@ -384,6 +384,7 @@ function applyFarmLanguage(language) {
   // Save pristine page once. Restore it before every language change.
   if(!window.__farmOriginalBody) window.__farmOriginalBody=document.body.innerHTML;
   const previousWorkDate=document.querySelector('#payroll-work-date')?.value;
+  const formValues=Array.from(document.querySelectorAll('#employee-notice-forms input,#employee-notice-forms textarea,#employee-notice-forms select')).map(e=>({id:e.id,name:e.name,type:e.type,value:e.value,checked:e.checked}));
   document.body.innerHTML=window.__farmOriginalBody;
   if(previousWorkDate){const dateInput=document.querySelector('#payroll-work-date');if(dateInput)dateInput.value=previousWorkDate;}
 
@@ -445,6 +446,11 @@ function applyFarmLanguage(language) {
       ? 'payroll-week-example-'+language+'.svg'
       : 'payroll-week-example.svg';
   }
+  formValues.forEach(saved=>{
+    const input=saved.id?document.getElementById(saved.id):Array.from(document.getElementsByName(saved.name)).find(e=>e.value===saved.value);
+    if(!input)return;
+    if(saved.type==='radio'||saved.type==='checkbox')input.checked=saved.checked;else input.value=saved.value;
+  });
   updatePayrollCalculator(language);
   if(typeof initMissingPayReport==="function") initMissingPayReport(language);
   if(typeof initEmployeeNoticeForms==="function") initEmployeeNoticeForms(language);
