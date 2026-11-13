@@ -168,6 +168,7 @@ el('leave-copy').onclick=async()=>{
  ].join('\n');
  const payload=JSON.stringify({name,alias,type,start:el('leave-start').value,end:el('leave-end').value,returnDate:el('leave-return').value,reason});
  button.disabled=true;
+ window.__leaveSubmitting=true;
  try{
   const alreadySubmitted=payload===lastSubmittedLeave;
   const submitted=alreadySubmitted?Promise.resolve(true):submitLeave(payload);
@@ -193,6 +194,7 @@ el('leave-copy').onclick=async()=>{
   else await copyButton.onclick();
  }finally{
   button.disabled=false;
+  window.__leaveSubmitting=false;
  }
 };
 el('resign-copy').onclick=()=>{
