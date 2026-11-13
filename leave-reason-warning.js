@@ -37,15 +37,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const reason=document.getElementById('nf-leave-reason');
   const type=document.querySelector('input[name="nf-leave-type"]:checked')?.value;
   if(type==='family'||type==='family_emergency') return;
+  if(!reason.value.trim())return;
   const result=classifyReason(reason.value);
   if(result==='clear'){attempts.delete(button);return;}
   event.preventDefault();event.stopImmediatePropagation();
   const count=(attempts.get(button)||0)+1;attempts.set(button,count);
   const value=id=>document.getElementById(id)?.value?.trim()||'';
-  fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-anomaly',{
+  const record=()=>fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-anomaly',{
    method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
    body:JSON.stringify({name:value('nf-leave-name')||value('nf-leave-english'),alias:value('nf-leave-alias'),type,reason:reason.value,category:result,attempt:count})
-  }).catch(()=>{});
+  }).then(r=>{if(!r.ok)throw Error('Log not saved');});
+  record().catch(()=>setTimeout(()=>record().catch(()=>{
+   const box=document.getElementById('nf-leave-status');
+   if(box&&reason.value===value('nf-leave-reason'))box.textContent+='（異常紀錄暫未同步，請聯絡管理層。）';
+  }),1500));
   const status=document.getElementById('nf-leave-status');
   if(status)status.textContent=result==='vague'&&count<2
    ?'請簡述需要辦理的事務，以便管理層了解申請原因。'
