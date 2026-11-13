@@ -41,6 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
   if(result==='clear'){attempts.delete(button);return;}
   event.preventDefault();event.stopImmediatePropagation();
   const count=(attempts.get(button)||0)+1;attempts.set(button,count);
+  const value=id=>document.getElementById(id)?.value?.trim()||'';
+  fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-anomaly',{
+   method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
+   body:JSON.stringify({name:value('nf-leave-name')||value('nf-leave-english'),alias:value('nf-leave-alias'),type,reason:reason.value,category:result,attempt:count})
+  }).catch(()=>{});
   const status=document.getElementById('nf-leave-status');
   if(status)status.textContent=result==='vague'&&count<2
    ?'請簡述需要辦理的事務，以便管理層了解申請原因。'
