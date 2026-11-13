@@ -4,7 +4,7 @@ const attempts = new WeakMap();
 function classifyReason(value) {
  const s = value.normalize('NFKC').trim();
  const compact = s.replace(/[\s\p{P}\p{S}\p{Cf}]/gu, '').toLowerCase();
- if (!compact || /^\\p{N}+$/u.test(compact) || /^(?:哈|呵|嘻|嘿|ha|he|lol)+$/iu.test(compact) ||
+ if (!compact || /^\p{N}+$/u.test(compact) || /^(?:哈|呵|嘻|嘿|ha|he|lol)+$/iu.test(compact) ||
  /^(?:abc\d*|asdf\w*|qwerty\w*|test\d*|123\d*|測試|测试)$/iu.test(compact) ||
  /^(?:被窩不讓我起床|被窝不让我起床|需要拯救世界|拯救世界|你唔使理|關你咩事)$/u.test(compact)) return 'invalid';
  if (/^(?:辦事|办事|有事|私事|處理事情|处理事情|處理事務|处理事务|因為有事所以需要請假處理事情|因有事需要請假|personal reasons|something)$/iu.test(s.replace(/[。.!！]/gu,''))) return 'vague';
