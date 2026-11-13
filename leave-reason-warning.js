@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
    ?'請簡述需要辦理的事務，以便管理層了解申請原因。'
    :'請認真填寫與本次請假有關的實際理由。';
   if(result==='invalid'||count>=2){
-   if(typeof dialog.showModal==='function'){if(!dialog.open)dialog.showModal();}
+   if(typeof dialog.showModal==='function'){if(!dialog.isConnected)document.body.append(dialog);if(!style.isConnected)document.head.append(style);if(!dialog.open)dialog.showModal();}
    else window.alert('請認真填寫！不接受以亂碼、玩笑或無關內容作為請假理由。');
   }else reason.focus();
  },true);
