@@ -36,10 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const button=document.getElementById('nf-leave-copy');
   const reason=document.getElementById('nf-leave-reason');
   const type=document.querySelector('input[name="nf-leave-type"]:checked')?.value;
-  if(type==='family'||type==='family_emergency') return;
   if(!reason.value.trim())return;
   const result=classifyReason(reason.value);
-  if(result==='clear'){attempts.delete(button);return;}
+  if(result==='clear'||((type==='family'||type==='family_emergency')&&result==='vague')){attempts.delete(button);return;}
   event.preventDefault();event.stopImmediatePropagation();
   const count=(attempts.get(button)||0)+1;attempts.set(button,count);
   const value=id=>document.getElementById(id)?.value?.trim()||'';
