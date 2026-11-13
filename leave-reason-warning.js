@@ -26,12 +26,15 @@ document.addEventListener('DOMContentLoaded', function () {
  const close = document.createElement('button');
  close.type='button';close.textContent='返回認真填寫';
  close.style.cssText='display:block;width:calc(100% - 32px);margin:12px 16px 16px;padding:14px;border:0;border-radius:12px;background:#ba0c19;color:white;font:700 18px sans-serif;cursor:pointer;';
- close.onclick=function(){dialog.close();reason.focus();};
+ close.onclick=function(){dialog.close();document.getElementById('nf-leave-reason').focus();};
  dialog.append(image,close);document.body.append(dialog);
  const style=document.createElement('style');
  style.textContent='#leave-serious-warning::backdrop{background:#10213bc4}';
  document.head.append(style);
- button.addEventListener('click', function(event){
+ document.addEventListener('click', function(event){
+  if(!event.target.closest('#nf-leave-copy'))return;
+  const button=document.getElementById('nf-leave-copy');
+  const reason=document.getElementById('nf-leave-reason');
   const type=document.querySelector('input[name="nf-leave-type"]:checked')?.value;
   if(type==='family'||type==='family_emergency') return;
   const result=classifyReason(reason.value);
