@@ -54,7 +54,7 @@ const fields={
 'ko':['중국어 이름 (선택)','영어 이름 (선택)','중국어 또는 영어 이름을 입력하세요. 별명은 필수입니다.']
 }[lang]||['中文姓名（選填）','英文姓名（選填）','中文或英文姓名填其中一項即可；別名必填。'];
 el('leave-name-label').textContent=fields[0];el('leave-english-label').textContent=fields[1];el('leave-name-help').textContent=fields[2];
-el('leave-alias-label').textContent=w[4].replace(/（選填）|（选填）| \\(optional\\)|（任意）|\\(선택\\)/g,'')+' *';
+el('leave-alias-label').textContent=w[4].replace(/（選填）|（选填）| \(optional\)|（任意）|\(선택\)/g,'')+' *';
 const reasonField=el('leave-reason');
 const getLeaveType=()=>document.querySelector('input[name="nf-leave-type"]:checked')?.value||'personal';
 const [personalReasonHint,personalReasonError]=personalReasonPrompts[lang]||personalReasonPrompts['zh-TW'];
@@ -88,7 +88,7 @@ const showCopiedReminder=()=>{
 copyButton.onclick=async()=>{
  try{
   if(navigator.clipboard?.writeText){
-   await navigator.clipboard.writeText(copyText.value);
+   await Promise.race([navigator.clipboard.writeText(copyText.value),new Promise((_,reject)=>setTimeout(()=>reject(Error('Copy timeout')),2500))]);
   }else{
    copyText.focus();
    copyText.select();
@@ -107,10 +107,14 @@ copyButton.onclick=async()=>{
 async function submitLeave(payload){
  status('leave',m.working);
  try{
-  const resp=await fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:payload});
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),20000);
+  let resp;
+  try{resp=await fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:controller.signal});}
+  finally{clearTimeout(timer);}
   const result=await resp.json();
   if(!resp.ok||!result.ok){
-   status('leave',result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:m.offline);
+   status('leave',result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:result.code==='invalid'?w[27]+' '+(lang==='en'?'Check the date range and field lengths.':'請檢查日期範圍及文字長度。'):m.offline);
    return false;
   }
   lastSubmittedLeave=payload;
@@ -132,6 +136,16 @@ el('leave-copy').onclick=async()=>{
  }
  if(b&&back&&back<=b){status('leave',m.dateError);el('leave-return').focus();return}
  if(!name||!alias||!a||!b||b<a||!back||!reason||!el('leave-confirm').checked){status('leave',w[27]);return}
+ const invalidField=(id,msg)=>{status('leave',msg);el(id).focus();};
+ const explain=(zh,en)=>lang==='en'?en:zh;
+ if(name.length<2||name.length>120){invalidField(chineseName?'leave-name':'leave-english',explain('姓名須為2至120個字，請填寫系統姓名。','Name must contain 2–120 characters.'));return;}
+ if(alias.length>80){invalidField('leave-alias',explain('別名不可超過80個字。','Nickname must not exceed 80 characters.'));return;}
+ if(reason.length<2||reason.length>1000){invalidField('leave-reason',explain('理由須為2至1000個字。','Reason must contain 2–1000 characters.'));return;}
+ const brisbaneToday=new Intl.DateTimeFormat('en-CA',{timeZone:'Australia/Brisbane',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ const todayDate=parse(brisbaneToday);
+ if(dateDiff(a,b)>45){invalidField('leave-end',explain('一次申請最多46個日曆日；較長假期請聯絡管理層。','A request can cover up to 46 calendar days. Contact management for longer leave.'));return;}
+ if(todayDate&&(dateDiff(todayDate,a)<-7||dateDiff(todayDate,a)>365)){invalidField('leave-start',explain('開始日期須在過去7日至未來365日內；其他日期請聯絡管理層。','Start date must be within the past 7 days or the next 365 days. Contact management for other dates.'));return;}
+
  const typeText=w[type==='personal'?6:type==='sick'?7:8];
  const message=[
   w[2],
@@ -164,7 +178,7 @@ el('leave-copy').onclick=async()=>{
    }
   }
   if(!await submitted)return;
-  const copiedOnSubmit=await copied;
+  const copiedOnSubmit=await Promise.race([copied,new Promise(resolve=>setTimeout(()=>resolve(false),2500))]);
   copyText.value=message;
   copyPanel.hidden=false;
   if(copiedOnSubmit)showCopiedReminder();
