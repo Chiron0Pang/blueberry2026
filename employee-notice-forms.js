@@ -28,6 +28,8 @@ const signalReminders={
 };
 let lastSubmittedLeave;
 window.initEmployeeNoticeForms=function(lang){
+window.__leaveFormLanguage=lang;
+let manualReviewNote='';
 const w=translations[lang]||translations['zh-TW'];if(!el('heading'))return;
 ids.forEach((id,i)=>{if(el(id))el(id).textContent=w[i]});
 ['resign-name-label','resign-alias-label'].forEach((id,i)=>el(id).textContent=w[3+i]);
@@ -61,6 +63,15 @@ const fields={
 el('leave-name-label').textContent=fields[0];el('leave-english-label').textContent=fields[1];el('leave-name-help').textContent=fields[2];
 el('leave-alias-label').textContent=w[4].replace(/（選填）|（选填）| \(optional\)|（任意）|\(선택\)/g,'')+' *';
 const reasonField=el('leave-reason');
+let reviewHelp=el('leave-reason-review-help');
+if(!reviewHelp){reviewHelp=document.createElement('p');reviewHelp.id='nf-leave-reason-review-help';reviewHelp.style.cssText='font-size:13px;line-height:1.5;color:#34536c;';reasonField.after(reviewHelp);}
+reviewHelp.textContent=({
+ 'zh-TW':'系統會使用 AI 檢查理由是否清楚；毋須提供證件號碼、戶口資料或詳細病歷。AI 不會批准或拒絕請假。',
+ 'zh-CN':'系统会使用 AI 检查理由是否清楚；无需提供证件号码、账号或详细病历。AI 不会批准或拒绝请假。',
+ en:'AI checks whether your reason is clear. Do not include ID/account numbers or detailed medical records. Management decides leave approval.',
+ ja:'AIが理由の明確さを確認します。証明書番号・口座情報・詳しい病歴は不要です。承認は管理者が行います。',
+ ko:'AI가 사유가 명확한지 확인합니다. 신분증·계좌번호나 자세한 병력은 필요 없습니다. 승인 여부는 관리자가 결정합니다.'
+})[lang]||'';
 const getLeaveType=()=>document.querySelector('input[name="nf-leave-type"]:checked')?.value||'personal';
 const [personalReasonHint,personalReasonError]=personalReasonPrompts[lang]||personalReasonPrompts['zh-TW'];
 const otherReasonHint=({'zh-TW':'例如：頭痛、生理期、身體不適等','zh-CN':'例如：头痛、生理期、身体不适等','en':'e.g. headache, menstrual discomfort, feeling unwell','ja':'例：頭痛、生理痛、体調不良など','ko':'예: 두통, 생리통, 몸이 아픈 경우 등'}[lang]||'例如：頭痛、生理期、身體不適等');
@@ -86,7 +97,7 @@ el('leave-copy-reminder-text').textContent=reminderText;
 el('leave-copy-reminder-close').textContent=reminderClose;
 el('leave-copy-reminder-tip').textContent=({"zh-TW":"已複製,直接出發去signal貼上","zh-CN":"已复制，直接去 Signal 粘贴","en":"Copied. Open Signal and paste it.","ja":"コピー済み。Signalに貼り付けてください。","ko":"복사 완료. Signal에 붙여넣으세요."})[lang]||'已複製,直接出發去signal貼上';
 const showCopiedReminder=()=>{
- status('leave',m.done);
+ status('leave',m.done+manualReviewNote);
  if(typeof signalReminder.showModal==='function'){
   if(!signalReminder.open)signalReminder.showModal();
  }else{
@@ -104,7 +115,7 @@ copyButton.onclick=async()=>{
    if(!document.execCommand('copy'))throw Error('Copy unavailable');
   }
  }catch{
-  status('leave',m.copied);
+  status('leave',m.copied+manualReviewNote);
   copyText.focus();
   copyText.select();
   copyText.setSelectionRange(0,copyText.value.length);
@@ -122,9 +133,25 @@ async function submitLeave(payload){
   finally{clearTimeout(timer);}
   const result=await resp.json();
   if(!resp.ok||!result.ok){
+   if(['reason_needs_detail','reason_invalid','reason_date_conflict'].includes(result.code)){
+    const category=result.code==='reason_invalid'?'invalid':'vague';
+    const message=result.review?.message||personalReasonError;
+    status('leave',message);
+    if(typeof window.showLeaveReasonWarning==='function')window.showLeaveReasonWarning(message,category,result.code!=='reason_date_conflict');
+    else reasonField.focus();
+    return false;
+   }
    status('leave',result.code==='reason_too_vague'?personalReasonError:result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:result.code==='invalid'?w[27]+' '+(lang==='en'?'Check the date range and field lengths.':'請檢查日期範圍及文字長度。'):m.offline);
    return false;
   }
+  manualReviewNote=result.review?.decision==='uncertain'?({
+   'zh-TW':' 理由已交由管理員人工核對，並非亂填警告。',
+   'zh-CN':' 理由已交由管理员人工核对，并非乱填警告。',
+   en:' Your reason needs a manual check by management. This is not a warning.',
+   ja:' 理由は管理者が確認します。警告ではありません。',
+   ko:' 사유는 관리자가 확인합니다. 경고가 아닙니다.'
+  }[lang]||''):'';
+  window.resetLeaveReasonWarnings?.();
   lastSubmittedLeave=payload;
   return true;
  }catch{
@@ -140,7 +167,7 @@ el('leave-copy').onclick=async()=>{
  const type=getLeaveType();
  const reasonText=reason.normalize('NFKC').replace(/[\p{P}\p{S}\p{Cf}]/gu,'').replace(/\s+/gu,' ').trim();
  if((type==='personal'||type==='other')&&(!reasonText||genericPersonalReason.test(reasonText))){
-  status('leave',personalReasonError);reasonField.focus();return;
+  status('leave',personalReasonError);if(typeof window.showLeaveReasonWarning==='function')window.showLeaveReasonWarning(personalReasonError,'vague',true);else reasonField.focus();return;
  }
  if(b&&back&&back<=b){status('leave',m.dateError);el('leave-return').focus();return}
  if(!name||!alias||!a||!b||b<a||!back||!reason||!el('leave-confirm').checked){status('leave',w[27]);return}
@@ -166,7 +193,7 @@ el('leave-copy').onclick=async()=>{
   w[11].replace(/\s*\*$/,'')+': '+fmt(back),
   w[12].replace(/\s*\*$/,'')+(lang==='zh-TW'||lang==='zh-CN'?'：':': ')+reason
  ].join('\n');
- const payload=JSON.stringify({name,alias,type,start:el('leave-start').value,end:el('leave-end').value,returnDate:el('leave-return').value,reason});
+ const payload=JSON.stringify({name,alias,type,language:lang,start:el('leave-start').value,end:el('leave-end').value,returnDate:el('leave-return').value,reason});
  button.disabled=true;
  window.__leaveSubmitting=true;
  try{
