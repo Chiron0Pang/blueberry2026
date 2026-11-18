@@ -7,7 +7,7 @@ function classifyReason(value) {
  if (!compact || /^\p{N}+$/u.test(compact) || /^(?:哈|呵|嘻|嘿|ha|he|lol)+$/iu.test(compact) ||
  /^(?:abc\d*|asdf\w*|qwerty\w*|test\d*|123\d*|測試|测试)$/iu.test(compact) ||
  /^(?:被窩不讓我起床|被窝不让我起床|需要拯救世界|拯救世界|你唔使理|關你咩事)$/u.test(compact)) return 'invalid';
- if (/^(?:辦事|办事|有事|私事|處理事情|处理事情|處理事務|处理事务|因為有事所以需要請假處理事情|因有事需要請假|personal reasons|something)$/iu.test(s.replace(/[。.!！]/gu,''))) return 'vague';
+ if (/^(?:(?:因為|因为|因|需要|需|我要|我想|想要|想|要|已)?(?:請事假|请事假|事假|預約辦事|预约办事|預約|预约|辦事|办事|私人原因|個人原因|个人原因|私人事務|私人事务|個人事務|个人事务|家庭事務|家庭事务|有事|有事情|處理事情|处理事情|處理私事|处理私事|私事|有安排|其他)|personal\s*(?:leave|reasons?|matters?)|private\s*(?:reasons?|matters?)|an?\s*appointment|appointment|family\s*matters?|errands?|something\s*to\s*do|私用休暇|私用|家庭の事情|用事|予約|개인\s*(?:사유|용무)(?:\s*휴가)?|예약)$/iu.test(s.replace(/[\p{P}\p{S}\p{Cf}]/gu,'').replace(/\s+/gu,' ').trim())) return 'vague';
  return 'clear';
 }
 window.classifyLeaveReason = classifyReason;
@@ -27,7 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
  close.type='button';close.textContent='返回認真填寫';
  close.style.cssText='display:block;width:calc(100% - 32px);margin:12px 16px 16px;padding:14px;border:0;border-radius:12px;background:#ba0c19;color:white;font:700 18px sans-serif;cursor:pointer;';
  close.onclick=function(){dialog.close();document.getElementById('nf-leave-reason').focus();};
- dialog.append(image,close);document.body.append(dialog);
+ const explanation = document.createElement('p');
+ explanation.style.cssText='margin:16px;color:#8b1320;font:700 16px/1.6 sans-serif;';
+ explanation.textContent='理由太空泛。請寫清楚實際事情，以及為何需要在請假當日處理。只填「預約辦事／私人原因／有事／處理事情」不能提交。';
+ dialog.append(image,explanation,close);document.body.append(dialog);
  const style=document.createElement('style');
  style.textContent='#leave-serious-warning::backdrop{background:#10213bc4}';
  document.head.append(style);
@@ -51,10 +54,10 @@ document.addEventListener('DOMContentLoaded', function () {
    if(box&&reason.value===value('nf-leave-reason'))box.textContent+='（異常紀錄暫未同步，請聯絡管理層。）';
   }),1500));
   const status=document.getElementById('nf-leave-status');
-  if(status)status.textContent=result==='vague'&&count<2
-   ?'請簡述需要辦理的事務，以便管理層了解申請原因。'
+  if(status)status.textContent=result==='vague'
+   ?explanation.textContent
    :'請認真填寫與本次請假有關的實際理由。';
-  if(result==='invalid'||count>=2){
+  if(result==='invalid'||result==='vague'){
    if(typeof dialog.showModal==='function'){if(!dialog.isConnected)document.body.append(dialog);if(!style.isConnected)document.head.append(style);if(!dialog.open)dialog.showModal();}
    else window.alert('請認真填寫！不接受以亂碼、玩笑或無關內容作為請假理由。');
   }else reason.focus();
