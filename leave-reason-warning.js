@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
  dialog.setAttribute('aria-label','請認真對待請假申請');
  dialog.style.cssText='border:0;padding:0;border-radius:20px;width:min(440px,calc(100vw - 32px));max-height:90dvh;overflow:auto;background:white;box-shadow:0 16px 60px #0006;';
  const image = document.createElement('img');
- image.src='leave-serious-warning.svg';
+ image.src='leave-reason-reminder.svg';
  image.alt='請認真填寫。不接受以亂碼、玩笑或無關內容作為請假理由。請說明實際事由後重新提交。趣味改圖。';
  image.style.cssText='display:block;width:100%;height:auto;';
  const close = document.createElement('button');
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
  const explanation = document.createElement('p');
  explanation.style.cssText='margin:16px;color:#8b1320;font:700 16px/1.6 sans-serif;';
  explanation.textContent='理由太空泛。請寫清楚實際事情，以及為何需要在請假當日處理。只填「預約辦事／私人原因／有事／處理事情」不能提交。';
+ const reasonExplanation=explanation.textContent;
  dialog.append(image,explanation,close);document.body.append(dialog);
  const style=document.createElement('style');
  style.textContent='#leave-serious-warning::backdrop{background:#10213bc4}';
@@ -44,6 +45,11 @@ document.addEventListener('DOMContentLoaded', function () {
   if(result==='clear'||((type==='family'||type==='family_emergency')&&result==='vague')){attempts.delete(button);return;}
   event.preventDefault();event.stopImmediatePropagation();
   const count=(attempts.get(button)||0)+1;attempts.set(button,count);
+  const severe=count>=2;
+  image.src=severe?'leave-serious-warning.svg':'leave-reason-reminder.svg';
+  image.alt=severe?'嚴重警告：你！請認真填寫！請說明實際事由後重新提交。':'請認真填寫請假理由。';
+  dialog.setAttribute('aria-label',severe?'嚴重警告：請認真填寫請假申請':'請補充實際請假理由');
+  explanation.textContent=(severe?'⚠️ 已再次提醒：':'')+reasonExplanation;
   const value=id=>document.getElementById(id)?.value?.trim()||'';
   const record=()=>fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-leave-anomaly',{
    method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
