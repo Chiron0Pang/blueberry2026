@@ -8,13 +8,13 @@ const translations={
 };
 const ids=['heading','intro','leave-title','leave-name-label','leave-alias-label','leave-type-label','leave-personal','leave-sick','leave-other','leave-start-label','leave-end-label','leave-return-label','leave-reason-label','leave-reminder','leave-confirm-label','leave-copy','resign-title','resign-notice-label','resign-days-label','custom-label','resign-custom-label','resign-reason-label','resign-reminder','resign-copy','privacy'];
 const personalReasonPrompts={
- 'zh-TW':['請填寫具體理由，例如：家庭事務或預約辦事。','事假必須填寫具體理由。'],
- 'zh-CN':['请填写具体理由，例如：家庭事务或预约办事。','事假必须填写具体理由。'],
- 'en':['Enter a specific reason, e.g. a family matter or an appointment.','Enter a specific reason for personal leave.'],
- 'ja':['具体的な理由を入力してください。例：家庭の事情、予約している用事。','私用休暇の具体的な理由を入力してください。'],
- 'ko':['가족 일이나 예약된 일정 등 구체적인 사유를 입력하세요.','개인 사유 휴가의 구체적인 사유를 입력하세요.']
+ 'zh-TW':['請說明辦理甚麼事情，以及為何需要在請假當日處理。例：已預約到銀行親身辦理身份核實。毋須填寫戶口號碼等私隱資料。','理由太空泛。請寫清楚實際事情及當日需要請假的原因，不能只填「預約辦事／私人原因／有事／處理事情」。'],
+ 'zh-CN':['请说明办理什么事情，以及为何需要在请假当天处理。例：已预约到银行亲自办理身份核实。无需填写账号等隐私资料。','理由太笼统。请说明实际事情及当天需要请假的原因，不能只填“预约办事／私人原因／有事／处理事情”。'],
+ 'en':['Explain what you need to do and why it requires leave that day, e.g. an in-person bank identity verification appointment. Do not include account numbers or other private details.','The reason is too vague. Describe the actual matter and why you need leave that day; “appointment”, “personal reasons” or “errands” alone is insufficient.'],
+ 'ja':['何をするために、その日に休暇が必要なのか記入してください。例：銀行で本人確認の予約があり、来店が必要。口座番号などは不要です。','理由が曖昧です。用事の内容と、その日に休暇が必要な理由を記入してください。「私用」「予約」だけでは不十分です。'],
+ 'ko':['어떤 일이며 왜 그날 휴가가 필요한지 작성하세요. 예: 은행 본인 확인 예약으로 직접 방문해야 함. 계좌번호 등은 적지 마세요.','사유가 너무 모호합니다. 실제 용무와 그날 휴가가 필요한 이유를 작성하세요. “개인 사유”, “예약”만으로는 부족합니다.']
 };
-const genericPersonalReason=/^(?:事假|請事假|请事假|personal\s*leave|私用休暇|개인\s*사유\s*휴가)$/iu;
+const genericPersonalReason=/^(?:(?:因為|因为|因|需要|需|我要|我想|想要|想|要|已)?(?:請事假|请事假|事假|預約辦事|预约办事|預約|预约|辦事|办事|私人原因|個人原因|个人原因|私人事務|私人事务|個人事務|个人事务|家庭事務|家庭事务|有事|有事情|處理事情|处理事情|處理私事|处理私事|私事|有安排|其他)|personal\s*(?:leave|reasons?|matters?)|private\s*(?:reasons?|matters?)|an?\s*appointment|appointment|family\s*matters?|errands?|something\s*to\s*do|私用休暇|私用|家庭の事情|用事|予約|개인\s*(?:사유|용무)(?:\s*휴가)?|예약)$/iu;
 const el=id=>document.getElementById('nf-'+id);
 const parse=s=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return null;const [y,m,d]=s.split('-').map(Number),v=new Date(Date.UTC(y,m-1,d));return v.getUTCFullYear()===y&&v.getUTCMonth()===m-1&&v.getUTCDate()===d?v:null};
 const fmt=d=>String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear();
@@ -122,7 +122,7 @@ async function submitLeave(payload){
   finally{clearTimeout(timer);}
   const result=await resp.json();
   if(!resp.ok||!result.ok){
-   status('leave',result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:result.code==='invalid'?w[27]+' '+(lang==='en'?'Check the date range and field lengths.':'請檢查日期範圍及文字長度。'):m.offline);
+   status('leave',result.code==='reason_too_vague'?personalReasonError:result.code==='duplicate'?m.duplicate:result.code==='not_matched'?m.fail:result.code==='rate_limit'?m.rate:result.code==='invalid'?w[27]+' '+(lang==='en'?'Check the date range and field lengths.':'請檢查日期範圍及文字長度。'):m.offline);
    return false;
   }
   lastSubmittedLeave=payload;
@@ -138,8 +138,8 @@ el('leave-copy').onclick=async()=>{
  if(button.disabled)return;
  copyPanel.hidden=true;
  const type=getLeaveType();
- const reasonText=reason.replace(/[\p{P}\p{S}\p{Cf}]/gu,'').trim();
- if(type==='personal'&&(!reasonText||genericPersonalReason.test(reasonText))){
+ const reasonText=reason.normalize('NFKC').replace(/[\p{P}\p{S}\p{Cf}]/gu,'').replace(/\s+/gu,' ').trim();
+ if((type==='personal'||type==='other')&&(!reasonText||genericPersonalReason.test(reasonText))){
   status('leave',personalReasonError);reasonField.focus();return;
  }
  if(b&&back&&back<=b){status('leave',m.dateError);el('leave-return').focus();return}
