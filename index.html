@@ -26,20 +26,18 @@
         *, *::before, *::after { box-sizing: border-box; }
         body { margin: 0; background: var(--canvas); color: var(--ink); font: 1rem/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; overflow-wrap: break-word; }
         .shell, .container { width: min(var(--page-width), 100% - var(--gutter) * 2); margin-inline: auto; }
-        .page-header { background: radial-gradient(ellipse at 100% 100%, #40397b 0, transparent 59%), #232346; color: #fff; }
         .topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; min-height: 66px; padding-block: 10px; border-bottom: 1px solid #ffffff26; }
         .brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 760; white-space: nowrap; }
         .brand-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: #ffffff18; }
         .header-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .farm-wall-link, .translate-btn { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 12px; border: 1px solid #ffffff48; border-radius: 10px; color: #fff; background: #ffffff12; font: inherit; font-size: .875rem; font-weight: 720; text-decoration: none; }
-        .farm-wall-link:hover, .translate-btn:hover { background: #ffffff25; }
+        .translate-btn { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 12px; border: 1px solid #ffffff48; border-radius: 10px; color: #fff; background: #ffffff12; font: inherit; font-size: .875rem; font-weight: 720; text-decoration: none; }
+        .translate-btn:hover { background: #ffffff25; }
         .translate-wrap { position: relative; }
         .translate-btn, .language-menu button { cursor: pointer; }
         .language-menu { display: none; position: absolute; z-index: 10; top: calc(100% + 7px); right: 0; width: max-content; min-width: 175px; padding: 5px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: 0 8px 24px #25254c2e; }
         .language-menu.show { display: block; }
         .language-menu button { display: block; width: 100%; min-height: 44px; padding: 7px 12px; border: 0; border-radius: 8px; background: none; color: var(--ink); font: inherit; text-align: start; }
         .language-menu button:hover { background: #f0effb; }
-        .hero { padding-block: clamp(22px, 4.2vw, 55px) clamp(26px, 5vw, 55px); }
         .hero h1 { margin: 0; font-size: clamp(1.75rem, 5vw, 3.25rem); line-height: 1.17; }
         .hero p { margin: 10px 0 0; color: #e2e2f5; }
         .container { margin-block: clamp(16px, 3vw, 30px) 34px; }
@@ -50,7 +48,6 @@
         html[lang="ja"] .localized > [lang="ja"],
         html[lang="ko"] .localized > [lang="ko"] { display: inline; }
         .announcement-banner { margin-bottom: 16px; padding: 11px 14px; border: 1px solid #edc7cd; border-inline-start: 4px solid var(--accent-color); border-radius: 12px; background: #fff1f3; color: #862639; font-size: .9375rem; }
-        .quick-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 5px; }
         .quick-tile { --tile-color: #504693; --tile-bg: #ede9ff; display: flex; align-items: center; gap: 12px; min-height: 78px; padding: 12px; border: 1px solid var(--line); border-radius: 15px; background: #fff; color: var(--ink); font-weight: 760; line-height: 1.3; text-decoration: none; box-shadow: 0 2px 6px #25254c0a; }
         .quick-tile:hover { border-color: var(--tile-color); background: var(--tile-bg); }
         .quick-tile.pay { --tile-bg: #e9f3ec; --tile-color: #376856; }
@@ -123,12 +120,7 @@
         .page-header :focus-visible { outline-color: #ddd7ff; }
         :target { scroll-margin-top: 14px; }
         @media (max-width: 750px) {
-            .quick-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
             .farm-grid { grid-template-columns: minmax(0, 1fr); }
-        }
-        @media (max-width: 400px) {
-            .quick-tile { min-height: 67px; padding: 7px; gap: 6px; font-size: .875rem; }
-            .quick-tile .nav-icon { width: 30px; height: 30px; font-size: .95rem; }
         }
 
         #nf-leave-copy-reminder {
@@ -187,6 +179,51 @@
         .leave-reminder-next small { font-size: 12px; line-height: 1.25; }
         #nf-leave-copy-reminder-close:focus-visible { outline: 2px solid #102951; outline-offset: 2px; }
 
+
+        .page-header { color: #fff; background: radial-gradient(ellipse at 92% 96%, #4b4a86 0%, transparent 53%), linear-gradient(115deg, #242343, #30335f); }
+        .hero { padding-block: clamp(20px, 4vw, 48px) clamp(25px, 5vw, 56px); }
+        .quick-nav { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 7px; }
+        .quick-tile { position: relative; align-items: flex-start; min-height: 116px; flex-direction: column; gap: 9px; padding: 12px; border-top: 3px solid var(--tile-color); box-shadow: 0 5px 14px #25254c0e; }
+        .quick-tile .nav-icon { height: 34px; width: 34px; }
+        .tile-text { min-width: 0; }
+        .tile-text small { display: block; margin-top: 4px; color: var(--muted); font-size: .8125rem; font-weight: 500; line-height: 1.4; }
+        .quick-tile.community { --tile-color: #885782; --tile-bg: #f5eaf4; }
+        .work-heading { margin: 0 0 10px; color: var(--primary-color); font-size: clamp(1.25rem, 3.6vw, 1.65rem); }
+        .quality-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(160px, 23%); gap: clamp(12px, 2vw, 24px); align-items: center; background: linear-gradient(125deg,#fff,#f5f2ff); border-inline-start-color: #6556a4; }
+        .quality-copy { min-width: 0; }
+        .quality-copy h3 { margin: 0 0 10px; color: var(--primary-color); font-size: 1.18rem; }
+        .quality-checks { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+        .quality-check { padding: 9px 12px; border: 1px solid #c4dcd3; border-radius: 11px; background: #ecf6ef; }
+        .quality-check strong { color: #265447; }
+        .quality-check.bad { border-color: #ecd0d6; background: #fff0f2; }
+        .quality-check.bad strong { color: #842d42; }
+        .quality-check p { margin: 3px 0 0; font-size: .9375rem; }
+        .quality-photo { display: block; width: 100%; height: auto; max-height: 235px; object-fit: cover; object-position: center 70%; border: 1px solid var(--line); border-radius: 12px; }
+        .section-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px; color: #494386; font-weight: 700; text-underline-offset: 3px; }
+        .community-card { border-inline-start-color: #885782; background: #fbf6fd; }
+        .community-intro { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; }
+        .community-intro h2 { margin-bottom: 5px; }
+        .community-intro p { margin: 0; }
+        .wall-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 16px; border-radius: 10px; background: #51448b; color: #fff; text-decoration: none; font-weight: 750; }
+        .wall-cta:hover { background: #3e346d; }
+        #wall-preview { margin-top: 16px; }
+        #wall-preview h3 { margin: 0 0 8px; }
+        .wall-preview-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%, 215px),1fr)); gap: 10px; }
+        .wall-preview-grid article { min-width: 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+        .wall-preview-grid p { margin: 3px 0 0; color: var(--muted); }
+        @media (max-width: 780px) {
+            .quick-nav { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+            .quick-tile { flex-direction: row; align-items: center; min-height: 76px; padding: 8px; gap: 8px; }
+            .quick-tile.community { grid-column: 1 / -1; min-height: 62px; }
+        }
+        @media (max-width: 570px) {
+            .quality-card, .quality-checks { grid-template-columns: minmax(0,1fr); }
+            .quality-photo { width: min(100%, 300px); max-height: 175px; }
+        }
+        @media (max-width: 380px) {
+            .quick-tile { gap: 6px; }
+            .quick-tile .nav-icon { width: 26px; height: 28px; }
+        }
     </style>
 </head>
 <body>
@@ -195,7 +232,6 @@
         <div class="shell topbar">
             <span class="brand"><span class="brand-icon" aria-hidden="true">🫐</span>Blueberry Crest</span>
             <div class="header-actions">
-                <a class="farm-wall-link" href="farm-wall.html"><span class="nav-icon" aria-hidden="true">💬</span><span class="localized"><span lang="zh-HK">農場留言牆</span><span lang="zh-CN">农场留言墙</span><span lang="en">Farm message wall</span><span lang="ja">農場メッセージボード</span><span lang="ko">농장 게시판</span></span></a>
                 <div class="translate-wrap">
                     <button class="translate-btn" id="translateButton" type="button" onclick="toggleLanguageMenu(event)" aria-haspopup="true" aria-expanded="false">🌐 翻譯</button>
                     <div class="language-menu" id="languageMenu">
@@ -221,11 +257,13 @@
             <span>⚠️ 📢 <strong>@All 各位請注意：</strong>請嚴格遵守農場守則，一旦被發現違規，可能會請你即時離场！</span>
         </div>
 
+
         <nav class="quick-nav" aria-label="Quick links">
-            <a class="quick-tile" href="#nf-leave"><span class="nav-icon" aria-hidden="true">🗓️</span><span class="localized"><span lang="zh-HK">請假申請</span><span lang="zh-CN">请假申请</span><span lang="en">Request leave</span><span lang="ja">休暇申請</span><span lang="ko">휴가 신청</span></span></a>
-            <a class="quick-tile pay" href="#payroll"><span class="nav-icon" aria-hidden="true">💰</span><span class="localized"><span lang="zh-HK">工資／Payslip</span><span lang="zh-CN">工资／Payslip</span><span lang="en">Pay &amp; payslips</span><span lang="ja">給与・明細</span><span lang="ko">급여·명세서</span></span></a>
-            <a class="quick-tile map" href="#farm-directory"><span class="nav-icon" aria-hidden="true">📍</span><span class="localized"><span lang="zh-HK">農場導航</span><span lang="zh-CN">农场导航</span><span lang="en">Farm directions</span><span lang="ja">農場へのアクセス</span><span lang="ko">농장 길찾기</span></span></a>
-            <a class="quick-tile rules" href="#work-rules"><span class="nav-icon" aria-hidden="true">📋</span><span class="localized"><span lang="zh-HK">工作守則</span><span lang="zh-CN">工作守则</span><span lang="en">Work rules</span><span lang="ja">就業ルール</span><span lang="ko">근무 수칙</span></span></a>
+            <a class="quick-tile rules" href="#work-rules"><span class="nav-icon" aria-hidden="true">📋</span><span class="tile-text"><span class="localized"><span lang="zh-HK">工作守則</span><span lang="zh-CN">工作守则</span><span lang="en">Work rules</span><span lang="ja">就業ルール</span><span lang="ko">근무 수칙</span></span><small><span class="localized"><span lang="zh-HK">採果品質與工作要求</span><span lang="zh-CN">采果质量与工作要求</span><span lang="en">Picking quality and standards</span><span lang="ja">品質と作業基準</span><span lang="ko">수확 품질 및 기준</span></span></small></span></a>
+            <a class="quick-tile pay" href="#payroll"><span class="nav-icon" aria-hidden="true">💰</span><span class="tile-text"><span class="localized"><span lang="zh-HK">工資／Payslip</span><span lang="zh-CN">工资／Payslip</span><span lang="en">Pay and payslips</span><span lang="ja">給与・明細</span><span lang="ko">급여·명세서</span></span><small><span class="localized"><span lang="zh-HK">發薪日期與申報</span><span lang="zh-CN">发薪日期与申报</span><span lang="en">Pay dates and reports</span><span lang="ja">支給日と未着報告</span><span lang="ko">지급일 및 신고</span></span></small></span></a>
+            <a class="quick-tile leave" href="#nf-leave"><span class="nav-icon" aria-hidden="true">🗓️</span><span class="tile-text"><span class="localized"><span lang="zh-HK">請假申請</span><span lang="zh-CN">请假申请</span><span lang="en">Request leave</span><span lang="ja">休暇申請</span><span lang="ko">휴가 신청</span></span><small><span class="localized"><span lang="zh-HK">通知守則與表格</span><span lang="zh-CN">通知规则与表格</span><span lang="en">Notice and forms</span><span lang="ja">連絡と申請書</span><span lang="ko">휴가 안내 및 양식</span></span></small></span></a>
+            <a class="quick-tile map" href="#farm-directory"><span class="nav-icon" aria-hidden="true">📍</span><span class="tile-text"><span class="localized"><span lang="zh-HK">農場導航</span><span lang="zh-CN">农场导航</span><span lang="en">Farm directions</span><span lang="ja">農場へのアクセス</span><span lang="ko">농장 길찾기</span></span><small><span class="localized"><span lang="zh-HK">三個農場地址</span><span lang="zh-CN">三个农场地址</span><span lang="en">Three farm locations</span><span lang="ja">3つの農場所在地</span><span lang="ko">농장 3곳의 위치</span></span></small></span></a>
+            <a class="quick-tile community" href="#farm-community"><span class="nav-icon" aria-hidden="true">💬</span><span class="tile-text"><span class="localized"><span lang="zh-HK">留言區</span><span lang="zh-CN">留言区</span><span lang="en">Message wall</span><span lang="ja">掲示板</span><span lang="ko">게시판</span></span><small><span class="localized"><span lang="zh-HK">分享相片與感想</span><span lang="zh-CN">分享照片与感想</span><span lang="en">Share photos and feedback</span><span lang="ja">写真と感想を共有</span><span lang="ko">사진 및 소감 공유</span></span></small></span></a>
         </nav>
         <nav class="subnav" aria-label="More employee links">
             <a class="localized" href="#leave-notes"><span lang="zh-HK">請假注意事項</span><span lang="zh-CN">请假注意事项</span><span lang="en">Leave rules</span><span lang="ja">休暇の注意事項</span><span lang="ko">휴가 안내</span></a>
@@ -234,178 +272,28 @@
             <a class="localized" href="#picking-guide"><span lang="zh-HK">採果圖鑑</span><span lang="zh-CN">采果图鉴</span><span lang="en">Picking guide</span><span lang="ja">収穫ガイド</span><span lang="ko">수확 가이드</span></a>
         </nav>
 
-        <!-- 📝 請假及離職表格 -->
-<div class="card warning leave-card" id="leave-notes"><h2>⚠️ 請假注意事項</h2>
-            <ol>
-                <li><strong>⏰ 事假請最少提前 72 小時（3日）通知：</strong>如屬可預先安排的長假，應更早提出，以便安排工作及人手。不可抗力等事宜，如突發家庭事故等，可例外處理，但須在可行情況下盡快通知管理層，說明原因、請假日期及預計返工日期。如情況有變，請及時更新。</li>
-                <li><strong>🤒 病假／突發情況請盡快通知：</strong>如因生病或突發情況無法上班，請在知道自己無法上班後盡快通知工頭，不要等到上班時間過後才通知。</li>
-                <li><strong>📅 請清楚提供請假日期：</strong>如連續請假多日，請寫清楚開始日期、結束日期及預計返工日期。</li>
-                <li><strong>❌ 請不要只發「今日唔返」：</strong>請使用下方表格提供姓名、日期、請假類型及原因，方便工頭記錄及安排人手。</li>
-                <li><strong>🔄 如需延長請假，請再次通知：</strong>如未能按照原定日期返工，請盡快通知工頭新的預計返工日期。</li>
-                <li><strong>⚠️ 未通知而缺勤：</strong>如沒有按照程序通知而沒有上班，將記錄為<strong>「未通知缺勤」</strong>，並由管理人員跟進。</li>
-                <li><strong>📩 提交資料後請留意回覆：</strong>如工頭需要確認日期或其他資料，請配合回覆，以便完成記錄及安排。</li>
-            </ol>
-</div>
+        <section id="work-rules" aria-labelledby="work-heading">
+            <h2 class="work-heading" id="work-heading"><span class="localized"><span lang="zh-HK">工作守則</span><span lang="zh-CN">工作守则</span><span lang="en">Work rules</span><span lang="ja">就業ルール</span><span lang="ko">근무 수칙</span></span></h2>
 
-<div class="card" id="employee-notice-forms" style="border:2px solid #c9d9eb">
-<h2 id="nf-heading">📝 請假及離職通知表格</h2><p id="nf-intro">填寫後複製內容，自行發送給管理層。</p>
-<section id="nf-leave" class="form-panel">
-<h3 id="nf-leave-title" style="color:#155f94">📝 員工請假申請表</h3>
-<p class="leave-brief"><span class="localized"><span lang="zh-HK">事假最少提前 72 小時通知。病假或突發情況，請盡快通知。</span><span lang="zh-CN">事假最少提前 72 小时通知。病假或突发情况，请尽快通知。</span><span lang="en">Give at least 72 hours’ notice for personal leave. Report sick leave or emergencies as soon as possible.</span><span lang="ja">私用休暇は72時間前までに、病気や緊急時はできるだけ早く連絡してください。</span><span lang="ko">개인 휴가는 최소 72시간 전에, 병가나 긴급 상황은 가능한 한 빨리 알려 주세요.</span></span> <a class="localized" href="#leave-notes"><span lang="zh-HK">查看請假守則</span><span lang="zh-CN">查看请假规则</span><span lang="en">View leave rules</span><span lang="ja">休暇ルールを見る</span><span lang="ko">휴가 수칙 보기</span></a></p>
-<p id="nf-leave-name-help" style="margin:10px 0 6px;font-size:14px;color:#34536c">中文或英文姓名填其中一項即可，別名必填。</p>
-<div class="field-grid">
-<label><span id="nf-leave-name-label">中文姓名（選填）</span><input id="nf-leave-name" type="text" autocomplete="name"></label>
-<label><span id="nf-leave-english-label">英文姓名（選填）</span><input id="nf-leave-english" type="text" autocomplete="off"></label>
-<label><span id="nf-leave-alias-label">別名（選填）</span><input id="nf-leave-alias" type="text"></label>
-</div>
-<fieldset><legend id="nf-leave-type-label">請假類型 *</legend><label><input type="radio" name="nf-leave-type" value="personal" checked><span id="nf-leave-personal">事假</span></label><label><input type="radio" name="nf-leave-type" value="sick"><span id="nf-leave-sick">病假</span></label><label><input type="radio" name="nf-leave-type" value="other"><span id="nf-leave-other">其他（自填）</span></label><label><input type="radio" name="nf-leave-type" value="family"><span id="nf-leave-family">突發家庭事故</span></label></fieldset>
-<div class="field-grid">
-<label><span id="nf-leave-start-label">開始日期 *</span><input id="nf-leave-start" type="date"></label>
-<label><span id="nf-leave-end-label">結束日期 *</span><input id="nf-leave-end" type="date"></label>
-</div>
-<p id="nf-leave-days" aria-live="polite"></p>
-<label><span id="nf-leave-return-label">預計返工日期 *</span><input id="nf-leave-return" type="date"></label>
-<label><span id="nf-leave-reason-label">理由 *</span><textarea id="nf-leave-reason" rows="3" required maxlength="1000" placeholder="例如：頭痛、生理期、身體不適等"></textarea></label>
-<p id="nf-leave-reminder">請盡早通知管理層；病假或突發情況請盡快通知。通知不代表已獲批准。</p>
-<label><input id="nf-leave-confirm" type="checkbox"><span id="nf-leave-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
-<button type="button" id="nf-leave-copy" style="display:block;width:100%;max-width:520px;min-height:64px;padding:17px 22px;font-size:clamp(17px,4.4vw,21px);font-weight:800;border-radius:14px;line-height:1.4;margin:16px auto">📤 提交請假申請及複製</button><p id="nf-leave-status" role="status"></p>
-<div id="nf-leave-copy-panel" hidden>
-<button type="button" id="nf-leave-copy-again">📋 複製已提交申請</button>
-<textarea id="nf-leave-copy-text" rows="9" readonly style="display:block;width:100%;margin-top:8px;font-size:16px"></textarea>
-</div>
-<dialog id="nf-leave-copy-reminder" aria-labelledby="nf-leave-copy-reminder-title" aria-describedby="nf-leave-copy-reminder-text">
-<img class="leave-reminder-mascot" src="leave-groundhog.webp" width="456" height="405" alt="">
-<h3 id="nf-leave-copy-reminder-title">已複製請假申請</h3>
-<p id="nf-leave-copy-reminder-text">記得在Signal發給工頭及隊長讓他們知道你要(請假)哦~</p>
-<form method="dialog"><button type="submit" id="nf-leave-copy-reminder-close" autofocus>知道了</button></form>
-<div class="leave-reminder-next"><img src="leave-groundhog-running.webp" width="36" height="36" alt=""><small id="nf-leave-copy-reminder-tip">已複製,直接出發去signal貼上</small></div>
-</dialog>
-</section>
-<section id="nf-resign" class="form-panel resignation">
-<h3 id="nf-resign-title" style="color:#985114">📋 員工離職通知表</h3>
-<div class="field-grid">
-<label><span id="nf-resign-name-label">英文姓名 *</span><input id="nf-resign-name" type="text"></label>
-<label><span id="nf-resign-alias-label">別名（選填）</span><input id="nf-resign-alias" type="text"></label>
-</div>
-<div class="field-grid">
-<label><span id="nf-resign-notice-label">提出通知日期 *</span><input id="nf-resign-notice" type="date"></label>
-<label><span id="nf-resign-days-label">提前通知日數 *</span><select id="nf-resign-days"><option value="7">7</option><option value="14" selected>14</option><option value="21">21</option><option value="28">28</option><option value="custom" id="nf-custom-label">自訂日數</option></select></label>
-</div>
-<label id="nf-resign-custom-wrap" hidden><span id="nf-resign-custom-label">輸入日數（0–365）</span><input id="nf-resign-custom" type="number" min="0" max="365" value="14"></label>
-<p id="nf-resign-last" aria-live="polite"></p>
-<label><span id="nf-resign-reason-label">離職原因 *</span><textarea id="nf-resign-reason" rows="3"></textarea></label>
-<p id="nf-resign-reminder">為方便安排人手，請盡量提前兩星期（14日）通知管理層。實際通知要求以適用合約及法律為準。</p>
-<label><input id="nf-resign-confirm" type="checkbox"><span id="nf-resign-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
-<button type="button" id="nf-resign-copy">📋 複製離職通知</button><p id="nf-resign-status" role="status"></p>
-</section><p id="nf-privacy">表格只會複製文字，不會上傳或儲存資料。</p>
-</div>
-
-
-
-
-        <!-- 工資與 Payslip -->
-        <div class="card" id="payroll">
-            <h2>💰 工資和 Payslip 注意事項</h2>
-            <div class="pay-summary">
-                <div><span class="localized"><span lang="zh-HK">出糧及發放 Payslip</span><span lang="zh-CN">发工资及 Payslip</span><span lang="en">Pay and payslips</span><span lang="ja">給与・明細の発行</span><span lang="ko">급여 및 명세서 지급</span></span><strong class="localized"><span lang="zh-HK">星期一 17:00 前</span><span lang="zh-CN">星期一 17:00 前</span><span lang="en">Monday by 5 pm</span><span lang="ja">月曜日 17:00 まで</span><span lang="ko">월요일 17:00까지</span></strong></div>
-                <div><span class="localized"><span lang="zh-HK">未收到，請通知管理層</span><span lang="zh-CN">未收到，请通知管理层</span><span lang="en">Notify management if missing</span><span lang="ja">未着の場合は管理者に連絡</span><span lang="ko">미수령 시 관리자에게 연락</span></span><strong class="localized"><span lang="zh-HK">同日 19:00 前</span><span lang="zh-CN">同日 19:00 前</span><span lang="en">Same day by 7 pm</span><span lang="ja">同日 19:00 まで</span><span lang="ko">당일 19:00까지</span></strong></div>
-            </div>
-           <ul>
-  <li data-i18n="pay-cycle"><strong>工資結算週期：</strong>星期四 至 下星期三 為一週。</li> 
-  <li data-i18n="pay-time"><strong>工資及Payslip的發放時間：</strong>將於（結算週）的<span class="highlight">下週一,下午 17:00 前</span>發放完畢。</li> 
-  <li data-i18n="pay-missing"><strong>未收到工資及Payslip<span style="color: red; font-size: 1.2em; font-weight: bold;">(星期一,17:00後)</span>：</strong>如未收到工資和 payslip<span style="color: #8B008B; font-weight: 900;">(先在垃圾郵件查核一下!!!再三告知先查核一下)</span>，請務必於<span style="color:#c51626;font-size:1.45em;font-weight:900;">（當天）</span><span class="highlight">週一晚上 19:00 分前</span>主動告知管理層。</li> 
-</ul>
-            <div style="margin-top:20px;text-align:center"><img data-payroll-example src="payroll-week-example.svg" alt="工資結算日期例子：11至17 September 2025；22 September 17:00前發薪，19:00前通知管理層" style="display:block;width:100%;max-width:1100px;height:auto;border-radius:14px" loading="lazy"></div>
-            <section id="payroll-calculator" data-payroll-calculator style="margin-top:22px;border:1px solid #c9d9eb;border-radius:16px;padding:18px;background:#f7fbff;color:#18324b">
-              <h3 data-pc="title" style="margin:0 0 8px">📅 工資日期計算機</h3>
-              <p data-pc="intro">選擇其中一日返工日期，計算所屬結算週及發薪日期。</p>
-              <label for="payroll-work-date" data-pc="label" style="display:block;font-weight:700;margin-bottom:8px">選擇返工日期</label>
-              <input id="payroll-work-date" type="date" value="2026-10-11" style="width:100%;max-width:320px;box-sizing:border-box;padding:12px;border:1px solid #a9bfd8;border-radius:9px;font-size:17px">
-              <div style="background:#e7f1ff;border-radius:12px;padding:15px;margin-top:15px">
-                <div data-pc="periodLabel" style="font-weight:700">工資結算週期（星期四至星期三）</div>
-                <div id="pc-period" style="font-size:clamp(19px,3.5vw,28px);font-weight:800;margin-top:7px"></div>
-              </div>
-              <div class="adaptive-grid" style="margin-top:13px">
-                <div style="border:2px solid #9ad8ac;background:#eaffef;border-radius:12px;padding:16px">
-                  <div data-pc="payLabel" style="font-weight:700;color:#12652f">💰 工資及 Payslip 發放</div>
-                  <div id="pc-paydate" style="font-size:clamp(22px,4vw,30px);font-weight:800;color:#12652f;margin:10px 0"></div>
-                  <div data-pc="payTime" style="font-size:clamp(22px,4vw,29px);font-weight:900;line-height:1.4;color:#08732c">星期一下午 17:00 前</div>
+        <section class="card quality-card" aria-labelledby="quality-heading">
+            <div class="quality-copy">
+                <h3 id="quality-heading"><span class="localized"><span lang="zh-HK">採果品質</span><span lang="zh-CN">采果质量</span><span lang="en">Picking quality</span><span lang="ja">収穫品質</span><span lang="ko">수확 품질</span></span></h3>
+                <div class="quality-checks">
+                    <div class="quality-check good">
+                        <strong><span class="localized"><span lang="zh-HK">可以入桶</span><span lang="zh-CN">可以入桶</span><span lang="en">What to keep</span><span lang="ja">バケツに入れる実</span><span lang="ko">통에 담는 열매</span></span></strong>
+                        <p><span class="localized"><span lang="zh-HK">全藍、果皮完整，沒有花或樹枝。</span><span lang="zh-CN">全蓝、果皮完整，没有花或树枝。</span><span lang="en">Only fully blue berries with intact skins and no flowers or twigs.</span><span lang="ja">全体が青く、皮に傷がなく、花や小枝が付いていない実を選びます。</span><span lang="ko">완전히 파랗고 껍질이 멀쩡하며 꽃이나 잔가지가 없는 열매만 담으세요.</span></span></p>
+                    </div>
+                    <div class="quality-check bad">
+                        <strong><span class="localized"><span lang="zh-HK">不要入桶</span><span lang="zh-CN">不要入桶</span><span lang="en">What to leave out</span><span lang="ja">バケツに入れない実</span><span lang="ko">통에 넣지 않는 열매</span></span></strong>
+                        <p><span class="localized"><span lang="zh-HK">紅果、綠果及破皮果。軟爛、爆汁或蟲咬的也不要放入桶。</span><span lang="zh-CN">红果、绿果及破皮果。软烂、爆汁或虫咬的也不要放入桶。</span><span lang="en">Leave out red, green, split, mushy, leaking or insect-damaged berries.</span><span lang="ja">赤い実、緑の実、皮が裂けた実、柔らかく傷んだ実、果汁が漏れた実、虫食いの実は除きます。</span><span lang="ko">빨갛거나 초록색인 열매, 터졌거나 물러졌거나 즙이 새거나 벌레 먹은 열매는 빼세요.</span></span></p>
+                    </div>
                 </div>
-                <div style="border:2px solid #f3a2a7;background:#fff0f0;border-radius:12px;padding:16px">
-                  <div data-pc="missingLabel" style="font-weight:700;color:#aa1420">⚠️ 未收到工資或 Payslip</div>
-                  <div id="pc-alertdate" style="font-size:clamp(22px,4vw,30px);font-weight:800;color:#aa1420;margin:10px 0"></div>
-                  <div data-pc="spam" style="font-size:clamp(23px,4vw,30px);font-weight:900;line-height:1.4;color:#c31626">❗先檢查垃圾郵件！</div>
-                  <div data-pc="notify" style="font-size:19px;font-weight:800;color:#a21a23;margin-top:10px">星期一晚上 19:00 前通知管理層</div>
-                </div>
-              </div>
-              <p data-pc="explain" style="font-size:14px;margin:13px 0 0">計算方式：由所選日期回推至星期四，結算至下一個星期三，並於結算週後的星期一發薪。</p>
-            </section>
-<section id="missing-pay-report" style="margin-top:22px;padding:20px;border:2px solid #d4c7ed;border-radius:16px;background:#fcfaff;color:#24304a">
-<h3 id="mpr-title">📝 工資／Payslip 未收到申報表</h3><p id="mpr-intro">星期一 17:00 後仍未收到？請先檢查垃圾郵件，並於當天 19:00 前通知管理層。</p>
-<div class="adaptive-grid">
-<label><span id="mpr-name-label">英文姓名 *</span><input id="mpr-name" autocomplete="name" style="display:block;width:100%;padding:10px;box-sizing:border-box"></label>
-<label><span id="mpr-alias-label">別名（選填）</span><input id="mpr-alias" style="display:block;width:100%;padding:10px;box-sizing:border-box"></label></div>
-<fieldset style="margin:15px 0"><legend id="mpr-missing-label">未收到甚麼？ *</legend>
-<label style="display:block"><input type="radio" name="mpr-missing" value="salary"><span id="mpr-salary">只欠工資</span></label>
-<label style="display:block"><input type="radio" name="mpr-missing" value="payslip"><span id="mpr-payslip">只欠 Payslip</span></label>
-<label style="display:block"><input type="radio" name="mpr-missing" value="both" checked><span id="mpr-both">工資及 Payslip 都未收到</span></label>
-<label style="display:block"><input type="radio" name="mpr-missing" value="shortfall"><span id="mpr-shortfall">工資有收到，但有欠缺（需提供該週 Payslip 作證明）</span></label></fieldset>
-<label for="mpr-date" id="mpr-date-label" style="display:block;font-weight:700">選擇工資週期（星期四至下星期三） *</label>
-<select id="mpr-date" style="width:100%;max-width:380px;padding:10px;box-sizing:border-box"></select>
-<div id="mpr-period" aria-live="polite" style="margin:12px 0;padding:12px;background:#edf3ff;border-radius:9px;font-weight:700"></div>
-<p id="mpr-check-hint" style="font-weight:700">以下三項可選一，亦可全選 *</p>
-<label style="display:block;margin:12px 0"><input id="mpr-spam" type="checkbox"><span id="mpr-spam-label">我已檢查收件箱及垃圾郵件（Spam / Junk）</span></label>
-<label style="display:block;margin:12px 0"><input id="mpr-bank" type="checkbox"><span id="mpr-bank-label">我已檢查銀行戶口是否收到工資</span></label>
-<label style="display:block;margin:12px 0"><input id="mpr-shortfall-check" type="checkbox"><span id="mpr-shortfall-check-label">我已收到工資，但我（肯定）欠缺了那週時數／金額</span></label>
-<label for="mpr-notes" id="mpr-notes-label" style="display:block;font-weight:700">補充資料（選填）</label>
-<textarea id="mpr-notes" rows="3" style="width:100%;box-sizing:border-box;padding:10px"></textarea>
-<button id="mpr-copy" type="button" style="display:block;width:100%;margin-top:15px;padding:14px;border:0;border-radius:10px;background:#245ac4;color:white;font-weight:800;font-size:17px;cursor:pointer">📋 複製申報內容</button>
-<p id="mpr-feedback" role="status" aria-live="polite"></p><p id="mpr-privacy" style="font-size:13px">只會複製內容，請自行發訊息予管理層；此表格不會上傳或儲存個人資料。毋須提供 TFN 或銀行帳號。</p></section>
-        </div>
-
-        <!-- 農場地址 Farm Address -->
-        <div class="card" id="farm-directory">
-            <h2>📍 農場導航與介紹影片 (Farm Directory)</h2>
-            
-            <div class="farm-grid">
-            <!-- 農場 1 -->
-            <div class="farm-item">
-                <div class="farm-name">1. Crows Nest Farm 🐦‍⬛</div>
-                <div class="farm-address">205 Orchard Rd, Crows Nest QLD 4355 澳洲</div>
-                <div class="btn-group">
-                    <a href="https://maps.app.goo.gl/wFzBzrBGhQgLPQYr6?g_st=ic" target="_blank" class="btn btn-map">🗺️ Google 導航地圖</a>
-                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.2760889%2C152.076504" target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
-                    <a href="https://youtu.be/wXjUQaSAsj4" target="_blank" class="btn btn-video">▶️ 導航影片</a>
-                </div>
+                <a class="section-link" href="#picking-guide"><span class="localized"><span lang="zh-HK">查看採果圖鑑</span><span lang="zh-CN">查看采果图鉴</span><span lang="en">See the picking guide</span><span lang="ja">収穫ガイドを見る</span><span lang="ko">수확 가이드 보기</span></span></a>
             </div>
-
-            <!-- 農場 2 -->
-            <div class="farm-item">
-                <div class="farm-name">2. Geham Farm 🐽</div>
-                <div class="farm-address">9203 New England Hwy, Geham QLD 4352 澳洲</div>
-                <div class="btn-group">
-                    <a href="https://www.google.com/maps/place/9203+New+England+Hwy,+Geham+QLD+4352/@-27.3827839,152.0158043,17z/data=!3m1!4b1!4m6!3m5!1s0x6b9663a8f1f23e9f:0xebd757e96a19404e!8m2!3d-27.3827887!4d152.0183792!16s%2Fg%2F11g0h043b8?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn btn-map">🗺️ Google 導航地圖</a>
-                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.3794666%2C152.016723." target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
-                    <a href="https://youtu.be/T6QrD8eTg8Q" target="_blank" class="btn btn-video">▶️ 導航影片</a>
-                </div>
-            </div>
-
-            <!-- 農場 3 -->
-            <div class="farm-item">
-                <div class="farm-name">3. Ravensbourne Farm (經理場)</div>
-                <div class="farm-address">24 Schwager Road, Ravensbourne QLD 澳洲</div>
-                <div class="btn-group">
-                    <a href="https://www.google.com/maps/place/24+Schwager+Rd,+Ravensbourne+QLD+4352/@-27.3814261,152.1400225,17z/data=!3m1!4b1!4m6!3m5!1s0x6b968895ad7727dd:0xa4b51d9c72f0ed1b!8m2!3d-27.3814309!4d152.1425974!16s%2Fg%2F11ghp0qwfp?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn btn-map">🗺️ Google 導航地圖</a>
-                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.381556%2C152.142341" target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
-                    <a href="https://youtu.be/u57BkPag0Vc" target="_blank" class="btn btn-video">▶️ 導航影片</a>
-                </div>
-            </div>
-
-            </div>
-        </div>
-
+            <img class="quality-photo" src="GOOD%20AND%20BAD.jpeg" width="1290" height="1703" alt="" decoding="async">
+        </section>
         <!-- 嚴格禁止與違規即時離場守則 -->
-        <div class="card alert" id="work-rules">
+        <div class="card alert">
             <h2>🚫 違規即時離場守則（請嚴格遵守）</h2>
             <ol>
                 <li data-i18n="rule-1"><strong>禁止坐桶：</strong>大家不要坐桶子（農場的桶子只是用來採果,不是拿來坐!）。</li>
@@ -564,6 +452,192 @@
             </ul>
         </div>
 
+        </section>
+
+        <!-- 工資與 Payslip -->
+        <div class="card" id="payroll">
+            <h2>💰 工資和 Payslip 注意事項</h2>
+            <div class="pay-summary">
+                <div><span class="localized"><span lang="zh-HK">出糧及發放 Payslip</span><span lang="zh-CN">发工资及 Payslip</span><span lang="en">Pay and payslips</span><span lang="ja">給与・明細の発行</span><span lang="ko">급여 및 명세서 지급</span></span><strong class="localized"><span lang="zh-HK">星期一 17:00 前</span><span lang="zh-CN">星期一 17:00 前</span><span lang="en">Monday by 5 pm</span><span lang="ja">月曜日 17:00 まで</span><span lang="ko">월요일 17:00까지</span></strong></div>
+                <div><span class="localized"><span lang="zh-HK">未收到，請通知管理層</span><span lang="zh-CN">未收到，请通知管理层</span><span lang="en">Notify management if missing</span><span lang="ja">未着の場合は管理者に連絡</span><span lang="ko">미수령 시 관리자에게 연락</span></span><strong class="localized"><span lang="zh-HK">同日 19:00 前</span><span lang="zh-CN">同日 19:00 前</span><span lang="en">Same day by 7 pm</span><span lang="ja">同日 19:00 まで</span><span lang="ko">당일 19:00까지</span></strong></div>
+            </div>
+           <ul>
+  <li data-i18n="pay-cycle"><strong>工資結算週期：</strong>星期四 至 下星期三 為一週。</li> 
+  <li data-i18n="pay-time"><strong>工資及Payslip的發放時間：</strong>將於（結算週）的<span class="highlight">下週一,下午 17:00 前</span>發放完畢。</li> 
+  <li data-i18n="pay-missing"><strong>未收到工資及Payslip<span style="color: red; font-size: 1.2em; font-weight: bold;">(星期一,17:00後)</span>：</strong>如未收到工資和 payslip<span style="color: #8B008B; font-weight: 900;">(先在垃圾郵件查核一下!!!再三告知先查核一下)</span>，請務必於<span style="color:#c51626;font-size:1.45em;font-weight:900;">（當天）</span><span class="highlight">週一晚上 19:00 分前</span>主動告知管理層。</li> 
+</ul>
+            <div style="margin-top:20px;text-align:center"><img data-payroll-example src="payroll-week-example.svg" alt="工資結算日期例子：11至17 September 2025；22 September 17:00前發薪，19:00前通知管理層" style="display:block;width:100%;max-width:1100px;height:auto;border-radius:14px" loading="lazy"></div>
+            <section id="payroll-calculator" data-payroll-calculator style="margin-top:22px;border:1px solid #c9d9eb;border-radius:16px;padding:18px;background:#f7fbff;color:#18324b">
+              <h3 data-pc="title" style="margin:0 0 8px">📅 工資日期計算機</h3>
+              <p data-pc="intro">選擇其中一日返工日期，計算所屬結算週及發薪日期。</p>
+              <label for="payroll-work-date" data-pc="label" style="display:block;font-weight:700;margin-bottom:8px">選擇返工日期</label>
+              <input id="payroll-work-date" type="date" value="2026-10-11" style="width:100%;max-width:320px;box-sizing:border-box;padding:12px;border:1px solid #a9bfd8;border-radius:9px;font-size:17px">
+              <div style="background:#e7f1ff;border-radius:12px;padding:15px;margin-top:15px">
+                <div data-pc="periodLabel" style="font-weight:700">工資結算週期（星期四至星期三）</div>
+                <div id="pc-period" style="font-size:clamp(19px,3.5vw,28px);font-weight:800;margin-top:7px"></div>
+              </div>
+              <div class="adaptive-grid" style="margin-top:13px">
+                <div style="border:2px solid #9ad8ac;background:#eaffef;border-radius:12px;padding:16px">
+                  <div data-pc="payLabel" style="font-weight:700;color:#12652f">💰 工資及 Payslip 發放</div>
+                  <div id="pc-paydate" style="font-size:clamp(22px,4vw,30px);font-weight:800;color:#12652f;margin:10px 0"></div>
+                  <div data-pc="payTime" style="font-size:clamp(22px,4vw,29px);font-weight:900;line-height:1.4;color:#08732c">星期一下午 17:00 前</div>
+                </div>
+                <div style="border:2px solid #f3a2a7;background:#fff0f0;border-radius:12px;padding:16px">
+                  <div data-pc="missingLabel" style="font-weight:700;color:#aa1420">⚠️ 未收到工資或 Payslip</div>
+                  <div id="pc-alertdate" style="font-size:clamp(22px,4vw,30px);font-weight:800;color:#aa1420;margin:10px 0"></div>
+                  <div data-pc="spam" style="font-size:clamp(23px,4vw,30px);font-weight:900;line-height:1.4;color:#c31626">❗先檢查垃圾郵件！</div>
+                  <div data-pc="notify" style="font-size:19px;font-weight:800;color:#a21a23;margin-top:10px">星期一晚上 19:00 前通知管理層</div>
+                </div>
+              </div>
+              <p data-pc="explain" style="font-size:14px;margin:13px 0 0">計算方式：由所選日期回推至星期四，結算至下一個星期三，並於結算週後的星期一發薪。</p>
+            </section>
+<section id="missing-pay-report" style="margin-top:22px;padding:20px;border:2px solid #d4c7ed;border-radius:16px;background:#fcfaff;color:#24304a">
+<h3 id="mpr-title">📝 工資／Payslip 未收到申報表</h3><p id="mpr-intro">星期一 17:00 後仍未收到？請先檢查垃圾郵件，並於當天 19:00 前通知管理層。</p>
+<div class="adaptive-grid">
+<label><span id="mpr-name-label">英文姓名 *</span><input id="mpr-name" autocomplete="name" style="display:block;width:100%;padding:10px;box-sizing:border-box"></label>
+<label><span id="mpr-alias-label">別名（選填）</span><input id="mpr-alias" style="display:block;width:100%;padding:10px;box-sizing:border-box"></label></div>
+<fieldset style="margin:15px 0"><legend id="mpr-missing-label">未收到甚麼？ *</legend>
+<label style="display:block"><input type="radio" name="mpr-missing" value="salary"><span id="mpr-salary">只欠工資</span></label>
+<label style="display:block"><input type="radio" name="mpr-missing" value="payslip"><span id="mpr-payslip">只欠 Payslip</span></label>
+<label style="display:block"><input type="radio" name="mpr-missing" value="both" checked><span id="mpr-both">工資及 Payslip 都未收到</span></label>
+<label style="display:block"><input type="radio" name="mpr-missing" value="shortfall"><span id="mpr-shortfall">工資有收到，但有欠缺（需提供該週 Payslip 作證明）</span></label></fieldset>
+<label for="mpr-date" id="mpr-date-label" style="display:block;font-weight:700">選擇工資週期（星期四至下星期三） *</label>
+<select id="mpr-date" style="width:100%;max-width:380px;padding:10px;box-sizing:border-box"></select>
+<div id="mpr-period" aria-live="polite" style="margin:12px 0;padding:12px;background:#edf3ff;border-radius:9px;font-weight:700"></div>
+<p id="mpr-check-hint" style="font-weight:700">以下三項可選一，亦可全選 *</p>
+<label style="display:block;margin:12px 0"><input id="mpr-spam" type="checkbox"><span id="mpr-spam-label">我已檢查收件箱及垃圾郵件（Spam / Junk）</span></label>
+<label style="display:block;margin:12px 0"><input id="mpr-bank" type="checkbox"><span id="mpr-bank-label">我已檢查銀行戶口是否收到工資</span></label>
+<label style="display:block;margin:12px 0"><input id="mpr-shortfall-check" type="checkbox"><span id="mpr-shortfall-check-label">我已收到工資，但我（肯定）欠缺了那週時數／金額</span></label>
+<label for="mpr-notes" id="mpr-notes-label" style="display:block;font-weight:700">補充資料（選填）</label>
+<textarea id="mpr-notes" rows="3" style="width:100%;box-sizing:border-box;padding:10px"></textarea>
+<button id="mpr-copy" type="button" style="display:block;width:100%;margin-top:15px;padding:14px;border:0;border-radius:10px;background:#245ac4;color:white;font-weight:800;font-size:17px;cursor:pointer">📋 複製申報內容</button>
+<p id="mpr-feedback" role="status" aria-live="polite"></p><p id="mpr-privacy" style="font-size:13px">只會複製內容，請自行發訊息予管理層；此表格不會上傳或儲存個人資料。毋須提供 TFN 或銀行帳號。</p></section>
+        </div>
+
+        <!-- 📝 請假及離職表格 -->
+<div class="card warning leave-card" id="leave-notes"><h2>⚠️ 請假注意事項</h2>
+            <ol>
+                <li><strong>⏰ 事假請最少提前 72 小時（3日）通知：</strong>如屬可預先安排的長假，應更早提出，以便安排工作及人手。不可抗力等事宜，如突發家庭事故等，可例外處理，但須在可行情況下盡快通知管理層，說明原因、請假日期及預計返工日期。如情況有變，請及時更新。</li>
+                <li><strong>🤒 病假／突發情況請盡快通知：</strong>如因生病或突發情況無法上班，請在知道自己無法上班後盡快通知工頭，不要等到上班時間過後才通知。</li>
+                <li><strong>📅 請清楚提供請假日期：</strong>如連續請假多日，請寫清楚開始日期、結束日期及預計返工日期。</li>
+                <li><strong>❌ 請不要只發「今日唔返」：</strong>請使用下方表格提供姓名、日期、請假類型及原因，方便工頭記錄及安排人手。</li>
+                <li><strong>🔄 如需延長請假，請再次通知：</strong>如未能按照原定日期返工，請盡快通知工頭新的預計返工日期。</li>
+                <li><strong>⚠️ 未通知而缺勤：</strong>如沒有按照程序通知而沒有上班，將記錄為<strong>「未通知缺勤」</strong>，並由管理人員跟進。</li>
+                <li><strong>📩 提交資料後請留意回覆：</strong>如工頭需要確認日期或其他資料，請配合回覆，以便完成記錄及安排。</li>
+            </ol>
+</div>
+
+<div class="card" id="employee-notice-forms" style="border:2px solid #c9d9eb">
+<h2 id="nf-heading">📝 請假及離職通知表格</h2><p id="nf-intro">填寫後複製內容，自行發送給管理層。</p>
+<section id="nf-leave" class="form-panel">
+<h3 id="nf-leave-title" style="color:#155f94">📝 員工請假申請表</h3>
+<p class="leave-brief"><span class="localized"><span lang="zh-HK">事假最少提前 72 小時通知。病假或突發情況，請盡快通知。</span><span lang="zh-CN">事假最少提前 72 小时通知。病假或突发情况，请尽快通知。</span><span lang="en">Give at least 72 hours’ notice for personal leave. Report sick leave or emergencies as soon as possible.</span><span lang="ja">私用休暇は72時間前までに、病気や緊急時はできるだけ早く連絡してください。</span><span lang="ko">개인 휴가는 최소 72시간 전에, 병가나 긴급 상황은 가능한 한 빨리 알려 주세요.</span></span> <a class="localized" href="#leave-notes"><span lang="zh-HK">查看請假守則</span><span lang="zh-CN">查看请假规则</span><span lang="en">View leave rules</span><span lang="ja">休暇ルールを見る</span><span lang="ko">휴가 수칙 보기</span></a></p>
+<p id="nf-leave-name-help" style="margin:10px 0 6px;font-size:14px;color:#34536c">中文或英文姓名填其中一項即可，別名必填。</p>
+<div class="field-grid">
+<label><span id="nf-leave-name-label">中文姓名（選填）</span><input id="nf-leave-name" type="text" autocomplete="name"></label>
+<label><span id="nf-leave-english-label">英文姓名（選填）</span><input id="nf-leave-english" type="text" autocomplete="off"></label>
+<label><span id="nf-leave-alias-label">別名（選填）</span><input id="nf-leave-alias" type="text"></label>
+</div>
+<fieldset><legend id="nf-leave-type-label">請假類型 *</legend><label><input type="radio" name="nf-leave-type" value="personal" checked><span id="nf-leave-personal">事假</span></label><label><input type="radio" name="nf-leave-type" value="sick"><span id="nf-leave-sick">病假</span></label><label><input type="radio" name="nf-leave-type" value="other"><span id="nf-leave-other">其他（自填）</span></label><label><input type="radio" name="nf-leave-type" value="family"><span id="nf-leave-family">突發家庭事故</span></label></fieldset>
+<div class="field-grid">
+<label><span id="nf-leave-start-label">開始日期 *</span><input id="nf-leave-start" type="date"></label>
+<label><span id="nf-leave-end-label">結束日期 *</span><input id="nf-leave-end" type="date"></label>
+</div>
+<p id="nf-leave-days" aria-live="polite"></p>
+<label><span id="nf-leave-return-label">預計返工日期 *</span><input id="nf-leave-return" type="date"></label>
+<label><span id="nf-leave-reason-label">理由 *</span><textarea id="nf-leave-reason" rows="3" required maxlength="1000" placeholder="例如：頭痛、生理期、身體不適等"></textarea></label>
+<p id="nf-leave-reminder">請盡早通知管理層；病假或突發情況請盡快通知。通知不代表已獲批准。</p>
+<label><input id="nf-leave-confirm" type="checkbox"><span id="nf-leave-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
+<button type="button" id="nf-leave-copy" style="display:block;width:100%;max-width:520px;min-height:64px;padding:17px 22px;font-size:clamp(17px,4.4vw,21px);font-weight:800;border-radius:14px;line-height:1.4;margin:16px auto">📤 提交請假申請及複製</button><p id="nf-leave-status" role="status"></p>
+<div id="nf-leave-copy-panel" hidden>
+<button type="button" id="nf-leave-copy-again">📋 複製已提交申請</button>
+<textarea id="nf-leave-copy-text" rows="9" readonly style="display:block;width:100%;margin-top:8px;font-size:16px"></textarea>
+</div>
+<dialog id="nf-leave-copy-reminder" aria-labelledby="nf-leave-copy-reminder-title" aria-describedby="nf-leave-copy-reminder-text">
+<img class="leave-reminder-mascot" src="leave-groundhog.webp" width="456" height="405" alt="">
+<h3 id="nf-leave-copy-reminder-title">已複製請假申請</h3>
+<p id="nf-leave-copy-reminder-text">記得在Signal發給工頭及隊長讓他們知道你要(請假)哦~</p>
+<form method="dialog"><button type="submit" id="nf-leave-copy-reminder-close" autofocus>知道了</button></form>
+<div class="leave-reminder-next"><img src="leave-groundhog-running.webp" width="36" height="36" alt=""><small id="nf-leave-copy-reminder-tip">已複製,直接出發去signal貼上</small></div>
+</dialog>
+</section>
+<section id="nf-resign" class="form-panel resignation">
+<h3 id="nf-resign-title" style="color:#985114">📋 員工離職通知表</h3>
+<div class="field-grid">
+<label><span id="nf-resign-name-label">英文姓名 *</span><input id="nf-resign-name" type="text"></label>
+<label><span id="nf-resign-alias-label">別名（選填）</span><input id="nf-resign-alias" type="text"></label>
+</div>
+<div class="field-grid">
+<label><span id="nf-resign-notice-label">提出通知日期 *</span><input id="nf-resign-notice" type="date"></label>
+<label><span id="nf-resign-days-label">提前通知日數 *</span><select id="nf-resign-days"><option value="7">7</option><option value="14" selected>14</option><option value="21">21</option><option value="28">28</option><option value="custom" id="nf-custom-label">自訂日數</option></select></label>
+</div>
+<label id="nf-resign-custom-wrap" hidden><span id="nf-resign-custom-label">輸入日數（0–365）</span><input id="nf-resign-custom" type="number" min="0" max="365" value="14"></label>
+<p id="nf-resign-last" aria-live="polite"></p>
+<label><span id="nf-resign-reason-label">離職原因 *</span><textarea id="nf-resign-reason" rows="3"></textarea></label>
+<p id="nf-resign-reminder">為方便安排人手，請盡量提前兩星期（14日）通知管理層。實際通知要求以適用合約及法律為準。</p>
+<label><input id="nf-resign-confirm" type="checkbox"><span id="nf-resign-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
+<button type="button" id="nf-resign-copy">📋 複製離職通知</button><p id="nf-resign-status" role="status"></p>
+</section><p id="nf-privacy">表格只會複製文字，不會上傳或儲存資料。</p>
+</div>
+
+
+
+
+        <!-- 農場地址 Farm Address -->
+        <div class="card" id="farm-directory">
+            <h2>📍 農場導航與介紹影片 (Farm Directory)</h2>
+            
+            <div class="farm-grid">
+            <!-- 農場 1 -->
+            <div class="farm-item">
+                <div class="farm-name">1. Crows Nest Farm 🐦‍⬛</div>
+                <div class="farm-address">205 Orchard Rd, Crows Nest QLD 4355 澳洲</div>
+                <div class="btn-group">
+                    <a href="https://maps.app.goo.gl/wFzBzrBGhQgLPQYr6?g_st=ic" target="_blank" class="btn btn-map">🗺️ Google 導航地圖</a>
+                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.2760889%2C152.076504" target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
+                    <a href="https://youtu.be/wXjUQaSAsj4" target="_blank" class="btn btn-video">▶️ 導航影片</a>
+                </div>
+            </div>
+
+            <!-- 農場 2 -->
+            <div class="farm-item">
+                <div class="farm-name">2. Geham Farm 🐽</div>
+                <div class="farm-address">9203 New England Hwy, Geham QLD 4352 澳洲</div>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/place/9203+New+England+Hwy,+Geham+QLD+4352/@-27.3827839,152.0158043,17z/data=!3m1!4b1!4m6!3m5!1s0x6b9663a8f1f23e9f:0xebd757e96a19404e!8m2!3d-27.3827887!4d152.0183792!16s%2Fg%2F11g0h043b8?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn btn-map">🗺️ Google 導航地圖</a>
+                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.3794666%2C152.016723." target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
+                    <a href="https://youtu.be/T6QrD8eTg8Q" target="_blank" class="btn btn-video">▶️ 導航影片</a>
+                </div>
+            </div>
+
+            <!-- 農場 3 -->
+            <div class="farm-item">
+                <div class="farm-name">3. Ravensbourne Farm (經理場)</div>
+                <div class="farm-address">24 Schwager Road, Ravensbourne QLD 澳洲</div>
+                <div class="btn-group">
+                    <a href="https://www.google.com/maps/place/24+Schwager+Rd,+Ravensbourne+QLD+4352/@-27.3814261,152.1400225,17z/data=!3m1!4b1!4m6!3m5!1s0x6b968895ad7727dd:0xa4b51d9c72f0ed1b!8m2!3d-27.3814309!4d152.1425974!16s%2Fg%2F11ghp0qwfp?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn btn-map">🗺️ Google 導航地圖</a>
+                    <a href="https://www.waze.com/zh-TW/live-map/directions?to=ll.-27.381556%2C152.142341" target="_blank" class="btn btn-waze">🚙 Waze 導航</a>
+                    <a href="https://youtu.be/u57BkPag0Vc" target="_blank" class="btn btn-video">▶️ 導航影片</a>
+                </div>
+            </div>
+
+            </div>
+        </div>
+
+
+        <section class="card community-card" id="farm-community" aria-labelledby="community-heading">
+            <div class="community-intro">
+                <div>
+                    <h2 id="community-heading"><span class="localized"><span lang="zh-HK">農場留言區</span><span lang="zh-CN">农场留言区</span><span lang="en">Farm message wall</span><span lang="ja">農場掲示板</span><span lang="ko">농장 게시판</span></span></h2>
+                    <p><span class="localized"><span lang="zh-HK">填個名字，就可以寫感想、畀建議或分享一張農場相片。留言會即時公開。</span><span lang="zh-CN">填个名字，就可以写感想、提建议或分享一张农场照片。留言会立即公开。</span><span lang="en">Use your name to share feedback, a suggestion or a farm photo. Posts are public as soon as you publish them.</span><span lang="ja">名前を入力して感想や提案、農場の写真を投稿できます。投稿はすぐに公開されます。</span><span lang="ko">이름을 적고 소감, 제안 또는 농장 사진을 공유하세요. 글은 게시 즉시 공개됩니다.</span></span></p>
+                </div>
+                <a class="wall-cta" href="farm-wall.html"><span class="localized"><span lang="zh-HK">去留言牆</span><span lang="zh-CN">前往留言墙</span><span lang="en">Open the message wall</span><span lang="ja">掲示板を開く</span><span lang="ko">게시판 열기</span></span></a>
+            </div>
+            <div id="wall-preview" hidden>
+                <h3><span class="localized"><span lang="zh-HK">最新留言</span><span lang="zh-CN">最新留言</span><span lang="en">Latest posts</span><span lang="ja">最新の投稿</span><span lang="ko">최신 게시물</span></span></h3>
+                <div class="wall-preview-grid"></div>
+            </div>
+        </section>
             <div class="card other-info" data-i18n="signal-community">
                 <h2>💬 Signal 活動交流群</h2>
                 <p>歡迎大家自願加入！可以在群組內尋找隊友一起出去玩、交流生活趣事、分享資訊、聊聊天，認識新朋友。</p>
@@ -582,6 +656,42 @@
     <script src="employee-notice-forms.js?v=20261118-ai-review"></script>
     <script src="translations.js?v=20261113-audit3"></script>
     <script>
+
+        let wallPostsRequest;
+        async function loadWallPreview() {
+            if (!wallPostsRequest) {
+                wallPostsRequest = fetch('https://batsjsznudkeqaaijxsg.supabase.co' + '/rest/v1/rpc/farm_wall_list', {
+                    method: 'POST',
+                    headers: { apikey: "sb_publishable_o4kcn0Rr0zSNnuMjyZ75KQ_9pKWrMN_", 'Content-Type': 'application/json' },
+                    body: '{}'
+                }).then(response => {
+                    if (!response.ok) throw Error('Message wall unavailable');
+                    return response.json();
+                });
+            }
+
+            try {
+                const posts = await wallPostsRequest;
+                const preview = document.getElementById('wall-preview');
+                if (!preview || !Array.isArray(posts) || !posts.length) return;
+                const cards = posts.slice(0, 3).map(post => {
+                    const article = document.createElement('article');
+                    const author = document.createElement('strong');
+                    const message = document.createElement('p');
+                    const characters = Array.from(post.message);
+                    author.dir = message.dir = 'auto';
+                    author.textContent = post.display_name;
+                    message.textContent = characters.slice(0, 125).join('') + (characters.length > 125 ? '…' : '');
+                    article.append(author, message);
+                    return article;
+                });
+                preview.querySelector('.wall-preview-grid').replaceChildren(...cards);
+                preview.hidden = false;
+            } catch {
+                wallPostsRequest = undefined;
+            }
+        }
+
         function toggleLanguageMenu(event) {
             event.stopPropagation();
             const menu = document.getElementById('languageMenu');
@@ -592,6 +702,7 @@
 
         function translatePage(language) {
             applyFarmLanguage(language);
+            loadWallPreview();
             const menu = document.getElementById('languageMenu');
             const button = document.getElementById('translateButton');
             if (menu) menu.classList.remove('show');
@@ -614,6 +725,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             let saved;try{saved=localStorage.getItem('farmLanguage');}catch{}
             applyFarmLanguage(saved && ['en','zh-TW','zh-CN','ja','ko'].includes(saved) ? saved : 'zh-TW');
+            loadWallPreview();
             const target = location.hash && document.getElementById(location.hash.slice(1));
             if (target) requestAnimationFrame(() => target.scrollIntoView());
         });
