@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src https://batsjsznudkeqaaijxsg.supabase.co; base-uri 'none'; form-action 'none'">
+<title>農場留言牆 | Blueberry Crest</title>
+<style>
+:root { color-scheme: light; font: 16px/1.55 system-ui, sans-serif; color: #202842; background: #f3f5fc; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; }
+header { background: #252750; color: #fff; }
+.wrap { width: min(100% - 32px, 1040px); margin-inline: auto; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; }
+.bar a, .bar button { color: inherit; font-weight: 700; }
+.bar a { padding: 10px 0; }
+.bar button { border: 1px solid #aeb1da; background: transparent; }
+.hero { padding-block: 14px 30px; }
+h1, h2 { line-height: 1.25; margin: 0 0 10px; }
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: 1.35rem; }
+p { margin: 0 0 12px; }
+.hero p { margin: 0; color: #e3e5fb; }
+main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 22px; align-items: start; padding-block: 24px 50px; }
+.panel, article { border: 1px solid #dce1f1; border-radius: 18px; background: #fff; padding: clamp(14px, 3vw, 22px); }
+label { display: block; font-weight: 700; margin-top: 12px; }
+input, textarea, button { font: inherit; }
+input, textarea { display: block; width: 100%; min-height: 44px; color: inherit; }
+input:not([type=file]), textarea { margin-top: 4px; padding: 9px 11px; border: 1px solid #aeb7d0; border-radius: 10px; background: #fcfcff; }
+input[type=file] { margin-top: 8px; }
+textarea { resize: vertical; }
+button { padding: 8px 14px; min-height: 44px; cursor: pointer; border: 1px solid transparent; border-radius: 10px; font-weight: 700; }
+.primary { color: #fff; background: #45449a; }
+form > .primary { width: 100%; margin-top: 10px; }
+button:disabled { opacity: .6; cursor: wait; }
+:focus-visible { outline: 3px solid #6a59c0; outline-offset: 3px; }
+.note, time { font-size: .9rem; color: #505973; }
+.status { margin: 8px 0 0; font-weight: 650; }
+.status:empty { display: none; }
+[data-error=true] { color: #a02138; }
+#posts, article { display: grid; gap: 8px; }
+#posts { gap: 12px; }
+article > strong, article p { overflow-wrap: anywhere; }
+article p { margin: 0; white-space: pre-wrap; }
+article img { width: 100%; max-height: 420px; object-fit: contain; background: #f3f5fc; border-radius: 10px; }
+#more, #refresh { background: #e9eafa; color: #312f6e; }
+#more { width: 100%; margin-top: 12px; }
+#refresh { margin-bottom: 12px; }
+.delete { justify-self: start; background: #fff0f2; color: #a02138; }
+dialog { width: min(420px, calc(100% - 32px)); max-height: calc(100% - 32px); }
+dialog::backdrop { background: #191c38aa; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+@media (max-width: 680px) { main { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a href="./">← 返回農場首頁</a>
+    <button id="manage" type="button">管理員登入</button>
+  </div>
+  <div class="wrap hero"><h1>農場留言牆</h1><p>分享採果照片、工作感想同農場建議。</p></div>
+</header>
+<main class="wrap">
+  <section class="panel" aria-labelledby="compose-title">
+    <h2 id="compose-title">寫留言</h2>
+    <form id="compose">
+      <label for="name">名字／暱稱</label>
+      <input id="name" name="name" required maxlength="40" autocomplete="nickname">
+      <label for="message">留言</label>
+      <textarea id="message" name="message" rows="4" required maxlength="1000"></textarea>
+      <label for="photo">相片（選填，一張）</label>
+      <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" aria-describedby="photo-help">
+      <p id="photo-help" class="note">留言同相片發佈後會公開。請先得到相中人物同意。</p>
+      <button id="publish" class="primary" type="submit">發佈留言</button>
+      <p id="compose-status" class="status" role="status"></p>
+    </form>
+  </section>
+  <section aria-labelledby="posts-title">
+    <h2 id="posts-title">最新留言</h2>
+    <button id="refresh" type="button">更新留言</button>
+    <p id="feed-status" class="status" role="status"></p>
+    <div id="posts"></div>
+    <button id="more" type="button" hidden>載入更多留言</button>
+  </section>
+</main>
+<dialog id="admin-dialog" class="panel" aria-labelledby="admin-title">
+  <h2 id="admin-title">管理員登入</h2>
+  <form id="login">
+    <label for="email">電郵</label>
+    <input id="email" type="email" autocomplete="username" required>
+    <label for="password">密碼</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+    <p id="login-status" class="status" role="status"></p>
+    <div class="actions"><button type="submit" class="primary">登入</button><button id="cancel-login" type="button">取消</button></div>
+  </form>
+</dialog>
+<dialog id="delete-dialog" class="panel" aria-labelledby="delete-title">
+  <h2 id="delete-title">刪除留言？</h2>
+  <p>留言同附上嘅相片會一併刪除。</p>
+  <form method="dialog" class="actions"><button value="cancel" autofocus>取消</button><button class="delete" value="delete">刪除</button></form>
+</dialog>
+<script>
+'use strict';
+const endpoint = 'https://batsjsznudkeqaaijxsg.supabase.co';
+const publishableKey = "sb_publishable_o4kcn0Rr0zSNnuMjyZ75KQ_9pKWrMN_";
+const byId = id => document.getElementById(id);
+const form = byId('compose');
+const feed = byId('posts');
+const more = byId('more');
+const refresh = byId('refresh');
+const manage = byId('manage');
+const login = byId('login');
+const dialog = byId('admin-dialog');
+const confirmation = byId('delete-dialog');
+const dateFormat = new Intl.DateTimeFormat('zh-HK', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Australia/Brisbane' });
+const photoLimit = 327680;
+let cursor;
+let session;
+let loading = false;
+let reloadRequested = false;
+let draftId = crypto.randomUUID();
+
+function status(id, text, error = false) {
+  const node = byId(id);
+  node.textContent = text;
+  node.dataset.error = error;
+}
+
+async function request(path, body, token) {
+  const headers = { apikey: publishableKey, 'Content-Type': 'application/json' };
+  if (token) headers.Authorization = 'Bearer ' + token;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 18000);
+  let response, result;
+  try {
+    response = await fetch(endpoint + path, {
+      method: 'POST', headers, body: JSON.stringify(body), signal: controller.signal
+    });
+    result = await response.json();
+  } finally {
+    clearTimeout(timeout);
+  }
+  if (!response.ok) {
+    const error = new Error(result.message || result.msg || 'request_failed');
+    error.status = response.status;
+    throw error;
+  }
+  return result;
+}
+
+function rpc(name, body, token) {
+  return request('/rest/v1/rpc/farm_wall_' + name, body, token);
+}
+
+async function attachPhoto(img, id) {
+  try {
+    const data = await rpc('photo', { post_id: id });
+    if (!data) return;
+    img.src = 'data:image/jpeg;base64,' + data;
+    img.hidden = false;
+  } catch {
+    img.replaceWith(document.createTextNode('暫時載入唔到相片。'));
+  }
+}
+
+const photoObserver = typeof IntersectionObserver === 'function' ? new IntersectionObserver(entries => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    photoObserver.unobserve(entry.target);
+    attachPhoto(entry.target.firstElementChild, entry.target.dataset.photo);
+  }
+}, { rootMargin: '250px' }) : null;
+
+function addPost(post) {
+  const article = document.createElement('article');
+  const name = document.createElement('strong');
+  const time = document.createElement('time');
+  const text = document.createElement('p');
+  name.textContent = post.display_name;
+  name.dir = 'auto';
+  time.dateTime = post.created_at;
+  time.textContent = dateFormat.format(new Date(post.created_at));
+  text.textContent = post.message;
+  text.dir = 'auto';
+  article.append(name, time, text);
+  if (post.has_photo) {
+    const frame = document.createElement('div');
+    frame.dataset.photo = post.id;
+    const img = document.createElement('img');
+    img.alt = '留言附圖';
+    img.hidden = true;
+    frame.append(img);
+    article.append(frame);
+    if (photoObserver) photoObserver.observe(frame);
+    else attachPhoto(img, post.id);
+  }
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.className = 'delete';
+  remove.textContent = '刪除留言';
+  remove.hidden = !session;
+  remove.addEventListener('click', () => deletePost(post.id, article));
+  article.append(remove);
+  feed.append(article);
+}
+
+async function loadPosts(reset = true) {
+  if (loading) {
+    if (reset) reloadRequested = true;
+    return;
+  }
+  loading = true;
+  refresh.disabled = more.disabled = true;
+  status('feed-status', '載入緊留言…');
+  try {
+    const filters = reset || !cursor ? {} : { before_time: cursor.created_at, before_id: cursor.id };
+    const posts = await rpc('list', filters);
+    if (reset) {
+      for (const frame of feed.querySelectorAll('[data-photo]')) photoObserver?.unobserve(frame);
+      feed.replaceChildren();
+    }
+    posts.forEach(addPost);
+    cursor = posts.at(-1);
+    more.hidden = posts.length < 12;
+    status('feed-status', feed.children.length ? '' : '暫時未有留言。');
+  } catch {
+    status('feed-status', '載入唔到留言，請再撳「更新留言」。', true);
+  } finally {
+    loading = false;
+    refresh.disabled = more.disabled = false;
+    if (reloadRequested) {
+      reloadRequested = false;
+      loadPosts();
+    }
+  }
+}
+
+async function preparePhoto(file) {
+  if (!file) return null;
+  if (file.size > 20 * 1024 * 1024) throw new Error('photo_size');
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    img.src = url;
+    try { await img.decode(); } catch { throw new Error('photo_format'); }
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context || !img.naturalWidth || !img.naturalHeight) throw new Error('photo_format');
+    for (const [edge, quality] of [[1152, .8], [960, .72], [720, .64], [560, .6]]) {
+      const scale = Math.min(1, edge / Math.max(img.naturalWidth, img.naturalHeight));
+      canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+      canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const encoded = canvas.toDataURL('image/jpeg', quality);
+      const prefix = 'data:image/jpeg;base64,';
+      if (!encoded.startsWith(prefix)) throw new Error('photo_format');
+      const base64 = encoded.slice(prefix.length);
+      const padding = base64.endsWith('==') ? 2 : Number(base64.endsWith('='));
+      if (base64.length / 4 * 3 - padding <= photoLimit) return base64;
+    }
+    throw new Error('photo_size');
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+form.addEventListener('input', () => { draftId = crypto.randomUUID(); });
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+  const button = byId('publish');
+  if (button.disabled) return;
+  const name = byId('name').value.trim();
+  const message = byId('message').value.trim();
+  if (!name || !message) {
+    status('compose-status', '請填寫名字同留言。', true);
+    return;
+  }
+  for (const control of form.elements) control.disabled = true;
+  status('compose-status', '發佈緊…');
+  try {
+    const photo = await preparePhoto(byId('photo').files[0]);
+    await rpc('post', { post_id: draftId, name_text: name, message_text: message, photo_base64: photo });
+    form.reset();
+    draftId = crypto.randomUUID();
+    status('compose-status', '已發佈留言。');
+    loadPosts();
+  } catch (error) {
+    const messages = {
+      photo_format: '讀唔到呢張相，請試用 JPG、PNG 或 WebP。',
+      photo_size: '相片太大，請揀一張細啲嘅相。',
+      wall_rate_limit: '留言太頻密，請遲啲再試。',
+      wall_full: '留言牆已滿，請稍後再試。'
+    };
+    status('compose-status', messages[error.message] || '發佈未能確認，請再試。', true);
+  } finally {
+    for (const control of form.elements) control.disabled = false;
+  }
+});
+
+function setSession(token) {
+  session = token;
+  manage.textContent = token ? '管理員登出' : '管理員登入';
+  feed.querySelectorAll('.delete').forEach(button => { button.hidden = !token; });
+}
+
+async function deletePost(id, article) {
+  if (!session || confirmation.open) return;
+  confirmation.returnValue = 'cancel';
+  confirmation.addEventListener('close', async () => {
+    if (confirmation.returnValue !== 'delete' || !session) return;
+    const button = article.querySelector('.delete');
+    button.disabled = true;
+    try {
+      await rpc('delete', { post_id: id }, session);
+      status('feed-status', '已刪除留言。');
+      const frame = article.querySelector('[data-photo]');
+      if (frame) photoObserver?.unobserve(frame);
+      article.remove();
+    } catch (error) {
+      if (error.status === 401 || error.status === 403) setSession(null);
+      status('feed-status', '刪除未完成，請確認管理員登入後再試。', true);
+    } finally {
+      button.disabled = false;
+    }
+  }, { once: true });
+  confirmation.showModal();
+}
+
+manage.addEventListener('click', () => {
+  if (session) {
+    setSession(null);
+    return;
+  }
+  status('login-status', '');
+  dialog.showModal();
+});
+byId('cancel-login').addEventListener('click', () => dialog.close());
+dialog.addEventListener('close', () => { byId('password').value = ''; });
+login.addEventListener('submit', async event => {
+  event.preventDefault();
+  const button = login.querySelector('[type=submit]');
+  if (button.disabled) return;
+  button.disabled = true;
+  status('login-status', '登入緊…');
+  try {
+    const auth = await request('/auth/v1/token?grant_type=password', {
+      email: byId('email').value.trim(), password: byId('password').value
+    });
+    const admin = await rpc('is_admin', {}, auth.access_token);
+    if (!dialog.open) return;
+    if (!admin) {
+      status('login-status', '呢個帳戶冇留言牆管理權限。', true);
+      return;
+    }
+    setSession(auth.access_token);
+    dialog.close();
+  } catch {
+    status('login-status', '登入失敗，請核對電郵同密碼。', true);
+  } finally {
+    byId('password').value = '';
+    button.disabled = false;
+  }
+});
+refresh.addEventListener('click', () => loadPosts());
+more.addEventListener('click', () => loadPosts(false));
+loadPosts();
+</script>
+</body>
+</html>
