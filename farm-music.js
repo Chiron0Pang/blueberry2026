@@ -22,6 +22,8 @@
   const next = document.getElementById('farm-music-next');
   const status = document.getElementById('farm-music-status');
   const source = document.getElementById('farm-music-source');
+  const autoplay = document.getElementById('farm-music-autoplay');
+  const autoplayKey = 'blueberryFarmMusicAutoplay';
   let queue = [];
   let current = takeNext();
   let player;
@@ -199,6 +201,18 @@
     if (event.target.closest('#farm-playlist-open')) setPanel(panel.hidden);
   });
   document.getElementById('farm-playlist-close').addEventListener('click', () => setPanel(false));
+  autoplay.addEventListener('change', () => {
+    try {
+      if (autoplay.checked) localStorage.setItem(autoplayKey, '1');
+      else localStorage.removeItem(autoplayKey);
+    } catch {
+      autoplay.checked = false;
+    }
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    try { autoplay.checked = localStorage.getItem(autoplayKey) === '1'; } catch {}
+    if (autoplay.checked) setPanel(true);
+  });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !panel.hidden && panel.contains(document.activeElement)) setPanel(false);
   });

@@ -263,8 +263,12 @@
         #farm-playlist-open { min-height: 44px; padding: 5px 8px; border: 0; border-radius: 8px; background: transparent; color: #eeebff; font: inherit; font-weight: 700; font-size: .8125rem; white-space: nowrap; cursor: pointer; }
         #farm-playlist-open:hover, #farm-playlist-open[aria-expanded="true"] { background: #ffffff24; }
         #farm-music-panel[hidden] { display: none; }
-        #farm-music-panel { position: fixed; z-index: 25; top: max(70px, calc(env(safe-area-inset-top) + 60px)); right: clamp(9px, 3vw, 30px); width: min(385px, calc(100% - 18px)); max-height: calc(100vh - 82px); max-height: calc(100dvh - 82px); overflow: auto; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 12px; margin: 0; box-shadow: 0 10px 34px #27204236; }
-        #farm-music-panel .music-screen { grid-row: 2; }
+        #farm-music-panel { position: fixed; z-index: 25; top: max(70px, calc(env(safe-area-inset-top) + 60px)); right: clamp(9px, 3vw, 30px); width: min(252px, calc(100% - 18px)); max-height: calc(100vh - 82px); max-height: calc(100dvh - 82px); overflow: auto; grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 8px; margin: 0; box-shadow: 0 10px 34px #27204236; }
+        #farm-music-panel .music-screen { grid-row: 2; min-height: 200px; }
+        #farm-music-panel .music-actions button { padding-inline: 9px; font-size: .875rem; }
+        #farm-music-panel .music-controls select { width: 100%; font-size: .875rem; }
+        .music-autoplay { display: flex; align-items: center; gap: 6px; min-height: 36px; font-size: .8125rem; cursor: pointer; }
+        .music-autoplay input { width: 17px; height: 17px; margin: 0; accent-color: #51448b; }
         .music-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         #farm-playlist-close { min-height: 44px; border: 1px solid #a99ebd; border-radius: 8px; padding: 5px 10px; background: #fff; color: #4a3d72; cursor: pointer; font: inherit; }
         @media (max-width: 380px) { #farm-music-panel { top: 106px; max-height: calc(100dvh - 116px); } }
@@ -307,6 +311,7 @@
                     <button type="button" id="farm-music-toggle" disabled><span class="localized"><span lang="zh-HK">播放</span><span lang="zh-CN">播放</span><span lang="en">Play</span><span lang="ja">再生</span><span lang="ko">재생</span></span></button>
                     <button type="button" id="farm-music-next" disabled><span class="localized"><span lang="zh-HK">下一首</span><span lang="zh-CN">下一首</span><span lang="en">Next</span><span lang="ja">次の曲</span><span lang="ko">다음 곡</span></span></button>
                 </div>
+                <label class="music-autoplay"><input type="checkbox" id="farm-music-autoplay"><span class="localized"><span lang="zh-HK">下次入頁自動試播</span><span lang="zh-CN">下次进入自动尝试播放</span><span lang="en">Try autoplay next visit</span><span lang="ja">次回は自動再生を試す</span><span lang="ko">다음 방문 시 자동 재생 시도</span></span></label>
                 <p id="farm-music-status" role="status"></p>
                 <a id="farm-music-source" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=QLxy9dYHrcg"><span class="localized"><span lang="zh-HK">喺 YouTube 播放</span><span lang="zh-CN">在 YouTube 播放</span><span lang="en">Play on YouTube</span><span lang="ja">YouTube で再生</span><span lang="ko">YouTube에서 재생</span></span></a>
             </div>
@@ -725,7 +730,7 @@
     <script src="leave-reason-warning.js?v=20261118-ai-review"></script>
     <script src="employee-notice-forms.js?v=20261118-ai-review"></script>
     <script src="translations.js?v=20261119-music"></script>
-    <script src="farm-music.js?v=2" defer></script>
+    <script src="farm-music.js?v=3" defer></script>
     <script>
 
         let wallPostsRequest;
