@@ -15,6 +15,7 @@
     ja: ['再生', '一時停止', '自動再生がブロックされました。「再生」を押してください。', 'この曲はここでは再生できません。別の曲または YouTube をお試しください。', 'プレーヤーを読み込めません。YouTube で再生してください。'],
     ko: ['재생', '일시정지', '자동재생이 차단되었습니다. 재생을 눌러 주세요.', '이 곡을 여기에서 재생할 수 없습니다. 다른 곡이나 YouTube를 이용하세요.', '플레이어를 불러오지 못했습니다. YouTube에서 재생할 수 있습니다.']
   };
+  const panel = document.getElementById('farm-music-panel');
   const screen = document.getElementById('farm-music-screen');
   const trackSelect = document.getElementById('farm-track');
   const toggle = document.getElementById('farm-music-toggle');
@@ -31,6 +32,7 @@
   let pauseForVisibility = false;
   let statusIndex;
   let loadingTimeout;
+  let started = false;
 
   function takeNext(previous) {
     if (!queue.length) {
@@ -54,7 +56,7 @@
   }
 
   function canPlayHere() {
-    return visible && !document.hidden;
+    return !panel.hidden && visible && !document.hidden;
   }
 
   function syncVisibility() {
@@ -156,17 +158,48 @@
   }, { threshold: .51 }).observe(screen);
   render();
 
-  window.onYouTubeIframeAPIReady = setupPlayer;
-  if (window.YT?.Player) setupPlayer();
-  else {
-    const script = document.createElement('script');
-    script.src = 'https://www.youtube.com/iframe_api';
-    script.async = true;
-    document.head.append(script);
+  function startPlayer() {
+    if (started) return;
+    started = true;
+    window.onYouTubeIframeAPIReady = setupPlayer;
+    loadingTimeout = setTimeout(() => {
+      if (ready) return;
+      statusIndex = 4;
+      render();
+    }, 12000);
+    if (window.YT?.Player) setupPlayer();
+    else {
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.async = true;
+      document.head.append(script);
+    }
   }
-  if (!ready) loadingTimeout = setTimeout(() => {
-    if (ready) return;
-    statusIndex = 4;
+
+  function setPanel(open) {
+    panel.hidden = !open;
+    const opener = document.getElementById('farm-playlist-open');
+    opener.setAttribute('aria-expanded', String(open));
+    if (open) {
+      wantsPlayback = true;
+      if (statusIndex === 2) statusIndex = undefined;
+      const box = screen.getBoundingClientRect();
+      const visibleHeight = Math.max(0, Math.min(innerHeight, box.bottom) - Math.max(0, box.top));
+      visible = box.height > 0 && visibleHeight / box.height > .5;
+      startPlayer();
+    } else {
+      visible = false;
+      if (panel.contains(document.activeElement)) opener.focus();
+    }
+    syncVisibility();
     render();
-  }, 12000);
+  }
+
+  document.addEventListener('click', event => {
+    if (event.target.closest('#farm-playlist-open')) setPanel(panel.hidden);
+  });
+  document.getElementById('farm-playlist-close').addEventListener('click', () => setPanel(false));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !panel.hidden && panel.contains(document.activeElement)) setPanel(false);
+  });
 })();
