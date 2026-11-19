@@ -86,6 +86,18 @@ textarea { resize: vertical; }
   .hero p { margin: 8px 0 13px; }
   .posts { grid-template-columns: minmax(0, 1fr); gap: 12px; }
 }
+.thread { margin-top: 12px; border-top: 1px solid var(--line); }
+.thread summary { display: flex; align-items: center; gap: 8px; min-height: 44px; color: var(--plum); font-weight: 740; cursor: pointer; list-style: none; }
+.thread summary::-webkit-details-marker { display: none; }
+.thread summary::before { content: '+'; width: 1.15em; text-align: center; }
+.thread[open] summary::before { content: '−'; }
+.reply-list { display: grid; gap: 8px; margin: 4px 0 10px; padding: 0; list-style: none; }
+.reply { min-width: 0; padding: 9px 11px; border-inline-start: 3px solid #c9b7e6; border-radius: 8px; background: #f6f2fc; }
+.reply p { margin-top: 5px; }
+.reply-form { margin-top: 9px; }
+.reply-form label { margin-top: 7px; font-size: .9rem; }
+.reply-form .primary { margin-top: 9px; }
+.thread .status { margin-block: 4px 8px; }
 </style>
 </head>
 <body>
@@ -164,9 +176,24 @@ textarea { resize: vertical; }
     <div class="actions"><button type="submit" class="primary">登入</button><button class="subtle" id="cancel-login" type="button">取消</button></div>
   </form>
 </dialog>
+<template id="thread-template">
+  <details class="thread">
+    <summary>回覆</summary>
+    <p class="status reply-status" role="status"></p>
+    <button class="subtle reply-older" type="button" hidden>睇較早回覆</button>
+    <button class="subtle reply-retry" type="button" hidden>重新載入回覆</button>
+    <ul class="reply-list" aria-label="回覆"></ul>
+    <form class="reply-form">
+      <label>名字／暱稱<input name="reply-name" required maxlength="40" autocomplete="nickname"></label>
+      <label>回覆內容<textarea name="reply-message" rows="2" required maxlength="1000"></textarea></label>
+      <button class="primary" type="submit">發佈回覆</button>
+      <p class="status reply-feedback" role="status"></p>
+    </form>
+  </details>
+</template>
 <dialog id="delete-dialog" aria-labelledby="delete-title">
   <h2 id="delete-title">刪除留言？</h2>
-  <p>留言同附上嘅相片會一併刪除。</p>
+  <p id="delete-message">留言、相片同所有回覆會一併刪除。</p>
   <form method="dialog" class="actions"><button class="subtle" value="cancel" autofocus>取消</button><button class="delete" value="delete">刪除</button></form>
 </dialog>
 <script>
@@ -182,6 +209,7 @@ const thumbnail = byId('photo-thumb');
 const photoDialog = byId('photo-dialog');
 const fullPhoto = byId('full-photo');
 const emptyFeed = byId('empty-feed');
+const threadTemplate = byId('thread-template');
 const feed = byId('posts');
 const more = byId('more');
 const refresh = byId('refresh');
@@ -258,6 +286,132 @@ const photoObserver = typeof IntersectionObserver === 'function' ? new Intersect
   }
 }, { rootMargin: '250px' }) : null;
 
+function buildThread(postId) {
+  const thread = threadTemplate.content.firstElementChild.cloneNode(true);
+  const list = thread.querySelector('.reply-list');
+  const listStatus = thread.querySelector('.reply-status');
+  const feedback = thread.querySelector('.reply-feedback');
+  const older = thread.querySelector('.reply-older');
+  const retry = thread.querySelector('.reply-retry');
+  const replyForm = thread.querySelector('.reply-form');
+  const nameField = replyForm.elements.namedItem('reply-name');
+  const messageField = replyForm.elements.namedItem('reply-message');
+  const replyButton = replyForm.querySelector('[type=submit]');
+  let replyId = crypto.randomUUID();
+  let firstPageLoaded = false;
+  let cursor;
+  let pendingList;
+  let listFailed = false;
+
+  function showListStatus() {
+    listStatus.textContent = list.children.length ? '' : '暫時未有回覆。';
+    listStatus.dataset.error = 'false';
+  }
+
+  function renderReply(reply) {
+    const row = document.createElement('li');
+    row.className = 'reply';
+    const name = document.createElement('strong');
+    name.dir = 'auto';
+    name.textContent = reply.display_name;
+    const time = document.createElement('time');
+    time.dateTime = reply.created_at;
+    time.textContent = dateFormat.format(new Date(reply.created_at));
+    const message = document.createElement('p');
+    message.dir = 'auto';
+    message.textContent = reply.message;
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'delete';
+    remove.hidden = !session;
+    remove.textContent = '刪除回覆';
+    remove.addEventListener('click', () => confirmDelete('reply', reply.id, remove, () => {
+      row.remove();
+      showListStatus();
+    }, feedback));
+    row.append(name, time, message, remove);
+    return row;
+  }
+
+  function loadReplies(reset = true) {
+    if (pendingList) return pendingList;
+    older.disabled = true;
+    retry.hidden = true;
+    listFailed = false;
+    listStatus.textContent = '載入回覆中…';
+    listStatus.dataset.error = 'false';
+    const filter = { post_id: postId };
+    if (!reset && cursor) {
+      filter.before_time = cursor.created_at;
+      filter.before_id = cursor.id;
+    }
+    pendingList = (async () => {
+      try {
+        const replies = await rpc('reply_list', filter);
+        if (reset) list.replaceChildren();
+        if (replies.length) {
+          cursor = replies.at(-1);
+          list.prepend(...replies.reverse().map(renderReply));
+        } else if (reset) {
+          cursor = undefined;
+        }
+        older.hidden = replies.length < 20;
+        firstPageLoaded = true;
+        showListStatus();
+      } catch {
+        listFailed = true;
+        listStatus.textContent = '載入唔到回覆。';
+        listStatus.dataset.error = 'true';
+        retry.hidden = false;
+      } finally {
+        older.disabled = false;
+        pendingList = undefined;
+      }
+    })();
+    return pendingList;
+  }
+
+  thread.addEventListener('toggle', () => {
+    if (thread.open && !firstPageLoaded) loadReplies();
+  });
+  older.addEventListener('click', () => loadReplies(false));
+  retry.addEventListener('click', () => loadReplies());
+  replyForm.addEventListener('input', () => { replyId = crypto.randomUUID(); });
+  replyForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (replyButton.disabled) return;
+    const name = nameField.value.trim();
+    const message = messageField.value.trim();
+    if (!name || !message) {
+      feedback.textContent = '請填寫名字同回覆。';
+      feedback.dataset.error = 'true';
+      return;
+    }
+    replyButton.disabled = nameField.disabled = messageField.disabled = true;
+    feedback.textContent = '發佈緊回覆…';
+    feedback.dataset.error = 'false';
+    try {
+      await rpc('reply_post', { post_id: postId, reply_id: replyId, name_text: name, message_text: message });
+      messageField.value = '';
+      replyId = crypto.randomUUID();
+      if (pendingList) await pendingList;
+      await loadReplies();
+      feedback.textContent = listFailed ? '已發佈回覆。撳重新載入就可以再睇。' : '已發佈回覆。';
+    } catch (error) {
+      const messages = {
+        post_missing: '呢則留言已經移除，請更新留言。',
+        wall_rate_limit: '回覆太頻密，請遲啲再試。',
+        thread_full: '呢則留言嘅回覆已滿。'
+      };
+      feedback.textContent = messages[error.message] || '發佈回覆未能確認，請再試。';
+      feedback.dataset.error = 'true';
+    } finally {
+      replyButton.disabled = nameField.disabled = messageField.disabled = false;
+    }
+  });
+  return thread;
+}
+
 function addPost(post) {
   const article = document.createElement('article');
   article.className = 'post';
@@ -306,8 +460,13 @@ function addPost(post) {
   remove.className = 'delete';
   remove.textContent = '刪除留言';
   remove.hidden = !session;
-  remove.addEventListener('click', () => deletePost(post.id, article));
-  body.append(remove);
+  remove.addEventListener('click', () => confirmDelete('post', post.id, remove, () => {
+    const frame = article.querySelector('[data-photo]');
+    if (frame) photoObserver?.unobserve(frame);
+    article.remove();
+    emptyFeed.hidden = feed.children.length > 0;
+  }, byId('feed-status')));
+  body.append(remove, buildThread(post.id));
   article.append(body);
   feed.append(article);
 }
@@ -452,23 +611,24 @@ function setSession(token) {
   feed.querySelectorAll('.delete').forEach(button => { button.hidden = !token; });
 }
 
-async function deletePost(id, article) {
+function confirmDelete(kind, id, button, afterDelete, feedback) {
   if (!session || confirmation.open) return;
+  const isReply = kind === 'reply';
+  byId('delete-title').textContent = isReply ? '刪除回覆？' : '刪除留言？';
+  byId('delete-message').textContent = isReply ? '呢則回覆會被刪除。' : '留言、相片同所有回覆會一併刪除。';
   confirmation.returnValue = 'cancel';
   confirmation.addEventListener('close', async () => {
     if (confirmation.returnValue !== 'delete' || !session) return;
-    const button = article.querySelector('.delete');
     button.disabled = true;
     try {
-      await rpc('delete', { post_id: id }, session);
-      status('feed-status', '已刪除留言。');
-      const frame = article.querySelector('[data-photo]');
-      if (frame) photoObserver?.unobserve(frame);
-      article.remove();
-      emptyFeed.hidden = feed.children.length > 0;
+      await rpc(isReply ? 'reply_delete' : 'delete', isReply ? { reply_id: id } : { post_id: id }, session);
+      afterDelete();
+      feedback.textContent = isReply ? '已刪除回覆。' : '已刪除留言。';
+      feedback.dataset.error = 'false';
     } catch (error) {
       if (error.status === 401 || error.status === 403) setSession(null);
-      status('feed-status', '刪除未完成，請確認管理員登入後再試。', true);
+      feedback.textContent = '刪除未完成，請確認管理員登入後再試。';
+      feedback.dataset.error = 'true';
     } finally {
       button.disabled = false;
     }
