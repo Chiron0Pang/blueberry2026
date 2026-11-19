@@ -126,6 +126,20 @@
         .leave-reminder-next img { width: 32px; height: 32px; object-fit: contain; flex: none; }
         .leave-reminder-next small { font-size: 12px; line-height: 1.25; }
         #nf-leave-copy-reminder-close:focus-visible { outline: 2px solid #102951; outline-offset: 2px; }
+
+        .farm-wall-link {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-height: 44px; margin-top: 18px; padding: 0 18px; border-radius: 10px;
+            background: #eeefff; color: #303269; font-weight: 750;
+        }
+        .farm-wall-link:hover { background: #fff; }
+        .farm-wall-link:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+        .farm-wall-link span { display: none; }
+        html[lang="zh-HK"] .farm-wall-link [lang="zh-HK"],
+        html[lang="zh-CN"] .farm-wall-link [lang="zh-CN"],
+        html[lang="en"] .farm-wall-link [lang="en"],
+        html[lang="ja"] .farm-wall-link [lang="ja"],
+        html[lang="ko"] .farm-wall-link [lang="ko"] { display: inline; }
     </style>
 </head>
 <body>
@@ -143,6 +157,13 @@
         </div>
         <h1>農場員工重要資訊公告</h1>
         <p>請全體工作人員務必仔細閱讀並遵守以下規範</p>
+        <a href="farm-wall.html" class="farm-wall-link">
+            <span lang="zh-HK">農場留言牆</span>
+            <span lang="zh-CN">农场留言墙</span>
+            <span lang="en">Farm message wall</span>
+            <span lang="ja">農場メッセージボード</span>
+            <span lang="ko">농장 게시판</span>
+        </a>
     </header>
 
     <div class="container">
