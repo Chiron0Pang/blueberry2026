@@ -240,6 +240,29 @@
         .music-screen { min-width: 0; width: 100%; align-self: center; background: #241e38; }
         .music-screen iframe { display: block; width: 100%; height: auto; min-height: 200px; aspect-ratio: 16 / 9; border: 0; }
         @media (max-width: 725px) { .farm-music { grid-template-columns: minmax(0,1fr); } .music-screen { grid-row: 1; } }
+        .farm-tabs { display: flex; flex-wrap: wrap; gap: 5px; }
+        .farm-tabs a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 11px; border: 1px solid transparent; border-radius: 9px; color: #eeebff; text-decoration: none; font-size: .875rem; font-weight: 700; }
+        .farm-tabs a:hover { background: #ffffff1c; }
+        .farm-tabs a[aria-current="page"] { border-color: #ffffff59; background: #ffffff20; color: #fff; }
+        #farm-wall-view[hidden] { display: none; }
+        #farm-wall-view { min-width: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: #f8f7fb; }
+        .farm-wall-frame { display: block; width: 100%; min-height: 585px; height: 76vh; height: 76dvh; border: 0; }
+        body.is-farm-wall .hero, body.is-farm-wall [data-main-language], body.is-farm-wall > footer { display: none; }
+        body.is-farm-wall main.container { display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, 320px); align-items: start; gap: 16px; }
+        body.is-farm-wall .farm-music { grid-column: 2; grid-row: 1; grid-template-columns: minmax(0, 1fr); margin-bottom: 0; }
+        body.is-farm-wall .music-screen { grid-row: 1; }
+        body.is-farm-wall #farm-wall-view { grid-column: 1; grid-row: 1; }
+        @media (max-width: 780px) {
+            body.is-farm-wall main.container { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+            body.is-farm-wall .farm-music { grid-column: 1; grid-row: 1; }
+            body.is-farm-wall #farm-wall-view { grid-row: 2; }
+            .farm-wall-frame { min-height: 520px; }
+        }
+        @media (max-width: 480px) {
+            .topbar { align-content: center; }
+            .header-actions { flex: 1 1 auto; justify-content: space-between; }
+            .farm-tabs a { padding-inline: 8px; }
+        }
     </style>
 </head>
 <body>
@@ -248,6 +271,10 @@
         <div class="shell topbar">
             <span class="brand"><span class="brand-icon" aria-hidden="true">🫐</span>Blueberry Crest</span>
             <div class="header-actions">
+                <nav class="farm-tabs" aria-label="Blueberry Crest">
+                    <a href="#farm-home" aria-current="page"><span class="localized"><span lang="zh-HK">首頁</span><span lang="zh-CN">首页</span><span lang="en">Home</span><span lang="ja">ホーム</span><span lang="ko">홈</span></span></a>
+                    <a href="#farm-wall"><span class="localized"><span lang="zh-HK">留言牆</span><span lang="zh-CN">留言墙</span><span lang="en">Message wall</span><span lang="ja">掲示板</span><span lang="ko">게시판</span></span></a>
+                </nav>
                 <div class="translate-wrap">
                     <button class="translate-btn" id="translateButton" type="button" onclick="toggleLanguageMenu(event)" aria-haspopup="true" aria-expanded="false">🌐 翻譯</button>
                     <div class="language-menu" id="languageMenu">
@@ -280,7 +307,7 @@
             <a class="quick-tile pay" href="#payroll"><span class="nav-icon" aria-hidden="true">💰</span><span class="tile-text"><span class="localized"><span lang="zh-HK">工資／Payslip</span><span lang="zh-CN">工资／Payslip</span><span lang="en">Pay and payslips</span><span lang="ja">給与・明細</span><span lang="ko">급여·명세서</span></span><small><span class="localized"><span lang="zh-HK">發薪日期與申報</span><span lang="zh-CN">发薪日期与申报</span><span lang="en">Pay dates and reports</span><span lang="ja">支給日と未着報告</span><span lang="ko">지급일 및 신고</span></span></small></span></a>
             <a class="quick-tile leave" href="#nf-leave"><span class="nav-icon" aria-hidden="true">🗓️</span><span class="tile-text"><span class="localized"><span lang="zh-HK">請假申請</span><span lang="zh-CN">请假申请</span><span lang="en">Request leave</span><span lang="ja">休暇申請</span><span lang="ko">휴가 신청</span></span><small><span class="localized"><span lang="zh-HK">通知守則與表格</span><span lang="zh-CN">通知规则与表格</span><span lang="en">Notice and forms</span><span lang="ja">連絡と申請書</span><span lang="ko">휴가 안내 및 양식</span></span></small></span></a>
             <a class="quick-tile map" href="#farm-directory"><span class="nav-icon" aria-hidden="true">📍</span><span class="tile-text"><span class="localized"><span lang="zh-HK">農場導航</span><span lang="zh-CN">农场导航</span><span lang="en">Farm directions</span><span lang="ja">農場へのアクセス</span><span lang="ko">농장 길찾기</span></span><small><span class="localized"><span lang="zh-HK">三個農場地址</span><span lang="zh-CN">三个农场地址</span><span lang="en">Three farm locations</span><span lang="ja">3つの農場所在地</span><span lang="ko">농장 3곳의 위치</span></span></small></span></a>
-            <a class="quick-tile community" href="#farm-community"><span class="nav-icon" aria-hidden="true">💬</span><span class="tile-text"><span class="localized"><span lang="zh-HK">留言區</span><span lang="zh-CN">留言区</span><span lang="en">Message wall</span><span lang="ja">掲示板</span><span lang="ko">게시판</span></span><small><span class="localized"><span lang="zh-HK">分享相片與感想</span><span lang="zh-CN">分享照片与感想</span><span lang="en">Share photos and feedback</span><span lang="ja">写真と感想を共有</span><span lang="ko">사진 및 소감 공유</span></span></small></span></a>
+            <a class="quick-tile community" href="#farm-wall"><span class="nav-icon" aria-hidden="true">💬</span><span class="tile-text"><span class="localized"><span lang="zh-HK">留言區</span><span lang="zh-CN">留言区</span><span lang="en">Message wall</span><span lang="ja">掲示板</span><span lang="ko">게시판</span></span><small><span class="localized"><span lang="zh-HK">分享相片與感想</span><span lang="zh-CN">分享照片与感想</span><span lang="en">Share photos and feedback</span><span lang="ja">写真と感想を共有</span><span lang="ko">사진 및 소감 공유</span></span></small></span></a>
         </nav>
         <nav class="subnav" aria-label="More employee links">
             <a class="localized" href="#leave-notes"><span lang="zh-HK">請假注意事項</span><span lang="zh-CN">请假注意事项</span><span lang="en">Leave rules</span><span lang="ja">休暇の注意事項</span><span lang="ko">휴가 안내</span></a>
@@ -665,7 +692,7 @@
                     <h2 id="community-heading"><span class="localized"><span lang="zh-HK">農場留言區</span><span lang="zh-CN">农场留言区</span><span lang="en">Farm message wall</span><span lang="ja">農場掲示板</span><span lang="ko">농장 게시판</span></span></h2>
                     <p><span class="localized"><span lang="zh-HK">填個名字，就可以寫感想、畀建議或分享一張農場相片。留言會即時公開。</span><span lang="zh-CN">填个名字，就可以写感想、提建议或分享一张农场照片。留言会立即公开。</span><span lang="en">Use your name to share feedback, a suggestion or a farm photo. Posts are public as soon as you publish them.</span><span lang="ja">名前を入力して感想や提案、農場の写真を投稿できます。投稿はすぐに公開されます。</span><span lang="ko">이름을 적고 소감, 제안 또는 농장 사진을 공유하세요. 글은 게시 즉시 공개됩니다.</span></span></p>
                 </div>
-                <a class="wall-cta" href="farm-wall.html"><span class="localized"><span lang="zh-HK">去留言牆</span><span lang="zh-CN">前往留言墙</span><span lang="en">Open the message wall</span><span lang="ja">掲示板を開く</span><span lang="ko">게시판 열기</span></span></a>
+                <a class="wall-cta" href="#farm-wall"><span class="localized"><span lang="zh-HK">去留言牆</span><span lang="zh-CN">前往留言墙</span><span lang="en">Open the message wall</span><span lang="ja">掲示板を開く</span><span lang="ko">게시판 열기</span></span></a>
             </div>
             <div id="wall-preview" hidden>
                 <h3><span class="localized"><span lang="zh-HK">最新留言</span><span lang="zh-CN">最新留言</span><span lang="en">Latest posts</span><span lang="ja">最新の投稿</span><span lang="ko">최신 게시물</span></span></h3>
@@ -680,6 +707,9 @@
                 <div class="image-container"><div class="image-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https%3A%2F%2Fsignal.group%2F%23CjQKIP9RNYn0IWx6Dp1_2v13DXwy92_3Bvl-sTS1JoYd720sEhCJNN4MI-Txhv-zQR92Xx7B" alt="Signal 活動交流群加入 QR Code" loading="lazy"><div class="image-caption">📸 Signal 活動交流群 QR Code</div></div></div>
             </div>
     </div>
+        <section id="farm-wall-view" hidden aria-label="農場留言牆">
+            <iframe class="farm-wall-frame" id="farm-wall-frame" title="農場留言牆" data-src="farm-wall.html?embedded=1"></iframe>
+        </section>
     </main>
 
     <footer data-farm-language>
@@ -738,6 +768,7 @@
 
         function translatePage(language) {
             applyFarmLanguage(language);
+            updateFarmView();
             loadWallPreview();
             const menu = document.getElementById('languageMenu');
             const button = document.getElementById('translateButton');
@@ -758,10 +789,28 @@
             button.setAttribute('aria-expanded', 'false');
             button.focus();
         });
+        function updateFarmView() {
+            const showWall = location.hash === '#farm-wall';
+            const wall = document.getElementById('farm-wall-view');
+            const frame = document.getElementById('farm-wall-frame');
+            document.body.classList.toggle('is-farm-wall', showWall);
+            wall.hidden = !showWall;
+            if (showWall && !frame.hasAttribute('src')) frame.src = frame.dataset.src;
+            document.querySelectorAll('.farm-tabs a').forEach(link => {
+                const active = link.hash === (showWall ? '#farm-wall' : '#farm-home');
+                if (active) link.setAttribute('aria-current', 'page');
+                else link.removeAttribute('aria-current');
+            });
+        }
+        window.addEventListener('hashchange', function () {
+            updateFarmView();
+            if (location.hash === '#farm-home' || location.hash === '#farm-wall') window.scrollTo(0, 0);
+        });
         document.addEventListener('DOMContentLoaded', function () {
             let saved;try{saved=localStorage.getItem('farmLanguage');}catch{}
             applyFarmLanguage(saved && ['en','zh-TW','zh-CN','ja','ko'].includes(saved) ? saved : 'zh-TW');
             loadWallPreview();
+            updateFarmView();
             const target = location.hash && document.getElementById(location.hash.slice(1));
             if (target) requestAnimationFrame(() => target.scrollIntoView());
         });

@@ -98,9 +98,22 @@ textarea { resize: vertical; }
 .reply-form label { margin-top: 7px; font-size: .9rem; }
 .reply-form .primary { margin-top: 9px; }
 .thread .status { margin-block: 4px 8px; }
+.is-embedded .top { background: #f8f7fb; }
+.is-embedded .top .bar { min-height: 56px; }
+.is-embedded .top .home { display: none; }
+.is-embedded .top #manage { margin-inline-start: auto; }
+.is-embedded .hero { min-height: 200px; margin-block: 14px 20px; }
+.is-embedded .hero img { max-height: 245px; }
+.is-embedded .hero-copy { padding: clamp(14px, 3.5vw, 32px); }
+.is-embedded h1 { font-size: clamp(1.7rem, 4.4vw, 2.6rem); }
 </style>
 </head>
 <body>
+<script>
+if (window.parent !== window && new URLSearchParams(location.search).get('embedded') === '1') {
+  document.body.classList.add('is-embedded');
+}
+</script>
 <header class="top">
   <div class="wrap bar">
     <a class="home" href="./"><span aria-hidden="true">‹</span> 農場首頁</a>
