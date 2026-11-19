@@ -4,8 +4,8 @@
   const songs = [
     ['QLxy9dYHrcg', 'The truth that you leave', 'Pianoboy 高至豪', 'au', '1863892846'],
     ['by4SYYWlhEs', '夜に駆ける', 'YOASOBI', 'au', '1490256995'],
-    ['OXDtr93Nbtk', '我看見今晚的月色很美，你呢？', '晚安莉莉', 'au', '1887819000'],
-    ['bzLgbHY5xbs', 'Butter-Fly', '和田光司', 'jp', '520633103'],
+    ['q70X4QvSZ9M', '我看見今晚的月色很美，你呢？', '晚安莉莉', 'au', '1887819000'],
+    ['0SMfWmEf8Wo', 'Butter-Fly', '和田光司', 'jp', '520633103'],
     ['s3_5FKpAxAQ', 'All For You', '徐仁國＆鄭恩地', 'au', '1570577663']
   ];
   const copy = {
