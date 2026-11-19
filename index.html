@@ -225,22 +225,6 @@
             .quick-tile .nav-icon { width: 26px; height: 28px; }
         }
         [data-main-language] { display: contents; }
-        .farm-music { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: clamp(12px, 2vw, 22px); margin-bottom: 20px; padding: clamp(12px, 2vw, 18px); border: 1px solid #ddd6ee; border-radius: 16px; background: #faf7ff; }
-        .music-controls { display: grid; gap: 6px; align-content: center; justify-items: start; min-width: 0; }
-        .music-controls h2 { margin: 0; color: var(--primary-color); font-size: 1.25rem; }
-        .music-controls label { color: var(--muted); font-weight: 650; }
-        .music-controls select { width: min(100%, 380px); min-height: 44px; padding: 5px 8px; border: 1px solid #aaa2bf; border-radius: 8px; background: #fff; color: var(--ink); font: inherit; }
-        .music-actions { display: flex; flex-wrap: wrap; gap: 7px; }
-        .music-actions button { min-height: 44px; padding: 6px 12px; border: 1px solid #584786; border-radius: 9px; background: #fff; color: #4a3d72; font: inherit; font-weight: 700; cursor: pointer; }
-        .music-actions button:first-child { background: #51448b; color: #fff; }
-        .music-actions button:disabled { opacity: .6; cursor: default; }
-        #farm-music-status { margin: 0; color: var(--muted); font-size: .875rem; }
-        #farm-music-status:empty { display: none; }
-        .music-source-links { display: flex; flex-wrap: wrap; gap: 2px 10px; }
-        .music-source-links a { color: #4a3d72; font-size: .875rem; text-underline-offset: 2px; }
-        .music-screen { min-width: 0; width: 100%; align-self: center; background: #241e38; }
-        .music-screen iframe { display: block; width: 100%; height: auto; min-height: 200px; aspect-ratio: 16 / 9; border: 0; }
-        @media (max-width: 725px) { .farm-music { grid-template-columns: minmax(0,1fr); } .music-screen { grid-row: 1; } }
         .farm-tabs { display: flex; flex-wrap: wrap; gap: 5px; }
         .farm-tabs a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 11px; border: 1px solid transparent; border-radius: 9px; color: #eeebff; text-decoration: none; font-size: .875rem; font-weight: 700; }
         .farm-tabs a:hover { background: #ffffff1c; }
@@ -261,18 +245,8 @@
             .header-actions { flex: 1 1 auto; justify-content: space-between; }
             .farm-tabs a { padding-inline: 8px; }
         }
-        #farm-playlist-open { min-height: 44px; padding: 5px 8px; border: 0; border-radius: 8px; background: transparent; color: #eeebff; font: inherit; font-weight: 700; font-size: .8125rem; white-space: nowrap; cursor: pointer; }
-        #farm-playlist-open:hover, #farm-playlist-open[aria-expanded="true"] { background: #ffffff24; }
-        #farm-music-panel[hidden] { display: none; }
-        #farm-music-panel { position: fixed; z-index: 25; top: max(70px, calc(env(safe-area-inset-top) + 60px)); right: clamp(9px, 3vw, 30px); width: min(252px, calc(100% - 18px)); max-height: calc(100vh - 82px); max-height: calc(100dvh - 82px); overflow: auto; grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 8px; margin: 0; box-shadow: 0 10px 34px #27204236; }
-        #farm-music-panel .music-screen { grid-row: 2; min-height: 200px; }
-        #farm-music-panel .music-actions button { padding-inline: 9px; font-size: .875rem; }
-        #farm-music-panel .music-controls select { width: 100%; font-size: .875rem; }
-        .music-autoplay { display: flex; align-items: center; gap: 6px; min-height: 36px; font-size: .8125rem; cursor: pointer; }
-        .music-autoplay input { width: 17px; height: 17px; margin: 0; accent-color: #51448b; }
-        .music-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        #farm-playlist-close { min-height: 44px; border: 1px solid #a99ebd; border-radius: 8px; padding: 5px 10px; background: #fff; color: #4a3d72; cursor: pointer; font: inherit; }
-        @media (max-width: 380px) { #farm-music-panel { top: 106px; max-height: calc(100dvh - 116px); } }
+        #farm-background-music { min-height: 44px; padding: 5px 8px; border: 0; border-radius: 8px; background: transparent; color: #eeebff; font: inherit; font-weight: 700; font-size: .8125rem; white-space: nowrap; cursor: pointer; }
+        #farm-background-music:hover, #farm-background-music[aria-pressed="true"] { background: #ffffff24; }
     </style>
 </head>
 <body>
@@ -285,7 +259,7 @@
                     <a href="#farm-home" aria-current="page"><span class="localized"><span lang="zh-HK">首頁</span><span lang="zh-CN">首页</span><span lang="en">Home</span><span lang="ja">ホーム</span><span lang="ko">홈</span></span></a>
                     <a href="#farm-wall"><span class="localized"><span lang="zh-HK">留言牆</span><span lang="zh-CN">留言墙</span><span lang="en">Message wall</span><span lang="ja">掲示板</span><span lang="ko">게시판</span></span></a>
                 </nav>
-                <button id="farm-playlist-open" type="button" aria-expanded="false" aria-controls="farm-music-panel"><span class="localized"><span lang="zh-HK">♪ 歌單</span><span lang="zh-CN">♪ 歌单</span><span lang="en">♪ Playlist</span><span lang="ja">♪ 曲リスト</span><span lang="ko">♪ 재생목록</span></span></button>
+                <button id="farm-background-music" type="button" aria-pressed="false">♪ 音樂</button>
                 <div class="translate-wrap">
                     <button class="translate-btn" id="translateButton" type="button" onclick="toggleLanguageMenu(event)" aria-haspopup="true" aria-expanded="false">🌐 翻譯</button>
                     <div class="language-menu" id="languageMenu">
@@ -303,26 +277,8 @@
             <p>請全體工作人員務必仔細閱讀並遵守以下規範</p>
         </div>
     </header>
-        <section class="farm-music" id="farm-music-panel" aria-labelledby="music-heading" hidden>
-            <div class="music-panel-head"><strong id="music-heading"><span class="localized"><span lang="zh-HK">農場歌單</span><span lang="zh-CN">农场歌单</span><span lang="en">Farm playlist</span><span lang="ja">農場プレイリスト</span><span lang="ko">농장 재생목록</span></span></strong><button type="button" id="farm-playlist-close"><span class="localized"><span lang="zh-HK">關閉</span><span lang="zh-CN">关闭</span><span lang="en">Close</span><span lang="ja">閉じる</span><span lang="ko">닫기</span></span></button></div>
-            <div class="music-controls">
-                <label for="farm-track"><span class="localized"><span lang="zh-HK">揀歌</span><span lang="zh-CN">选歌</span><span lang="en">Choose a song</span><span lang="ja">曲を選ぶ</span><span lang="ko">곡 선택</span></span></label>
-                <select id="farm-track"></select>
-                <div class="music-actions">
-                    <button type="button" id="farm-music-toggle" disabled><span class="localized"><span lang="zh-HK">播放</span><span lang="zh-CN">播放</span><span lang="en">Play</span><span lang="ja">再生</span><span lang="ko">재생</span></span></button>
-                    <button type="button" id="farm-music-next" disabled><span class="localized"><span lang="zh-HK">下一首</span><span lang="zh-CN">下一首</span><span lang="en">Next</span><span lang="ja">次の曲</span><span lang="ko">다음 곡</span></span></button>
-                </div>
-                <label class="music-autoplay"><input type="checkbox" id="farm-music-autoplay"><span class="localized"><span lang="zh-HK">下次入頁自動試播</span><span lang="zh-CN">下次进入自动尝试播放</span><span lang="en">Try autoplay next visit</span><span lang="ja">次回は自動再生を試す</span><span lang="ko">다음 방문 시 자동 재생 시도</span></span></label>
-                <p id="farm-music-status" role="status"></p>
-                <div class="music-source-links">
-                <a id="farm-music-source" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=QLxy9dYHrcg"><span class="localized"><span lang="zh-HK">喺 YouTube 播放</span><span lang="zh-CN">在 YouTube 播放</span><span lang="en">Play on YouTube</span><span lang="ja">YouTube で再生</span><span lang="ko">YouTube에서 재생</span></span></a>
-                    <a id="farm-music-apple" target="_blank" rel="noopener" hidden>Apple Music</a>
-                </div>
-            </div>
-            <div class="music-screen" id="farm-music-screen"></div>
-        </section>
 
-    <main class="container">
+<main class="container">
     <div data-farm-language data-main-language>
 
         <!-- 頂部即時公告 -->
@@ -734,7 +690,7 @@
     <script src="leave-reason-warning.js?v=20261118-ai-review"></script>
     <script src="employee-notice-forms.js?v=20261118-ai-review"></script>
     <script src="translations.js?v=20261119-music"></script>
-    <script src="farm-music.js?v=5" defer></script>
+    <script src="farm-music.js?v=6" defer></script>
     <script>
 
         let wallPostsRequest;
@@ -809,7 +765,6 @@
             const frame = document.getElementById('farm-wall-frame');
             document.body.classList.toggle('is-farm-wall', showWall);
             wall.hidden = !showWall;
-            document.getElementById('farm-playlist-open').setAttribute('aria-expanded', String(!document.getElementById('farm-music-panel').hidden));
             if (showWall && !frame.hasAttribute('src')) frame.src = frame.dataset.src;
             document.querySelectorAll('.farm-tabs a').forEach(link => {
                 const active = link.hash === (showWall ? '#farm-wall' : '#farm-home');
