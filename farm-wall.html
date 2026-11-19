@@ -3,89 +3,157 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src https://batsjsznudkeqaaijxsg.supabase.co; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://batsjsznudkeqaaijxsg.supabase.co; base-uri 'none'; form-action 'none'">
 <title>農場留言牆 | Blueberry Crest</title>
 <style>
-:root { color-scheme: light; font: 16px/1.55 system-ui, sans-serif; color: #202842; background: #f3f5fc; }
-* { box-sizing: border-box; }
+:root { color-scheme: light; font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; color: #252541; background: #f8f7fb; --ink: #252541; --soft: #5a5870; --line: #dedbe9; --plum: #51417c; }
+*, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; }
-header { background: #252750; color: #fff; }
-.wrap { width: min(100% - 32px, 1040px); margin-inline: auto; }
-.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; }
-.bar a, .bar button { color: inherit; font-weight: 700; }
-.bar a { padding: 10px 0; }
-.bar button { border: 1px solid #aeb1da; background: transparent; }
-.hero { padding-block: 14px 30px; }
-h1, h2 { line-height: 1.25; margin: 0 0 10px; }
-h1 { font-size: clamp(2rem, 5vw, 3rem); }
-h2 { font-size: 1.35rem; }
-p { margin: 0 0 12px; }
-.hero p { margin: 0; color: #e3e5fb; }
-main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 22px; align-items: start; padding-block: 24px 50px; }
-.panel, article { border: 1px solid #dce1f1; border-radius: 18px; background: #fff; padding: clamp(14px, 3vw, 22px); }
-label { display: block; font-weight: 700; margin-top: 12px; }
-input, textarea, button { font: inherit; }
-input, textarea { display: block; width: 100%; min-height: 44px; color: inherit; }
-input:not([type=file]), textarea { margin-top: 4px; padding: 9px 11px; border: 1px solid #aeb7d0; border-radius: 10px; background: #fcfcff; }
-input[type=file] { margin-top: 8px; }
-textarea { resize: vertical; }
-button { padding: 8px 14px; min-height: 44px; cursor: pointer; border: 1px solid transparent; border-radius: 10px; font-weight: 700; }
-.primary { color: #fff; background: #45449a; }
-form > .primary { width: 100%; margin-top: 10px; }
+.wrap { width: min(1160px, 100% - clamp(28px, 7vw, 88px)); margin-inline: auto; }
+.top { border-bottom: 1px solid #e9e5ef; background: #fff; }
+.bar { display: flex; align-items: center; justify-content: space-between; min-height: 64px; gap: 10px; }
+.home, .subtle, .primary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; gap: 8px; }
+.home { color: var(--plum); text-decoration: none; font-weight: 740; }
+.home:hover { text-decoration: underline; }
+button, input, textarea { font: inherit; }
+button { border: 1px solid transparent; border-radius: 10px; cursor: pointer; font-weight: 700; }
 button:disabled { opacity: .6; cursor: wait; }
-:focus-visible { outline: 3px solid #6a59c0; outline-offset: 3px; }
-.note, time { font-size: .9rem; color: #505973; }
-.status { margin: 8px 0 0; font-weight: 650; }
+.subtle { padding: 7px 12px; color: var(--plum); background: #fff; border: 1px solid var(--line); }
+.subtle:hover { background: #f0ebf8; }
+.primary { padding: 9px 18px; color: #fff; background: var(--plum); }
+.primary:hover { background: #3d3061; }
+:focus-visible { outline: 3px solid #8263be; outline-offset: 3px; }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); min-height: 298px; margin-block: clamp(16px, 4vw, 42px) clamp(26px, 5vw, 54px); border-radius: 24px; overflow: hidden; background: #2c2547; color: #fff; }
+.hero-copy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: clamp(22px, 5vw, 62px); background: radial-gradient(ellipse at bottom right, #493664, transparent 65%); }
+.hero img { display: block; width: 100%; height: 100%; max-height: 420px; object-fit: cover; object-position: center 51%; }
+h1, h2 { margin: 0; line-height: 1.25; }
+h1 { font-size: clamp(2rem, 5vw, 3.55rem); font-weight: 800; letter-spacing: -.035em; }
+.hero p { margin: 12px 0 21px; color: #ede6f8; }
+.hero .primary { background: #f3ebff; color: #39265a; }
+.hero .primary:hover { background: #fff; }
+.board { padding-bottom: 32px; }
+.board-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
+.board-head h2 { font-size: clamp(1.25rem, 2.5vw, 1.6rem); }
+.posts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.post { display: grid; min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: white; box-shadow: 0 4px 14px #2820410a; }
+.post-body { padding: 15px; }
+.post header { display: flex; align-items: center; gap: 10px; }
+.author { min-width: 0; }
+.author strong, .post p { overflow-wrap: anywhere; }
+.avatar { display: grid; flex: 0 0 38px; height: 38px; place-items: center; border-radius: 13px; color: #4b336d; background: #eee5fb; font-size: .95rem; font-weight: 800; }
+time, .note, .upload-name, footer { color: var(--soft); font-size: .875rem; }
+time { display: block; margin-top: 1px; }
+.post p { margin: 10px 0 0; white-space: pre-wrap; }
+.photo-tile { position: relative; width: 100%; aspect-ratio: 1.55; border: 0; border-radius: 0; padding: 0; display: block; overflow: hidden; background: #eae4f2; }
+.photo-tile:focus-visible { outline-offset: -4px; }
+.photo-tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.photo-unavailable { display: block; padding: 12px 15px; border-bottom: 1px solid var(--line); color: var(--soft); }
+.status { margin: 9px 0; font-weight: 640; }
 .status:empty { display: none; }
 [data-error=true] { color: #a02138; }
-#posts, article { display: grid; gap: 8px; }
-#posts { gap: 12px; }
-article > strong, article p { overflow-wrap: anywhere; }
-article p { margin: 0; white-space: pre-wrap; }
-article img { width: 100%; max-height: 420px; object-fit: contain; background: #f3f5fc; border-radius: 10px; }
-#more, #refresh { background: #e9eafa; color: #312f6e; }
-#more { width: 100%; margin-top: 12px; }
-#refresh { margin-bottom: 12px; }
-.delete { justify-self: start; background: #fff0f2; color: #a02138; }
-dialog { width: min(420px, calc(100% - 32px)); max-height: calc(100% - 32px); }
-dialog::backdrop { background: #191c38aa; }
-.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-@media (max-width: 680px) { main { grid-template-columns: minmax(0, 1fr); } }
+.empty { padding: clamp(24px, 5vw, 52px) 16px; border: 1px dashed #c9c0db; border-radius: 16px; background: #fff; text-align: center; }
+.empty p { margin: 5px 0 12px; color: var(--soft); }
+.empty-icon { display: grid; width: 46px; height: 46px; margin: 0 auto 9px; place-items: center; border-radius: 14px; background: #f1eaf9; }
+#more { margin: 16px auto 0; display: flex; }
+.delete { min-height: 44px; padding: 7px 12px; color: #a02138; background: #fff0f2; }
+.post .delete { margin-top: 12px; }
+footer { padding-block: 0 22px; text-align: end; }
+footer a { color: var(--plum); }
+dialog { width: min(500px, calc(100% - 26px)); max-height: calc(100% - 26px); margin: auto; padding: clamp(14px, 3vw, 23px); border: 1px solid var(--line); border-radius: 18px; background: #fff; color: var(--ink); box-shadow: 0 12px 45px #2b244b47; }
+dialog::backdrop { background: #241c3db3; }
+.dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.dialog-head h2 { font-size: 1.35rem; }
+label { display: block; margin-top: 12px; font-weight: 700; }
+input:not([type=file]), textarea { display: block; width: 100%; min-height: 44px; margin-top: 4px; padding: 8px 10px; border: 1px solid #bcb7cb; border-radius: 9px; background: #fcfbff; color: inherit; }
+textarea { resize: vertical; }
+.upload { position: relative; display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; min-height: 54px; padding: 8px 12px; border: 1px dashed #aca0c6; border-radius: 10px; background: #f8f4fe; color: var(--plum); cursor: pointer; }
+.upload input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.upload:focus-within { outline: 3px solid #8263be; outline-offset: 3px; }
+.upload-name { max-width: 100%; overflow-wrap: anywhere; }
+#photo-preview { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+#photo-preview img { width: 65px; height: 54px; object-fit: cover; border-radius: 7px; }
+.note { margin: 8px 0 0; }
+.actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+#publish { width: 100%; margin-top: 12px; }
+#photo-dialog { width: min(880px, calc(100% - 24px)); }
+#full-photo { display: block; width: 100%; max-height: 75dvh; object-fit: contain; }
+@media (max-width: 850px) { .posts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 590px) {
+  .hero { grid-template-columns: 1fr; min-height: 0; }
+  .hero img { height: clamp(125px, 39vw, 186px); }
+  .hero-copy { padding: 18px; }
+  .hero p { margin: 8px 0 13px; }
+  .posts { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+}
 </style>
 </head>
 <body>
-<header>
+<header class="top">
   <div class="wrap bar">
-    <a href="./">← 返回農場首頁</a>
-    <button id="manage" type="button">管理員登入</button>
+    <a class="home" href="./"><span aria-hidden="true">‹</span> 農場首頁</a>
+    <button id="manage" class="subtle" type="button">管理員登入</button>
   </div>
-  <div class="wrap hero"><h1>農場留言牆</h1><p>分享採果照片、工作感想同農場建議。</p></div>
 </header>
 <main class="wrap">
-  <section class="panel" aria-labelledby="compose-title">
-    <h2 id="compose-title">寫留言</h2>
-    <form id="compose">
-      <label for="name">名字／暱稱</label>
-      <input id="name" name="name" required maxlength="40" autocomplete="nickname">
-      <label for="message">留言</label>
-      <textarea id="message" name="message" rows="4" required maxlength="1000"></textarea>
-      <label for="photo">相片（選填，一張）</label>
-      <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" aria-describedby="photo-help">
-      <p id="photo-help" class="note">留言同相片發佈後會公開。請先得到相中人物同意。</p>
-      <button id="publish" class="primary" type="submit">發佈留言</button>
-      <p id="compose-status" class="status" role="status"></p>
-    </form>
+  <section class="hero" aria-labelledby="wall-title">
+    <div class="hero-copy">
+      <h1 id="wall-title">農場留言牆</h1>
+      <p>分享採果相片、工作感想同農場建議。</p>
+      <button class="primary" type="button" data-open-compose><span aria-hidden="true">＋</span> 寫留言</button>
+    </div>
+    <img src="farm-wall-blueberries.webp" width="850" height="650" alt="" fetchpriority="high">
   </section>
-  <section aria-labelledby="posts-title">
-    <h2 id="posts-title">最新留言</h2>
-    <button id="refresh" type="button">更新留言</button>
+  <section class="board" aria-labelledby="posts-title">
+    <div class="board-head">
+      <h2 id="posts-title">最新留言</h2>
+      <button id="refresh" class="subtle" type="button">更新留言</button>
+    </div>
+    <p id="publish-notice" class="status" role="status"></p>
     <p id="feed-status" class="status" role="status"></p>
-    <div id="posts"></div>
-    <button id="more" type="button" hidden>載入更多留言</button>
+    <div id="empty-feed" class="empty" hidden>
+      <span class="empty-icon" aria-hidden="true">🫐</span>
+      <strong>暫時未有留言</strong>
+      <p>分享一張相，或者講吓今日喺農場嘅感想。</p>
+      <button class="subtle" type="button" data-open-compose>寫第一則留言</button>
+    </div>
+    <div id="posts" class="posts"></div>
+    <button id="more" class="subtle" type="button" hidden>載入更多留言</button>
   </section>
 </main>
-<dialog id="admin-dialog" class="panel" aria-labelledby="admin-title">
+<footer class="wrap"><a href="https://unsplash.com/photos/a-close-up-of-ripe-blueberries-on-a-bush-L3Eoy3-XFBA">藍莓相片 · Eric Prouzet</a></footer>
+<dialog id="compose-dialog" aria-labelledby="compose-title">
+  <div class="dialog-head">
+    <h2 id="compose-title">寫留言</h2>
+    <button class="subtle" id="close-compose" type="button">關閉</button>
+  </div>
+  <form id="compose">
+    <label for="name">名字／暱稱</label>
+    <input id="name" name="name" required maxlength="40" autocomplete="nickname" autofocus>
+    <label for="message">留言</label>
+    <textarea id="message" name="message" rows="4" required maxlength="1000"></textarea>
+    <label class="upload">
+      <span>附加相片（選填，一張）</span>
+      <span id="photo-name" class="upload-name"></span>
+      <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" aria-describedby="photo-help">
+    </label>
+    <div id="photo-preview" hidden>
+      <img id="photo-thumb" alt="待發佈相片預覽">
+      <button class="subtle" id="remove-photo" type="button">移除相片</button>
+    </div>
+    <p id="photo-help" class="note">留言同相片會即時公開。請先得到相中人物同意。</p>
+    <button id="publish" class="primary" type="submit">發佈留言</button>
+    <p id="compose-status" class="status" role="status"></p>
+  </form>
+</dialog>
+<dialog id="photo-dialog" aria-labelledby="photo-title">
+  <div class="dialog-head">
+    <h2 id="photo-title">留言相片</h2>
+    <button class="subtle" id="close-photo" type="button">關閉</button>
+  </div>
+  <img id="full-photo" alt="留言相片">
+</dialog>
+<dialog id="admin-dialog" aria-labelledby="admin-title">
   <h2 id="admin-title">管理員登入</h2>
   <form id="login">
     <label for="email">電郵</label>
@@ -93,13 +161,13 @@ dialog::backdrop { background: #191c38aa; }
     <label for="password">密碼</label>
     <input id="password" type="password" autocomplete="current-password" required>
     <p id="login-status" class="status" role="status"></p>
-    <div class="actions"><button type="submit" class="primary">登入</button><button id="cancel-login" type="button">取消</button></div>
+    <div class="actions"><button type="submit" class="primary">登入</button><button class="subtle" id="cancel-login" type="button">取消</button></div>
   </form>
 </dialog>
-<dialog id="delete-dialog" class="panel" aria-labelledby="delete-title">
+<dialog id="delete-dialog" aria-labelledby="delete-title">
   <h2 id="delete-title">刪除留言？</h2>
   <p>留言同附上嘅相片會一併刪除。</p>
-  <form method="dialog" class="actions"><button value="cancel" autofocus>取消</button><button class="delete" value="delete">刪除</button></form>
+  <form method="dialog" class="actions"><button class="subtle" value="cancel" autofocus>取消</button><button class="delete" value="delete">刪除</button></form>
 </dialog>
 <script>
 'use strict';
@@ -107,6 +175,13 @@ const endpoint = 'https://batsjsznudkeqaaijxsg.supabase.co';
 const publishableKey = "sb_publishable_o4kcn0Rr0zSNnuMjyZ75KQ_9pKWrMN_";
 const byId = id => document.getElementById(id);
 const form = byId('compose');
+const composer = byId('compose-dialog');
+const fileInput = byId('photo');
+const draftPreview = byId('photo-preview');
+const thumbnail = byId('photo-thumb');
+const photoDialog = byId('photo-dialog');
+const fullPhoto = byId('full-photo');
+const emptyFeed = byId('empty-feed');
 const feed = byId('posts');
 const more = byId('more');
 const refresh = byId('refresh');
@@ -121,6 +196,7 @@ let session;
 let loading = false;
 let reloadRequested = false;
 let draftId = crypto.randomUUID();
+let previewUrl;
 
 function status(id, text, error = false) {
   const node = byId(id);
@@ -154,14 +230,23 @@ function rpc(name, body, token) {
   return request('/rest/v1/rpc/farm_wall_' + name, body, token);
 }
 
-async function attachPhoto(img, id) {
+async function attachPhoto(tile, id) {
   try {
     const data = await rpc('photo', { post_id: id });
-    if (!data) return;
-    img.src = 'data:image/jpeg;base64,' + data;
-    img.hidden = false;
+    if (!data) {
+      tile.remove();
+      return;
+    }
+    const image = tile.firstElementChild;
+    image.src = 'data:image/jpeg;base64,' + data;
+    await image.decode();
+    image.hidden = false;
+    tile.disabled = false;
   } catch {
-    img.replaceWith(document.createTextNode('暫時載入唔到相片。'));
+    const message = document.createElement('span');
+    message.className = 'photo-unavailable';
+    message.textContent = '暫時載入唔到相片。';
+    tile.replaceWith(message);
   }
 }
 
@@ -169,12 +254,22 @@ const photoObserver = typeof IntersectionObserver === 'function' ? new Intersect
   for (const entry of entries) {
     if (!entry.isIntersecting) continue;
     photoObserver.unobserve(entry.target);
-    attachPhoto(entry.target.firstElementChild, entry.target.dataset.photo);
+    attachPhoto(entry.target, entry.target.dataset.photo);
   }
 }, { rootMargin: '250px' }) : null;
 
 function addPost(post) {
   const article = document.createElement('article');
+  article.className = 'post';
+  const body = document.createElement('div');
+  body.className = 'post-body';
+  const header = document.createElement('header');
+  const avatar = document.createElement('span');
+  avatar.className = 'avatar';
+  avatar.setAttribute('aria-hidden', 'true');
+  avatar.textContent = Array.from(post.display_name.trim())[0] || '🫐';
+  const author = document.createElement('div');
+  author.className = 'author';
   const name = document.createElement('strong');
   const time = document.createElement('time');
   const text = document.createElement('p');
@@ -184,17 +279,27 @@ function addPost(post) {
   time.textContent = dateFormat.format(new Date(post.created_at));
   text.textContent = post.message;
   text.dir = 'auto';
-  article.append(name, time, text);
+  author.append(name, time);
+  header.append(avatar, author);
+  body.append(header, text);
   if (post.has_photo) {
-    const frame = document.createElement('div');
-    frame.dataset.photo = post.id;
-    const img = document.createElement('img');
-    img.alt = '留言附圖';
-    img.hidden = true;
-    frame.append(img);
-    article.append(frame);
-    if (photoObserver) photoObserver.observe(frame);
-    else attachPhoto(img, post.id);
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'photo-tile';
+    tile.dataset.photo = post.id;
+    tile.disabled = true;
+    tile.setAttribute('aria-label', '放大' + post.display_name + '嘅留言相片');
+    const image = document.createElement('img');
+    image.alt = '留言附圖';
+    image.hidden = true;
+    tile.append(image);
+    tile.addEventListener('click', () => {
+      fullPhoto.src = image.src;
+      photoDialog.showModal();
+    });
+    article.append(tile);
+    if (photoObserver) photoObserver.observe(tile);
+    else attachPhoto(tile, post.id);
   }
   const remove = document.createElement('button');
   remove.type = 'button';
@@ -202,7 +307,8 @@ function addPost(post) {
   remove.textContent = '刪除留言';
   remove.hidden = !session;
   remove.addEventListener('click', () => deletePost(post.id, article));
-  article.append(remove);
+  body.append(remove);
+  article.append(body);
   feed.append(article);
 }
 
@@ -224,8 +330,10 @@ async function loadPosts(reset = true) {
     posts.forEach(addPost);
     cursor = posts.at(-1);
     more.hidden = posts.length < 12;
-    status('feed-status', feed.children.length ? '' : '暫時未有留言。');
+    emptyFeed.hidden = feed.children.length > 0;
+    status('feed-status', '');
   } catch {
+    emptyFeed.hidden = true;
     status('feed-status', '載入唔到留言，請再撳「更新留言」。', true);
   } finally {
     loading = false;
@@ -268,6 +376,38 @@ async function preparePhoto(file) {
   }
 }
 
+function updateDraftPreview() {
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  thumbnail.removeAttribute('src');
+  thumbnail.hidden = true;
+  const file = fileInput.files[0];
+  byId('photo-name').textContent = file ? file.name : '';
+  draftPreview.hidden = !file;
+  previewUrl = file ? URL.createObjectURL(file) : undefined;
+  if (previewUrl) thumbnail.src = previewUrl;
+}
+
+thumbnail.addEventListener('load', () => { thumbnail.hidden = false; });
+fileInput.addEventListener('change', updateDraftPreview);
+byId('remove-photo').addEventListener('click', () => {
+  fileInput.value = '';
+  draftId = crypto.randomUUID();
+  updateDraftPreview();
+  fileInput.focus();
+});
+document.querySelectorAll('[data-open-compose]').forEach(button => {
+  button.addEventListener('click', () => {
+    status('publish-notice', '');
+    composer.showModal();
+  });
+});
+byId('close-compose').addEventListener('click', () => composer.close());
+composer.addEventListener('cancel', event => {
+  if (byId('publish').disabled) event.preventDefault();
+});
+byId('close-photo').addEventListener('click', () => photoDialog.close());
+photoDialog.addEventListener('close', () => fullPhoto.removeAttribute('src'));
+
 form.addEventListener('input', () => { draftId = crypto.randomUUID(); });
 form.addEventListener('submit', async event => {
   event.preventDefault();
@@ -279,6 +419,7 @@ form.addEventListener('submit', async event => {
     status('compose-status', '請填寫名字同留言。', true);
     return;
   }
+  byId('close-compose').disabled = true;
   for (const control of form.elements) control.disabled = true;
   status('compose-status', '發佈緊…');
   try {
@@ -286,7 +427,10 @@ form.addEventListener('submit', async event => {
     await rpc('post', { post_id: draftId, name_text: name, message_text: message, photo_base64: photo });
     form.reset();
     draftId = crypto.randomUUID();
-    status('compose-status', '已發佈留言。');
+    updateDraftPreview();
+    status('compose-status', '');
+    composer.close();
+    status('publish-notice', '已發佈留言。');
     loadPosts();
   } catch (error) {
     const messages = {
@@ -298,6 +442,7 @@ form.addEventListener('submit', async event => {
     status('compose-status', messages[error.message] || '發佈未能確認，請再試。', true);
   } finally {
     for (const control of form.elements) control.disabled = false;
+    byId('close-compose').disabled = false;
   }
 });
 
@@ -320,6 +465,7 @@ async function deletePost(id, article) {
       const frame = article.querySelector('[data-photo]');
       if (frame) photoObserver?.unobserve(frame);
       article.remove();
+      emptyFeed.hidden = feed.children.length > 0;
     } catch (error) {
       if (error.status === 401 || error.status === 403) setSession(null);
       status('feed-status', '刪除未完成，請確認管理員登入後再試。', true);
