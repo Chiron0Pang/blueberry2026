@@ -2,11 +2,11 @@
   'use strict';
 
   const songs = [
-    ['QLxy9dYHrcg', 'The truth that you leave', 'Pianoboy 高至豪'],
-    ['by4SYYWlhEs', '夜に駆ける', 'YOASOBI'],
-    ['OXDtr93Nbtk', '我看見今晚的月色很美，你呢？', '晚安莉莉'],
-    ['bzLgbHY5xbs', 'Butter-Fly', '和田光司'],
-    ['s3_5FKpAxAQ', 'All For You', '徐仁國＆鄭恩地']
+    ['QLxy9dYHrcg', 'The truth that you leave', 'Pianoboy 高至豪', 'au', '1863892846'],
+    ['by4SYYWlhEs', '夜に駆ける', 'YOASOBI', 'au', '1490256995'],
+    ['OXDtr93Nbtk', '我看見今晚的月色很美，你呢？', '晚安莉莉', 'au', '1887819000'],
+    ['bzLgbHY5xbs', 'Butter-Fly', '和田光司', 'jp', '520633103'],
+    ['s3_5FKpAxAQ', 'All For You', '徐仁國＆鄭恩地', 'au', '1570577663']
   ];
   const copy = {
     'zh-HK': ['播放', '暫停', '瀏覽器阻止咗自動播放，撳「播放」開始。', '呢首歌暫時未能喺頁面播放，可以揀另一首或去 YouTube。', '播放器暫時載入唔到，可以去 YouTube 播放。'],
@@ -22,6 +22,7 @@
   const next = document.getElementById('farm-music-next');
   const status = document.getElementById('farm-music-status');
   const source = document.getElementById('farm-music-source');
+  const apple = document.getElementById('farm-music-apple');
   const autoplay = document.getElementById('farm-music-autoplay');
   const autoplayKey = 'blueberryFarmMusicAutoplay';
   let queue = [];
@@ -55,6 +56,10 @@
     status.textContent = statusIndex === undefined ? '' : words[statusIndex];
     trackSelect.value = current;
     source.href = 'https://www.youtube.com/watch?v=' + current;
+    const [, , , region, appleTrack] = songs.find(([id]) => id === current);
+    apple.href = 'https://music.apple.com/' + region + '/song/' + appleTrack;
+    apple.textContent = region === 'jp' ? 'Apple Music (JP)' : 'Apple Music';
+    apple.hidden = false;
   }
 
   function canPlayHere() {

@@ -236,7 +236,8 @@
         .music-actions button:disabled { opacity: .6; cursor: default; }
         #farm-music-status { margin: 0; color: var(--muted); font-size: .875rem; }
         #farm-music-status:empty { display: none; }
-        #farm-music-source { color: #4a3d72; font-size: .875rem; text-underline-offset: 2px; }
+        .music-source-links { display: flex; flex-wrap: wrap; gap: 2px 10px; }
+        .music-source-links a { color: #4a3d72; font-size: .875rem; text-underline-offset: 2px; }
         .music-screen { min-width: 0; width: 100%; align-self: center; background: #241e38; }
         .music-screen iframe { display: block; width: 100%; height: auto; min-height: 200px; aspect-ratio: 16 / 9; border: 0; }
         @media (max-width: 725px) { .farm-music { grid-template-columns: minmax(0,1fr); } .music-screen { grid-row: 1; } }
@@ -313,7 +314,10 @@
                 </div>
                 <label class="music-autoplay"><input type="checkbox" id="farm-music-autoplay"><span class="localized"><span lang="zh-HK">下次入頁自動試播</span><span lang="zh-CN">下次进入自动尝试播放</span><span lang="en">Try autoplay next visit</span><span lang="ja">次回は自動再生を試す</span><span lang="ko">다음 방문 시 자동 재생 시도</span></span></label>
                 <p id="farm-music-status" role="status"></p>
+                <div class="music-source-links">
                 <a id="farm-music-source" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=QLxy9dYHrcg"><span class="localized"><span lang="zh-HK">喺 YouTube 播放</span><span lang="zh-CN">在 YouTube 播放</span><span lang="en">Play on YouTube</span><span lang="ja">YouTube で再生</span><span lang="ko">YouTube에서 재생</span></span></a>
+                    <a id="farm-music-apple" target="_blank" rel="noopener" hidden>Apple Music</a>
+                </div>
             </div>
             <div class="music-screen" id="farm-music-screen"></div>
         </section>
@@ -730,7 +734,7 @@
     <script src="leave-reason-warning.js?v=20261118-ai-review"></script>
     <script src="employee-notice-forms.js?v=20261118-ai-review"></script>
     <script src="translations.js?v=20261119-music"></script>
-    <script src="farm-music.js?v=3" defer></script>
+    <script src="farm-music.js?v=4" defer></script>
     <script>
 
         let wallPostsRequest;
