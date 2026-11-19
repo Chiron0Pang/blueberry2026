@@ -245,8 +245,6 @@
             .header-actions { flex: 1 1 auto; justify-content: space-between; }
             .farm-tabs a { padding-inline: 8px; }
         }
-        #farm-background-music { min-height: 44px; padding: 5px 8px; border: 0; border-radius: 8px; background: transparent; color: #eeebff; font: inherit; font-weight: 700; font-size: .8125rem; white-space: nowrap; cursor: pointer; }
-        #farm-background-music:hover, #farm-background-music[aria-pressed="true"] { background: #ffffff24; }
     </style>
 </head>
 <body>
@@ -259,7 +257,7 @@
                     <a href="#farm-home" aria-current="page"><span class="localized"><span lang="zh-HK">首頁</span><span lang="zh-CN">首页</span><span lang="en">Home</span><span lang="ja">ホーム</span><span lang="ko">홈</span></span></a>
                     <a href="#farm-wall"><span class="localized"><span lang="zh-HK">留言牆</span><span lang="zh-CN">留言墙</span><span lang="en">Message wall</span><span lang="ja">掲示板</span><span lang="ko">게시판</span></span></a>
                 </nav>
-                <button id="farm-background-music" type="button" aria-pressed="false">♪ 音樂</button>
+
                 <div class="translate-wrap">
                     <button class="translate-btn" id="translateButton" type="button" onclick="toggleLanguageMenu(event)" aria-haspopup="true" aria-expanded="false">🌐 翻譯</button>
                     <div class="language-menu" id="languageMenu">
@@ -690,7 +688,6 @@
     <script src="leave-reason-warning.js?v=20261118-ai-review"></script>
     <script src="employee-notice-forms.js?v=20261118-ai-review"></script>
     <script src="translations.js?v=20261119-music"></script>
-    <script src="farm-music.js?v=6" defer></script>
     <script>
 
         let wallPostsRequest;
