@@ -382,11 +382,14 @@ function applyFarmLanguage(language) {
   const map=FARM_TRANSLATIONS[language] || {};
   document.documentElement.lang=language==='zh-TW'?'zh-HK':language;
 
-  // Save pristine page once. Restore it before every language change.
-  if(!window.__farmOriginalBody) window.__farmOriginalBody=document.body.innerHTML;
+  // Restore only translated regions so the embedded player can keep playing.
+  const translatedRegions=Array.from(document.querySelectorAll('[data-farm-language]'));
+  for(const region of translatedRegions){
+    if(!FARM_ORIGINAL_HTML.has(region)) FARM_ORIGINAL_HTML.set(region,region.innerHTML);
+  }
   const previousWorkDate=document.querySelector('#payroll-work-date')?.value;
   const formValues=Array.from(document.querySelectorAll('#employee-notice-forms input,#employee-notice-forms textarea,#employee-notice-forms select')).map(e=>({id:e.id,name:e.name,type:e.type,value:e.value,checked:e.checked}));
-  document.body.innerHTML=window.__farmOriginalBody;
+  for(const region of translatedRegions) region.innerHTML=FARM_ORIGINAL_HTML.get(region);
   if(previousWorkDate){const dateInput=document.querySelector('#payroll-work-date');if(dateInput)dateInput.value=previousWorkDate;}
 
   if(language!=='zh-TW'){
@@ -416,6 +419,7 @@ function applyFarmLanguage(language) {
     const blocks=document.querySelectorAll('.announcement-banner,h1,header p,h2,.card li,.card p,.gallery-title,.gallery-desc,.image-caption,.farm-address,.farm-name,.btn,footer p,#translateButton');
     const entries=Object.entries(map).sort((a,b)=>b[0].length-a[0].length);
     blocks.forEach(el=>{
+      if(!el.closest('[data-farm-language]'))return;
       const plain=el.textContent.trim();
       if(map[plain]!==undefined){
         // Preserve formatting only when the source is not split across child tags.
@@ -430,14 +434,14 @@ function applyFarmLanguage(language) {
       } else translateTextNodes(el,map);
     });
     // Catch remaining text, including Chinese split by nested formatting.
-    translateTextNodes(document.body,map);
-    // Final fallback: replace any remaining source phrases in the rendered HTML.
-    // This makes all dictionary entries apply even when styling split the source sentence.
-    let rendered=document.body.innerHTML;
-    for(const [from,to] of entries){
-      if(from.length>=2 && rendered.includes(from)) rendered=rendered.split(from).join(to);
+    for(const region of translatedRegions){
+      translateTextNodes(region,map);
+      let rendered=region.innerHTML;
+      for(const [from,to] of entries){
+        if(from.length>=2 && rendered.includes(from)) rendered=rendered.split(from).join(to);
+      }
+      region.innerHTML=rendered;
     }
-    document.body.innerHTML=rendered;
   }
   // Switch the embedded payroll infographic independently of text translations.
   const payrollExample=document.querySelector('[data-payroll-example]');

@@ -224,11 +224,27 @@
             .quick-tile { gap: 6px; }
             .quick-tile .nav-icon { width: 26px; height: 28px; }
         }
+        [data-main-language] { display: contents; }
+        .farm-music { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: clamp(12px, 2vw, 22px); margin-bottom: 20px; padding: clamp(12px, 2vw, 18px); border: 1px solid #ddd6ee; border-radius: 16px; background: #faf7ff; }
+        .music-controls { display: grid; gap: 6px; align-content: center; justify-items: start; min-width: 0; }
+        .music-controls h2 { margin: 0; color: var(--primary-color); font-size: 1.25rem; }
+        .music-controls label { color: var(--muted); font-weight: 650; }
+        .music-controls select { width: min(100%, 380px); min-height: 44px; padding: 5px 8px; border: 1px solid #aaa2bf; border-radius: 8px; background: #fff; color: var(--ink); font: inherit; }
+        .music-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+        .music-actions button { min-height: 44px; padding: 6px 12px; border: 1px solid #584786; border-radius: 9px; background: #fff; color: #4a3d72; font: inherit; font-weight: 700; cursor: pointer; }
+        .music-actions button:first-child { background: #51448b; color: #fff; }
+        .music-actions button:disabled { opacity: .6; cursor: default; }
+        #farm-music-status { margin: 0; color: var(--muted); font-size: .875rem; }
+        #farm-music-status:empty { display: none; }
+        #farm-music-source { color: #4a3d72; font-size: .875rem; text-underline-offset: 2px; }
+        .music-screen { min-width: 0; width: 100%; align-self: center; background: #241e38; }
+        .music-screen iframe { display: block; width: 100%; height: auto; min-height: 200px; aspect-ratio: 16 / 9; border: 0; }
+        @media (max-width: 725px) { .farm-music { grid-template-columns: minmax(0,1fr); } .music-screen { grid-row: 1; } }
     </style>
 </head>
 <body>
 
-    <header class="page-header">
+    <header class="page-header" data-farm-language>
         <div class="shell topbar">
             <span class="brand"><span class="brand-icon" aria-hidden="true">🫐</span>Blueberry Crest</span>
             <div class="header-actions">
@@ -251,6 +267,7 @@
     </header>
 
     <main class="container">
+    <div data-farm-language data-main-language>
 
         <!-- 頂部即時公告 -->
         <div class="announcement-banner">
@@ -272,6 +289,23 @@
             <a class="localized" href="#picking-guide"><span lang="zh-HK">採果圖鑑</span><span lang="zh-CN">采果图鉴</span><span lang="en">Picking guide</span><span lang="ja">収穫ガイド</span><span lang="ko">수확 가이드</span></a>
         </nav>
 
+    </div>
+        <section class="farm-music" aria-labelledby="music-heading">
+            <div class="music-controls">
+                <h2 id="music-heading"><span class="localized"><span lang="zh-HK">農場歌單</span><span lang="zh-CN">农场歌单</span><span lang="en">Farm playlist</span><span lang="ja">農場プレイリスト</span><span lang="ko">농장 재생목록</span></span></h2>
+                <label for="farm-track"><span class="localized"><span lang="zh-HK">揀歌</span><span lang="zh-CN">选歌</span><span lang="en">Choose a song</span><span lang="ja">曲を選ぶ</span><span lang="ko">곡 선택</span></span></label>
+                <select id="farm-track"></select>
+                <div class="music-actions">
+                    <button type="button" id="farm-music-toggle" disabled><span class="localized"><span lang="zh-HK">播放</span><span lang="zh-CN">播放</span><span lang="en">Play</span><span lang="ja">再生</span><span lang="ko">재생</span></span></button>
+                    <button type="button" id="farm-music-next" disabled><span class="localized"><span lang="zh-HK">下一首</span><span lang="zh-CN">下一首</span><span lang="en">Next</span><span lang="ja">次の曲</span><span lang="ko">다음 곡</span></span></button>
+                </div>
+                <p id="farm-music-status" role="status"></p>
+                <a id="farm-music-source" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=QLxy9dYHrcg"><span class="localized"><span lang="zh-HK">喺 YouTube 播放</span><span lang="zh-CN">在 YouTube 播放</span><span lang="en">Play on YouTube</span><span lang="ja">YouTube で再生</span><span lang="ko">YouTube에서 재생</span></span></a>
+            </div>
+            <div class="music-screen" id="farm-music-screen"></div>
+        </section>
+
+    <div data-farm-language data-main-language>
         <section id="work-rules" aria-labelledby="work-heading">
             <h2 class="work-heading" id="work-heading"><span class="localized"><span lang="zh-HK">工作守則</span><span lang="zh-CN">工作守则</span><span lang="en">Work rules</span><span lang="ja">就業ルール</span><span lang="ko">근무 수칙</span></span></h2>
 
@@ -645,16 +679,18 @@
                 <p><strong>📱 使用 Signal 掃描下方 QR Code 即可加入。</strong></p><p><a class="btn btn-map" href="https://signal.group/#CjQKIP9RNYn0IWx6Dp1_2v13DXwy92_3Bvl-sTS1JoYd720sEhCJNN4MI-Txhv-zQR92Xx7B" target="_blank" rel="noopener noreferrer">💬 點擊加入 Signal 活動群</a></p>
                 <div class="image-container"><div class="image-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https%3A%2F%2Fsignal.group%2F%23CjQKIP9RNYn0IWx6Dp1_2v13DXwy92_3Bvl-sTS1JoYd720sEhCJNN4MI-Txhv-zQR92Xx7B" alt="Signal 活動交流群加入 QR Code" loading="lazy"><div class="image-caption">📸 Signal 活動交流群 QR Code</div></div></div>
             </div>
+    </div>
     </main>
 
-    <footer>
+    <footer data-farm-language>
         <p>請嚴格遵守農場守則 • 違規者將面臨即時離場處分</p>
     </footer>
 
     <script src="missing-pay-report.js?v=20261020-1"></script>
     <script src="leave-reason-warning.js?v=20261118-ai-review"></script>
     <script src="employee-notice-forms.js?v=20261118-ai-review"></script>
-    <script src="translations.js?v=20261113-audit3"></script>
+    <script src="translations.js?v=20261119-music"></script>
+    <script src="farm-music.js?v=1" defer></script>
     <script>
 
         let wallPostsRequest;

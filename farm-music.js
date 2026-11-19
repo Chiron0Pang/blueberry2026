@@ -1,0 +1,172 @@
+(() => {
+  'use strict';
+
+  const songs = [
+    ['QLxy9dYHrcg', 'The truth that you leave', 'Pianoboy 高至豪'],
+    ['by4SYYWlhEs', '夜に駆ける', 'YOASOBI'],
+    ['OXDtr93Nbtk', '我看見今晚的月色很美，你呢？', '晚安莉莉'],
+    ['bzLgbHY5xbs', 'Butter-Fly', '和田光司'],
+    ['s3_5FKpAxAQ', 'All For You', '徐仁國＆鄭恩地']
+  ];
+  const copy = {
+    'zh-HK': ['播放', '暫停', '瀏覽器阻止咗自動播放，撳「播放」開始。', '呢首歌暫時未能喺頁面播放，可以揀另一首或去 YouTube。', '播放器暫時載入唔到，可以去 YouTube 播放。'],
+    'zh-CN': ['播放', '暂停', '浏览器阻止了自动播放，请按「播放」。', '这首歌暂时无法在此播放，请选另一首或前往 YouTube。', '播放器暂时无法加载，请前往 YouTube。'],
+    en: ['Play', 'Pause', 'Autoplay was blocked. Press Play to start.', 'This track is unavailable here. Choose another or open YouTube.', 'The player could not load. You can open YouTube.'],
+    ja: ['再生', '一時停止', '自動再生がブロックされました。「再生」を押してください。', 'この曲はここでは再生できません。別の曲または YouTube をお試しください。', 'プレーヤーを読み込めません。YouTube で再生してください。'],
+    ko: ['재생', '일시정지', '자동재생이 차단되었습니다. 재생을 눌러 주세요.', '이 곡을 여기에서 재생할 수 없습니다. 다른 곡이나 YouTube를 이용하세요.', '플레이어를 불러오지 못했습니다. YouTube에서 재생할 수 있습니다.']
+  };
+  const screen = document.getElementById('farm-music-screen');
+  const trackSelect = document.getElementById('farm-track');
+  const toggle = document.getElementById('farm-music-toggle');
+  const next = document.getElementById('farm-music-next');
+  const status = document.getElementById('farm-music-status');
+  const source = document.getElementById('farm-music-source');
+  let queue = [];
+  let current = takeNext();
+  let player;
+  let ready = false;
+  let playing = false;
+  let visible = false;
+  let wantsPlayback = true;
+  let pauseForVisibility = false;
+  let statusIndex;
+  let loadingTimeout;
+
+  function takeNext(previous) {
+    if (!queue.length) {
+      queue = songs.map(([id]) => id);
+      for (let i = queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [queue[i], queue[j]] = [queue[j], queue[i]];
+      }
+      if (queue[0] === previous) queue.push(queue.shift());
+    }
+    return queue.shift();
+  }
+
+  function render() {
+    const words = copy[document.documentElement.lang] || copy['zh-HK'];
+    toggle.textContent = words[playing ? 1 : 0];
+    toggle.disabled = next.disabled = !ready;
+    status.textContent = statusIndex === undefined ? '' : words[statusIndex];
+    trackSelect.value = current;
+    source.href = 'https://www.youtube.com/watch?v=' + current;
+  }
+
+  function canPlayHere() {
+    return visible && !document.hidden;
+  }
+
+  function syncVisibility() {
+    if (!ready) return;
+    if (!canPlayHere()) {
+      if (playing || player.getPlayerState() === YT.PlayerState.BUFFERING) {
+        pauseForVisibility = true;
+        player.pauseVideo();
+      }
+      return;
+    }
+    if (wantsPlayback && !playing && statusIndex === undefined) player.playVideo();
+  }
+
+  function selectTrack(id) {
+    current = id;
+    queue = queue.filter(item => item !== id);
+    wantsPlayback = true;
+    playing = false;
+    statusIndex = undefined;
+    render();
+    if (!ready) return;
+    if (canPlayHere()) player.loadVideoById(id);
+    else player.cueVideoById(id);
+  }
+
+  function handlePlayerState({ data }) {
+    if (data === YT.PlayerState.PLAYING) {
+      playing = true;
+      pauseForVisibility = false;
+      statusIndex = undefined;
+      syncVisibility();
+    } else if (data === YT.PlayerState.PAUSED) {
+      if (!pauseForVisibility && playing) wantsPlayback = false;
+      playing = false;
+      pauseForVisibility = false;
+      if (canPlayHere() && wantsPlayback) syncVisibility();
+    } else if (data === YT.PlayerState.ENDED) {
+      selectTrack(takeNext(current));
+    }
+    render();
+  }
+
+  function setupPlayer() {
+    if (player || !window.YT?.Player) return;
+    const initialId = current;
+    const frame = document.createElement('iframe');
+    const url = new URL('https://www.youtube-nocookie.com/embed/' + current);
+    url.search = new URLSearchParams({ enablejsapi: '1', playsinline: '1', origin: location.origin, rel: '0' });
+    frame.src = url;
+    frame.title = 'YouTube';
+    frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    frame.allowFullscreen = true;
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    screen.append(frame);
+    player = new YT.Player(frame, { events: {
+      onReady() {
+        clearTimeout(loadingTimeout);
+        ready = true;
+        statusIndex = undefined;
+        if (initialId !== current) player.cueVideoById(current);
+        render();
+        syncVisibility();
+      },
+      onStateChange: handlePlayerState,
+      onAutoplayBlocked() {
+        playing = false;
+        statusIndex = 2;
+        render();
+      },
+      onError() {
+        playing = false;
+        statusIndex = 3;
+        render();
+      }
+    }});
+  }
+
+  for (const [id, title, artist] of songs) trackSelect.add(new Option(title + ' · ' + artist, id));
+  trackSelect.addEventListener('change', () => selectTrack(trackSelect.value));
+  toggle.addEventListener('click', () => {
+    if (!ready) return;
+    if (playing) {
+      wantsPlayback = false;
+      player.pauseVideo();
+    } else {
+      wantsPlayback = true;
+      statusIndex = undefined;
+      syncVisibility();
+    }
+    render();
+  });
+  next.addEventListener('click', () => selectTrack(takeNext(current)));
+  document.addEventListener('visibilitychange', syncVisibility);
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  new IntersectionObserver(([entry]) => {
+    visible = entry.intersectionRatio > .5;
+    syncVisibility();
+  }, { threshold: .51 }).observe(screen);
+  render();
+
+  window.onYouTubeIframeAPIReady = setupPlayer;
+  if (window.YT?.Player) setupPlayer();
+  else {
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    script.async = true;
+    document.head.append(script);
+  }
+  if (!ready) loadingTimeout = setTimeout(() => {
+    if (ready) return;
+    statusIndex = 4;
+    render();
+  }, 12000);
+})();
