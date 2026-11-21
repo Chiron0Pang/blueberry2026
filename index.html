@@ -592,9 +592,10 @@
 </section>
 <section id="nf-resign" class="form-panel resignation">
 <h3 id="nf-resign-title" style="color:#985114">📋 員工離職通知表</h3>
+<p id="nf-resign-name-help">英文全名或別名填一項。兩項都有填，就必須對到同一位員工。</p>
 <div class="field-grid">
-<label><span id="nf-resign-name-label">英文姓名 *</span><input id="nf-resign-name" type="text"></label>
-<label><span id="nf-resign-alias-label">別名（選填）</span><input id="nf-resign-alias" type="text"></label>
+<label><span id="nf-resign-name-label">英文姓名（選填）</span><input id="nf-resign-name" type="text" maxlength="120" autocomplete="name"></label>
+<label><span id="nf-resign-alias-label">別名（選填）</span><input id="nf-resign-alias" type="text" maxlength="80" autocomplete="nickname"></label>
 </div>
 <div class="field-grid">
 <label><span id="nf-resign-notice-label">提出通知日期 *</span><input id="nf-resign-notice" type="date"></label>
@@ -602,11 +603,16 @@
 </div>
 <label id="nf-resign-custom-wrap" hidden><span id="nf-resign-custom-label">輸入日數（0–365）</span><input id="nf-resign-custom" type="number" min="0" max="365" value="14"></label>
 <p id="nf-resign-last" aria-live="polite"></p>
-<label><span id="nf-resign-reason-label">離職原因 *</span><textarea id="nf-resign-reason" rows="3"></textarea></label>
+<label><span id="nf-resign-reason-label">離職原因 *</span><textarea id="nf-resign-reason" rows="3" maxlength="1000"></textarea></label>
 <p id="nf-resign-reminder">為方便安排人手，請盡量提前兩星期（14日）通知管理層。實際通知要求以適用合約及法律為準。</p>
 <label><input id="nf-resign-confirm" type="checkbox"><span id="nf-resign-confirm-label">我確認資料正確，並會自行發送給管理層。</span></label>
+<p id="nf-resign-send-help">按「複製離職通知」會同時將通知私下送交管理員審核。</p>
 <button type="button" id="nf-resign-copy">📋 複製離職通知</button><p id="nf-resign-status" role="status"></p>
-</section><p id="nf-privacy">表格只會複製文字，不會上傳或儲存資料。</p>
+<div id="nf-resign-copy-panel" hidden>
+ <button type="button" id="nf-resign-copy-again">📋 再複製已提交的通知</button>
+ <textarea id="nf-resign-copy-text" rows="9" readonly style="display:block;width:100%;margin-top:8px;font-size:16px"></textarea>
+</div>
+</section><p id="nf-privacy">已提交的表格只供授權管理員審核。</p>
 </div>
 
 
@@ -686,7 +692,7 @@
 
     <script src="missing-pay-report.js?v=20261020-1"></script>
     <script src="leave-reason-warning.js?v=20261118-ai-review"></script>
-    <script src="employee-notice-forms.js?v=20261118-ai-review"></script>
+    <script src="employee-notice-forms.js?v=20261121-resignation"></script>
     <script src="translations.js?v=20261119-music"></script>
     <script>
 

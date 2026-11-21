@@ -26,20 +26,35 @@ const signalReminders={
  'ja':['休暇申請をコピーしました','Signalで現場責任者に送って、休暇申請を知らせてください。','わかりました'],
  'ko':['휴가 신청을 복사했습니다','Signal로 현장 책임자에게 휴가 신청을 보내 주세요.','확인']
 };
-let lastSubmittedLeave;
+const resignationText={
+ 'zh-TW':{intro:'請填寫並提交請假申請或離職通知。',privacy:'已提交的表格只供授權管理員審核。',name:'英文姓名（選填）',help:'英文全名或別名填一項。兩項都有填，就必須對到同一位員工。',send:'按「複製離職通知」會同時將通知私下送交管理員審核。',confirm:'我確認資料正確，並提交離職通知。',sending:'正在核對員工資料並送出…',done:'✅ 已送交管理員審核，並已複製離職通知。',manual:'✅ 已送交管理員審核。請長按下方文字複製。',retry:'📋 再複製已提交的通知',mismatch:'英文姓名或別名未能唯一配對，未有送出。請核對後再試。',pending:'已有一份通知待審核；如需更改，請聯絡管理員。',offline:'未能確認送出結果。請稍後重試。'},
+ 'zh-CN':{intro:'请填写并提交请假申请或离职通知。',privacy:'已提交的表格仅供授权管理员审核。',name:'英文姓名（选填）',help:'英文全名或别名填写一项。两项都填时，须匹配同一位员工。',send:'点击「复制离职通知」会同时将通知私下送交管理员审核。',confirm:'我确认资料正确，并提交离职通知。',sending:'正在核对员工资料并提交…',done:'✅ 已送交管理员审核，并已复制离职通知。',manual:'✅ 已送交管理员审核。请长按下方文字复制。',retry:'📋 再复制已提交的通知',mismatch:'英文姓名或别名无法唯一匹配，未提交。请核对后重试。',pending:'已有一份通知待审核。如需更改，请联系管理员。',offline:'无法确认提交结果，请稍后重试。'},
+ en:{intro:'Complete and submit a leave request or resignation notice.',privacy:'Submitted forms are available to authorised managers for review.',name:'English full name (optional)',help:'Enter your English full name or nickname. If you enter both, they must identify the same employee.',send:'Copying the resignation notice also submits it privately for manager review.',confirm:'I confirm the details and submit this resignation notice.',sending:'Checking employee details and submitting…',done:'✅ Submitted for manager review and copied.',manual:'✅ Submitted for manager review. Select and copy the text below.',retry:'📋 Copy submitted notice',mismatch:'The name or nickname could not be matched to one employee. Check your entry and retry.',pending:'A notice is already awaiting review. Contact management to make changes.',offline:'Submission could not be confirmed. Please retry later.'},
+ ja:{intro:'休暇申請または退職通知を入力し、送信してください。',privacy:'送信内容は権限のある管理者のみが確認できます。',name:'英語氏名（任意）',help:'英語の氏名またはニックネームを入力してください。両方の場合は同じ従業員と一致する必要があります。',send:'退職通知をコピーすると、管理者の確認用に非公開で送信されます。',confirm:'内容を確認し、退職通知を送信します。',sending:'従業員情報を照合して送信中…',done:'✅ 管理者に送信し、通知をコピーしました。',manual:'✅ 管理者に送信しました。下の文章を選択してコピーしてください。',retry:'📋 送信済みの通知をコピー',mismatch:'氏名またはニックネームが一意に一致しません。入力を確認してください。',pending:'確認待ちの通知があります。変更は管理者に連絡してください。',offline:'送信を確認できません。時間をおいて再試行してください。'},
+ ko:{intro:'휴가 신청 또는 퇴사 통보를 작성해 제출하세요.',privacy:'제출된 양식은 권한이 있는 관리자만 검토할 수 있습니다.',name:'영문 성명 (선택)',help:'영문 성명이나 별명 중 하나를 입력하세요. 둘 다 입력하면 동일한 직원과 일치해야 합니다.',send:'퇴사 통보를 복사하면 관리자 검토를 위해 비공개로 제출됩니다.',confirm:'내용이 정확함을 확인하고 퇴사 통보를 제출합니다.',sending:'직원 정보 확인 후 제출 중…',done:'✅ 관리자에게 제출하고 통보를 복사했습니다.',manual:'✅ 관리자에게 제출했습니다. 아래 내용을 선택해 복사하세요.',retry:'📋 제출한 통보 다시 복사',mismatch:'성명 또는 별명이 직원 한 명과 일치하지 않습니다. 입력 내용을 확인하세요.',pending:'검토 대기 중인 통보가 있습니다. 변경은 관리자에게 문의하세요.',offline:'제출을 확인할 수 없습니다. 잠시 후 다시 시도하세요.'}
+};
+let lastSubmittedLeave,lastSubmittedResignation;
 window.initEmployeeNoticeForms=function(lang){
 window.__leaveFormLanguage=lang;
 let manualReviewNote='';
 const w=translations[lang]||translations['zh-TW'];if(!el('heading'))return;
 ids.forEach((id,i)=>{if(el(id))el(id).textContent=w[i]});
-['resign-name-label','resign-alias-label'].forEach((id,i)=>el(id).textContent=w[3+i]);
+const resign=resignationText[lang]||resignationText['zh-TW'];
+el('intro').textContent=resign.intro;
+el('privacy').textContent=resign.privacy;
+el('resign-name-label').textContent=resign.name;
+el('resign-alias-label').textContent=w[4];
+el('resign-name-help').textContent=resign.help;
+el('resign-send-help').textContent=resign.send;
+el('resign-confirm-label').textContent=resign.confirm;
+el('resign-copy-again').textContent=resign.retry;
+el('resign-copy-text').setAttribute('aria-label',resign.retry);
 const status=(kind,msg)=>el(kind+'-status').textContent=msg;
 const refreshLeave=()=>{const a=parse(el('leave-start').value),b=parse(el('leave-end').value);el('leave-days').textContent=a&&b&&b>=a?w[25].replace('{n}',dateDiff(a,b)+1):'';};
-const refreshResign=()=>{const d=parse(el('resign-notice').value),custom=el('resign-days').value==='custom';el('resign-custom-wrap').hidden=!custom;const n=Number(custom?el('resign-custom').value:el('resign-days').value),valid=Number.isInteger(n)&&n>=0&&n<=365;if(!d||!valid){el('resign-last').textContent='';return null}const last=new Date(d.getTime()+n*86400000);el('resign-last').textContent=w[26].replace('{date}',fmt(last)).replace('{n}',n)+(n<14?' ⚠️ '+w[31]:'');return {n,last,d};};
+const refreshResign=()=>{const d=parse(el('resign-notice').value),custom=el('resign-days').value==='custom';el('resign-custom-wrap').hidden=!custom;const daysValue=custom?el('resign-custom').value:el('resign-days').value,n=Number(daysValue),valid=daysValue.trim()!==''&&Number.isInteger(n)&&n>=0&&n<=365;if(!d||!valid){el('resign-last').textContent='';return null}const last=new Date(d.getTime()+n*86400000);el('resign-last').textContent=w[26].replace('{date}',fmt(last)).replace('{n}',n)+(n<14?' ⚠️ '+w[31]:'');return {n,last,d};};
 ['leave-start','leave-end'].forEach(id=>el(id).oninput=refreshLeave);
 ['resign-notice','resign-days','resign-custom'].forEach(id=>{el(id).oninput=refreshResign;el(id).onchange=refreshResign});
 refreshLeave();refreshResign();
-async function copy(kind,message){try{await navigator.clipboard.writeText(message);status(kind,w[28]);}catch(e){status(kind,w[29]);let area=el(kind+'-manual');if(!area){area=document.createElement('textarea');area.id='nf-'+kind+'-manual';area.rows=9;el(kind+'-status').after(area)}area.value=message;area.style.width='100%';area.focus();area.select();}}
 const messages={
 'zh-TW':{hint:"中文或英文姓名（二選一）及別名必須與員工系統吻合。姓與名可以調轉。提交成功後會嘗試複製內容。請假須經管理員批准。",button:"📤 提交請假申請及複製",working:'正在核對及登記…',done:"✅ 已提交待審批，亦已複製申請內容。",copied:"已提交待審批。瀏覽器未能自動複製，請長按下方文字複製。",fail:'❌ 姓名或別名未能唯一配對，未有登記。請核對後聯絡管理員。',duplicate:'⚠️ 日期已有請假紀錄，未重複登記。',rate:'⚠️ 提交過於頻繁，請稍後再試。',offline:"⚠️ 未能確認是否提交成功，請先向管理員查詢。",retry:"📋 複製已提交申請",dateError:"預計返工日期必須遲過請假結束日期。"},
 'zh-CN':{hint:"中文或英文姓名（二选一）及别名必须与员工系统一致。姓与名可以调换。提交成功后会尝试复制内容。请假须经管理员批准。",button:"📤 提交请假申请及复制",working:'正在核对及登记…',done:"✅ 已提交待审批，且已复制申请内容。",copied:"已提交待审批。浏览器无法自动复制，请长按下方文字复制。",fail:'❌ 姓名或别名未能唯一匹配，未登记。',duplicate:'⚠️ 日期已有请假记录。',rate:'⚠️ 提交过于频繁，请稍后再试。',offline:"⚠️ 无法确认提交是否成功，请先向管理员查询。",retry:"📋 复制已提交申请",dateError:"预计返工日期必须晚于请假结束日期。"},
@@ -224,10 +239,50 @@ el('leave-copy').onclick=async()=>{
   window.__leaveSubmitting=false;
  }
 };
-el('resign-copy').onclick=()=>{
-const calc=refreshResign(),name=el('resign-name').value.trim(),reason=el('resign-reason').value.trim();
-if(!name||!calc||!reason||!el('resign-confirm').checked){status('resign',w[27]);return}
-copy('resign',[w[16],w[3]+': '+name,w[4]+': '+(el('resign-alias').value.trim()||w[30]),w[33]+': '+fmt(calc.d),w[18]+': '+calc.n,w[32]+': '+fmt(calc.last),w[35]+': '+reason].join('\n'));
+const resignationPanel=el('resign-copy-panel'),resignationCopyText=el('resign-copy-text');
+el('resign-copy-again').onclick=async()=>{
+ try{await navigator.clipboard.writeText(resignationCopyText.value);status('resign',resign.done);}
+ catch{status('resign',resign.manual);resignationCopyText.focus();resignationCopyText.select();}
+};
+async function submitResignation(payload){
+ status('resign',resign.sending);
+ try{
+  const response=await fetch('https://batsjsznudkeqaaijxsg.supabase.co/functions/v1/public-resignation-submit',{
+   method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:AbortSignal.timeout(12000)
+  });
+  const result=await response.json();
+  if(response.ok&&result.ok){lastSubmittedResignation=payload;return true;}
+  const errors={not_matched:resign.mismatch,already_pending:resign.pending,rate_limit:m.rate,invalid:w[27]};
+  status('resign','⚠️ '+(errors[result.code]||resign.offline));
+ }catch{status('resign','⚠️ '+resign.offline);}
+ return false;
+}
+el('resign-copy').onclick=async()=>{
+ const button=el('resign-copy');
+ if(button.disabled)return;
+ resignationPanel.hidden=true;
+ const calc=refreshResign(),name=el('resign-name').value.trim(),alias=el('resign-alias').value.trim(),reason=el('resign-reason').value.trim();
+ if((!name&&!alias)||!calc||!reason||!el('resign-confirm').checked){status('resign',w[27]);return;}
+ const payload=JSON.stringify({name,alias,notice:el('resign-notice').value,days:calc.n,reason});
+ const message=[w[16],...(name?[resign.name+': '+name]:[]),...(alias?[w[4]+': '+alias]:[]),w[33]+': '+fmt(calc.d),w[18]+': '+calc.n,w[32]+': '+fmt(calc.last),w[35]+': '+reason].join('\n');
+ button.disabled=true;
+ try{
+  const submitted=payload===lastSubmittedResignation?Promise.resolve(true):submitResignation(payload);
+  let copied=Promise.resolve(false);
+  if(navigator.clipboard?.write&&typeof ClipboardItem==='function'){
+   const content=submitted.then(ok=>{
+    if(!ok)throw Error('Resignation notice was not accepted');
+    return new Blob([message],{type:'text/plain'});
+   });
+   content.catch(()=>{});
+   try{copied=navigator.clipboard.write([new ClipboardItem({'text/plain':content})]).then(()=>true,()=>false);}catch{}
+  }
+  if(!await submitted)return;
+  resignationCopyText.value=message;
+  resignationPanel.hidden=false;
+  if(await Promise.race([copied,new Promise(resolve=>setTimeout(()=>resolve(false),2500))]))status('resign',resign.done);
+  else await el('resign-copy-again').onclick();
+ }finally{button.disabled=false;}
 };
 };
 })();
